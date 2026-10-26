@@ -413,27 +413,201 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 }
 .online-dot.off{background:#c0392b;}
 
+/* ============ شريط اختيار قوالب الورقة ============ */
+.template-selector-card{
+  border:2px solid #2874a6;background:linear-gradient(180deg,#fbfdff,#f1f7fc);
+  border-radius:12px;padding:14px;margin-bottom:14px;
+}
+.template-selector-grid{
+  display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:10px;
+}
+.tpl-btn{
+  background:#fff;border:2px solid #c3d4e0;border-radius:12px;padding:12px 14px;
+  text-align:start;cursor:pointer;transition:all .2s ease;
+  display:flex;flex-direction:column;gap:5px;font-family:inherit;
+}
+.tpl-btn:hover{
+  border-color:#2874a6;background:#f4f9fd;transform:translateY(-1px);
+}
+.tpl-btn.active{
+  border-color:#1a5276;background:#ebf5fb;box-shadow:0 0 0 2px #1a5276;
+}
+.tpl-badge{
+  font-size:11px;font-weight:bold;color:#1a5276;background:#d4e6f1;
+  padding:2px 8px;border-radius:10px;align-self:flex-start;
+}
+.tpl-btn.active .tpl-badge{
+  background:#1a5276;color:#fff;
+}
+.tpl-name{
+  font-size:14.5px;font-weight:bold;color:#12222e;
+}
+.tpl-desc{
+  font-size:11.5px;color:#5b7285;line-height:1.45;
+}
+
+/* ============ القالب 1: الأكاديمي الرسمي (Academic Formal) ============ */
+.paper.tpl-academic{
+  max-width:850px;margin:0 auto;border:1px solid #000000;padding:28px 32px;
+  background:#ffffff;color:#000000;box-shadow:0 0 0 1px #ffffff inset, 0 2px 8px rgba(0,0,0,.08);
+  font-family:"Times New Roman", "Georgia", Arial, serif;font-size:15px;line-height:1.65;
+  border-radius:0;direction:var(--paper-dir, rtl);text-align:var(--paper-align, right);
+}
+.paper.tpl-academic .header{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  border-bottom:1px solid #000000;padding-bottom:12px;margin-bottom:4px;direction:var(--paper-dir, rtl);
+}
+.paper.tpl-academic .header .right,
+.paper.tpl-academic .header .left{
+  width:33%;font-size:13.5px;line-height:1.7;letter-spacing:.2px;
+}
+.paper.tpl-academic .header .right{text-align:start;}
+.paper.tpl-academic .header .left{text-align:end;}
+.paper.tpl-academic .header .center{
+  width:34%;text-align:center;font-size:16px;font-weight:bold;padding-top:4px;font-style:italic;
+}
+.paper.tpl-academic .header-rule{
+  border:none;border-top:1px solid #000000;margin:0 0 14px 0;
+}
+.paper.tpl-academic .exam-title{
+  text-align:center;font-size:16px;font-weight:bold;letter-spacing:.8px;text-transform:uppercase;
+  border-top:1px solid #000000;border-bottom:1px solid #000000;padding:7px;margin:12px 0 10px;
+}
+.paper.tpl-academic .info-bar{
+  display:flex;justify-content:space-between;font-size:14px;
+  border-bottom:1px solid #000000;padding-bottom:7px;margin-bottom:20px;font-style:italic;
+}
+.paper.tpl-academic .question{
+  padding:14px 0;border:none;border-top:1px solid #000000;background:transparent;
+  margin-bottom:0;border-radius:0;page-break-inside:avoid;
+}
+.paper.tpl-academic .question:first-of-type{border-top:none;padding-top:0;}
+.paper.tpl-academic .question.question-sub{
+  margin-inline-start:22px;border-inline-start:3px solid #000000;padding-inline-start:12px;background:#fafafa;
+}
+.paper.tpl-academic .q-head{
+  display:flex;justify-content:space-between;align-items:baseline;font-weight:bold;font-size:15px;
+  margin-bottom:10px;padding-bottom:4px;border-bottom:1px dotted #555555;letter-spacing:.2px;
+  background:transparent;color:#000000;border-radius:0;
+}
+.paper.tpl-academic .marks{
+  font-weight:normal;font-size:13px;font-style:italic;white-space:nowrap;
+  background:transparent;color:#000000;padding:0;
+}
+.paper.tpl-academic ol{margin-inline-start:24px;padding-inline-start:0;}
+.paper.tpl-academic ol li{margin-bottom:8px;font-size:15px;}
+.paper.tpl-academic .write-line{display:inline-block;border-bottom:1px dotted #000000;width:140px;margin-inline-start:6px;}
+.paper.tpl-academic .answer-line{display:block;border-bottom:1px dotted #000000;width:100%;height:24px;margin-top:4px;}
+.paper.tpl-academic .choices{font-weight:bold;font-style:italic;margin-inline-start:8px;}
+.paper.tpl-academic .circle-box{
+  border:1px solid #000000;padding:12px;margin-top:10px;font-size:15px;
+  line-height:2.1;text-align:center;word-spacing:22px;letter-spacing:.3px;
+}
+.paper.tpl-academic table{width:100%;border-collapse:collapse;margin-top:8px;font-size:14px;}
+.paper.tpl-academic th, .paper.tpl-academic td{border:1px solid #000000;padding:7px 10px;text-align:center;}
+.paper.tpl-academic th{font-weight:bold;text-transform:uppercase;letter-spacing:.5px;font-size:13px;background:transparent;color:#000000;}
+.paper.tpl-academic .footer{
+  display:flex;justify-content:space-between;align-items:center;font-size:14px;
+  border-top:1px solid #000000;margin-top:22px;padding-top:10px;
+}
+.paper.tpl-academic .footer .f-center{font-weight:bold;font-style:italic;}
+.paper.tpl-academic .footer-note{
+  text-align:center;font-size:11.5px;color:#444444;margin-top:6px;letter-spacing:.3px;font-style:italic;
+}
+
+/* ============ القالب 2: القياسي المبسط (Minimal Standard) ============ */
+.paper.tpl-minimal{
+  max-width:850px;margin:0 auto;border:1px solid #000000;padding:20px;
+  background:#ffffff;color:#000000;font-family:"Times New Roman", Arial, sans-serif;
+  font-size:15px;line-height:1.6;border-radius:0;direction:var(--paper-dir, rtl);text-align:var(--paper-align, right);
+}
+.paper.tpl-minimal .header{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  border-bottom:1px solid #000000;padding-bottom:10px;margin-bottom:10px;direction:var(--paper-dir, rtl);
+}
+.paper.tpl-minimal .header .right,
+.paper.tpl-minimal .header .left{
+  width:33%;font-size:14px;line-height:1.7;
+}
+.paper.tpl-minimal .header .right{text-align:start;}
+.paper.tpl-minimal .header .left{text-align:end;}
+.paper.tpl-minimal .header .center{
+  width:34%;text-align:center;font-size:17px;font-weight:bold;padding-top:4px;
+}
+.paper.tpl-minimal .exam-title{
+  text-align:center;font-size:17px;font-weight:bold;border-top:1px solid #000000;
+  border-bottom:1px solid #000000;padding:6px;margin:12px 0;
+}
+.paper.tpl-minimal .info-bar{
+  display:flex;justify-content:space-between;font-size:14px;
+  border-bottom:1px solid #000000;padding-bottom:6px;margin-bottom:16px;
+}
+.paper.tpl-minimal .question{
+  margin-bottom:18px;border:none;background:transparent;padding:0;border-radius:0;
+}
+.paper.tpl-minimal .question.question-sub{
+  margin-inline-start:20px;border-inline-start:2px solid #000000;padding-inline-start:10px;
+}
+.paper.tpl-minimal .q-head{
+  display:flex;justify-content:space-between;align-items:center;font-weight:bold;font-size:15px;
+  border-bottom:1px solid #000000;padding-bottom:4px;margin-bottom:8px;
+  background:transparent;color:#000000;border-radius:0;
+}
+.paper.tpl-minimal .marks{
+  font-weight:normal;font-size:14px;white-space:nowrap;background:transparent;color:#000000;padding:0;
+}
+.paper.tpl-minimal ol{margin-inline-start:22px;padding-inline-start:0;}
+.paper.tpl-minimal ol li{margin-bottom:7px;font-size:15px;}
+.paper.tpl-minimal .write-line{display:inline-block;border-bottom:1px dotted #000000;width:140px;margin-inline-start:6px;}
+.paper.tpl-minimal .answer-line{display:block;border-bottom:1px dotted #000000;width:100%;height:22px;margin-top:4px;}
+.paper.tpl-minimal .choices{font-weight:bold;margin-inline-start:8px;}
+.paper.tpl-minimal .circle-box{
+  border:1px solid #000000;padding:10px 12px;margin-top:8px;font-size:15px;
+  line-height:2;text-align:center;word-spacing:18px;
+}
+.paper.tpl-minimal table{width:100%;border-collapse:collapse;margin-top:6px;font-size:14px;}
+.paper.tpl-minimal th, .paper.tpl-minimal td{border:1px solid #000000;padding:6px 10px;text-align:center;}
+.paper.tpl-minimal th{font-weight:bold;background:transparent;color:#000000;}
+.paper.tpl-minimal .footer{
+  display:flex;justify-content:space-between;align-items:center;font-size:14px;
+  border-top:1px solid #000000;margin-top:20px;padding-top:8px;
+}
+.paper.tpl-minimal .footer .f-center{font-weight:bold;}
+
+/* ============ القالب 3: الأزرق العصري (Modern Blue) ============ */
+.paper.tpl-modern{
+  direction:var(--paper-dir, rtl); text-align:var(--paper-align, right); background:#fff; color:var(--col-base, #12222e);
+  border:3px solid #1a5276; border-radius:10px;
+  padding:16px 18px; width:794px; margin:0 auto;
+  font-family:"Times New Roman",Tahoma,Arial,sans-serif;
+  font-size:var(--fs-base, 14.5px);
+}
+
 /* ============ الطباعة ============ */
 @media print{
-  .appbar,.tabs,main,.modal,.busy,.toast,.pwa-notify-card{display:none !important;}
+  .appbar,.tabs,main,.modal,.busy,.toast,.pwa-notify-card,.template-selector-card{display:none !important;}
   #printRoot{display:block !important;}
   body{background:#fff;padding:0;margin:0;}
-  .paper{border:3px solid #1a5276 !important;border-radius:10px !important;direction:var(--paper-dir, rtl) !important;text-align:var(--paper-align, right) !important;}
-  .question{background:#eaf4fb !important;direction:var(--paper-dir, rtl) !important;text-align:var(--paper-align, right) !important;}
-  .question.question-sub{background:#f5faff !important;border-inline-start:6px solid #2874a6 !important;}
-  .p-footer{direction:var(--paper-dir, rtl) !important;}
-  .q-head{background:#2874a6 !important;color:#fff !important;}
-  .q-head.q-head-sub{background:#1b4f72 !important;color:#fff !important;}
-  .p-title{background:var(--bg-title, #1a5276) !important;color:var(--col-title, #fff) !important;}
-  .mt th{background:#1a5276 !important;color:#fff !important;}
-  .marks{background:#f1c40f !important;color:#000 !important;}
-  .ph-col{color:#1a5276 !important;}
-  .ph-center{color:#145a32 !important;}
-  .p-info{color:#7b241c !important;border-color:#7b241c !important;}
-  .circlebox{color:#1a5276 !important;border-color:#2874a6 !important;}
-  .p-footer .f1{color:#145a32 !important;}
-  .p-footer .f2{color:#7b241c !important;}
-  .p-footer .f3{color:#1a5276 !important;}
+  .paper{box-shadow:none !important;margin:0 auto !important;}
+  .paper.tpl-academic{border:1px solid #000000 !important;padding:20px 24px !important;}
+  .paper.tpl-academic .question{page-break-inside:avoid !important;}
+  .paper.tpl-minimal{border:1px solid #000000 !important;padding:16px 20px !important;}
+  .paper.tpl-modern{border:3px solid #1a5276 !important;border-radius:10px !important;direction:var(--paper-dir, rtl) !important;text-align:var(--paper-align, right) !important;}
+  .paper.tpl-modern .question{background:#eaf4fb !important;direction:var(--paper-dir, rtl) !important;text-align:var(--paper-align, right) !important;}
+  .paper.tpl-modern .question.question-sub{background:#f5faff !important;border-inline-start:6px solid #2874a6 !important;}
+  .paper.tpl-modern .p-footer{direction:var(--paper-dir, rtl) !important;}
+  .paper.tpl-modern .q-head{background:#2874a6 !important;color:#fff !important;}
+  .paper.tpl-modern .q-head.q-head-sub{background:#1b4f72 !important;color:#fff !important;}
+  .paper.tpl-modern .p-title{background:var(--bg-title, #1a5276) !important;color:var(--col-title, #fff) !important;}
+  .paper.tpl-modern .mt th{background:#1a5276 !important;color:#fff !important;}
+  .paper.tpl-modern .marks{background:#f1c40f !important;color:#000 !important;}
+  .paper.tpl-modern .ph-col{color:#1a5276 !important;}
+  .paper.tpl-modern .ph-center{color:#145a32 !important;}
+  .paper.tpl-modern .p-info{color:#7b241c !important;border-color:#7b241c !important;}
+  .paper.tpl-modern .circlebox{color:#1a5276 !important;border-color:#2874a6 !important;}
+  .paper.tpl-modern .p-footer .f1{color:#145a32 !important;}
+  .paper.tpl-modern .p-footer .f2{color:#7b241c !important;}
+  .paper.tpl-modern .p-footer .f3{color:#1a5276 !important;}
   *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
   @page{size:A4;margin:8mm;}
 }
@@ -595,6 +769,33 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   </section>
 
   <section id="tab-preview" hidden>
+    <!-- شريط اختيار قالب ورقة الاختبار -->
+    <div class="template-selector-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        <h3 style="margin:0;color:var(--primary);font-size:15px;display:flex;align-items:center;gap:6px;">
+          <span>📑</span> نماذج وقوالب ورقة الاختبار (اختر أي قالب للاستعراض والحفظ):
+        </h3>
+        <span style="font-size:12px;color:#5b7285;">(يتم تطبيق محتوى أسئلتك تلقائياً داخل القالب المختار)</span>
+      </div>
+      <div class="template-selector-grid" id="paperTemplateGrid">
+        <button type="button" class="tpl-btn" data-tpl="academic">
+          <div class="tpl-badge">القالب 1</div>
+          <div class="tpl-name">🎓 الأكاديمي الرسمي (Formal)</div>
+          <div class="tpl-desc">تصميم وزاري رسمي كلاسيكي، خطوط سيريف رصينة، فواصل نقطية أنيقة وخيارات بين قوسين.</div>
+        </button>
+        <button type="button" class="tpl-btn" data-tpl="minimal">
+          <div class="tpl-badge">القالب 2</div>
+          <div class="tpl-name">📄 القياسي المبسط (Minimal)</div>
+          <div class="tpl-desc">إطار وتسطير كلاسيكي نقي، ترويسة قياسية وأسطر إجابة مريحة وواضحة.</div>
+        </button>
+        <button type="button" class="tpl-btn" data-tpl="modern">
+          <div class="tpl-badge">القالب 3</div>
+          <div class="tpl-name">🎨 الأزرق العصري (Modern)</div>
+          <div class="tpl-desc">تصميم ملون حديث، بطاقات أسئلة ملونة وقابلة لتخصيص الألوان والخطوط.</div>
+        </button>
+      </div>
+    </div>
+
     <div class="toolbar">
       <button id="btnSavePdf" class="btn primary">💾 حفظ PDF</button>
       <button id="btnShare" class="btn success">📤 مشاركة</button>
@@ -769,6 +970,7 @@ let state = loadState() || defaultState();
 if(!state.style) state.style = defaultStyle();
 if(!state.style.direction) state.style.direction = 'rtl';
 if(state.meta.logoImage == null) state.meta.logoImage = '';
+if(!state.paperTemplate) state.paperTemplate = 'academic';
 
 function saveLocal(){
   try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
@@ -950,8 +1152,284 @@ function bodyHTML(q){
   }
 }
 
-function paperHTML(mode){
-  mode = mode || 'preview';
+/* ============ قوالب ورقة الاختبار (Templates 1, 2, 3) ============ */
+function renderAcademicTemplate(mode){
+  const m = state.meta;
+  const s = state.style;
+  const isPreview = mode === 'preview';
+  const total = state.questions.reduce((a,q)=>a + (Number(q.marks)||0), 0);
+  const dir = s.direction === 'ltr' ? 'ltr' : 'rtl';
+  const align = dir === 'rtl' ? 'right' : 'left';
+
+  let headerImgHtml = '';
+  if(m.logoImage){
+    headerImgHtml = `<img src="${m.logoImage}" class="header-logo" style="max-height:60px;margin-bottom:6px;display:block;">`;
+  } else if(isPreview){
+    headerImgHtml = `<div class="img-placeholder header-img-slot" data-img="header-logo" style="margin-bottom:6px;">🖼️ شعار</div>`;
+  }
+
+  let currentMainNumber = 0;
+  let currentSubNumber = 1;
+
+  const qs = state.questions.map((q, i) => {
+    let imgHtml = '';
+    if(q.image){
+      imgHtml = `<img src="${q.image}" class="q-img" style="max-width:100%;max-height:260px;margin-top:8px;display:block;">`;
+    } else if(isPreview){
+      imgHtml = `<div class="img-placeholder" data-img-q="${i}">🖼️ اضغط لإضافة صورة للسؤال</div>`;
+    }
+
+    let headerLabel = '';
+    const isSub = !!q.isSub;
+    if(!isSub){
+      currentMainNumber++;
+      currentSubNumber = 1;
+      const clean = String(q.title||'').replace(/^\s*(?:Q\s*\d+|Question\s*\d+|س\s*\d+|\d+)[\s_:.\-–]*/i,'').trim();
+      headerLabel = `Q${currentMainNumber}: ${clean || 'Question'}`;
+    } else {
+      currentSubNumber++;
+      const clean = String(q.title||'').replace(/^\s*(?:Q\s*\d+|Question\s*\d+|س\s*\d+|\d+)[\s_:.\-–]*/i,'').trim();
+      headerLabel = `${currentSubNumber}_ ${clean || 'سؤال فرعي'}`;
+    }
+
+    let body = '';
+    switch(q.type){
+      case 'mcq':
+        body = '<ol>' + (q.items||[]).map(it => {
+          const opts = (it.options||[]).filter(o => o != null && String(o).trim() !== '');
+          const choiceStr = opts.length ? opts.map(o => esc(o)).join(' / ') : '';
+          return `<li>${esc(it.text)}${choiceStr ? ` <span class="choices">( ${choiceStr} )</span>` : ''}</li>`;
+        }).join('') + '</ol>';
+        break;
+      case 'meaning':
+        body = '<ol>' + (q.words||[]).map(w =>
+          `<li>${esc(w)} &nbsp;→&nbsp; <span class="write-line"></span></li>`
+        ).join('') + '</ol>';
+        break;
+      case 'match':
+        body = `<table><tr><th>Column A</th><th>Column B</th></tr>` +
+          (q.left||[]).map((l,li)=>
+            `<tr><td>${li+1}. &nbsp;${esc(l)}</td><td>${esc((q.right||[])[li]||'')}</td></tr>`
+          ).join('') + `</table>`;
+        break;
+      case 'circle': {
+        const n = Math.max(0, Number(q.lines)||0);
+        body = `<div class="circle-box">${esc(q.box||'')}</div>` +
+          (n ? Array.from({length:n}).map(()=>'<span class="answer-line"></span>').join('') : '');
+        break;
+      }
+      case 'essay':
+      case 'list': {
+        const n = Math.max(1, Number(q.lines)||4);
+        body = Array.from({length:n}).map(()=>'<span class="answer-line"></span>').join('');
+        break;
+      }
+      case 'fill':
+      case 'truefalse':
+      case 'correct':
+      case 'order':
+        body = '<ol>' + (q.items||[]).map(w =>
+          `<li>${esc(w)} &nbsp; <span class="write-line" style="width:160px;"></span></li>`
+        ).join('') + '</ol>';
+        break;
+      default:
+        body = '';
+    }
+
+    const subClass = isSub ? 'question-sub' : '';
+    const marksText = Number(q.marks) > 0 ? `<span class="marks">${Number(q.marks)} Marks</span>` : '';
+
+    return `<div class="question ${subClass}" data-qidx="${i}">
+      <div class="q-head">
+        <span>${esc(headerLabel)}</span>
+        ${marksText}
+      </div>
+      <div>${body}</div>
+      ${imgHtml}
+    </div>`;
+  }).join('');
+
+  return `<div class="paper tpl-academic" style="--paper-dir:${dir}; --paper-align:${align}; direction:${dir}; text-align:${align};">
+    <div class="header">
+      <div class="right">
+        ${headerImgHtml}
+        <div>${esc(m.country)}</div>
+        <div>${esc(m.ministry)}</div>
+        <div>${esc(m.governorate)}</div>
+        <div>${esc(m.office)}</div>
+      </div>
+      <div class="center">
+        بسم الله الرحمن الرحيم
+      </div>
+      <div class="left">
+        <div>${esc(m.school)}</div>
+        <div>${esc(m.className)}</div>
+        <div>${esc(m.subject)}</div>
+        <div>${esc(m.duration)}</div>
+      </div>
+    </div>
+
+    <hr class="header-rule">
+
+    <div class="exam-title">
+      ${esc(m.examTitle)}
+    </div>
+
+    <div class="info-bar">
+      <span>${esc(m.studentLabel)}: ______________________</span>
+      <span>Total Marks: ${total}</span>
+    </div>
+
+    ${qs}
+
+    <div class="footer">
+      <span class="f-left">${esc(m.footerLeft || 'Good Luck')}</span>
+      <span class="f-center">T/ ${esc(m.teacher)}</span>
+      <span class="f-right">Total: ${total} Marks</span>
+    </div>
+
+    <div class="footer-note">
+      — End of Exam Paper —
+    </div>
+  </div>`;
+}
+
+function renderMinimalTemplate(mode){
+  const m = state.meta;
+  const s = state.style;
+  const isPreview = mode === 'preview';
+  const total = state.questions.reduce((a,q)=>a + (Number(q.marks)||0), 0);
+  const dir = s.direction === 'ltr' ? 'ltr' : 'rtl';
+  const align = dir === 'rtl' ? 'right' : 'left';
+
+  let headerImgHtml = '';
+  if(m.logoImage){
+    headerImgHtml = `<img src="${m.logoImage}" class="header-logo" style="max-height:55px;margin-bottom:6px;display:block;">`;
+  } else if(isPreview){
+    headerImgHtml = `<div class="img-placeholder header-img-slot" data-img="header-logo" style="margin-bottom:6px;">🖼️ شعار</div>`;
+  }
+
+  let currentMainNumber = 0;
+  let currentSubNumber = 1;
+
+  const qs = state.questions.map((q, i) => {
+    let imgHtml = '';
+    if(q.image){
+      imgHtml = `<img src="${q.image}" class="q-img" style="max-width:100%;max-height:260px;margin-top:8px;display:block;">`;
+    } else if(isPreview){
+      imgHtml = `<div class="img-placeholder" data-img-q="${i}">🖼️ اضغط لإضافة صورة للسؤال</div>`;
+    }
+
+    let headerLabel = '';
+    const isSub = !!q.isSub;
+    if(!isSub){
+      currentMainNumber++;
+      currentSubNumber = 1;
+      const clean = String(q.title||'').replace(/^\s*(?:Q\s*\d+|Question\s*\d+|س\s*\d+|\d+)[\s_:.\-–]*/i,'').trim();
+      headerLabel = `Q${currentMainNumber}: ${clean || 'Question'}`;
+    } else {
+      currentSubNumber++;
+      const clean = String(q.title||'').replace(/^\s*(?:Q\s*\d+|Question\s*\d+|س\s*\d+|\d+)[\s_:.\-–]*/i,'').trim();
+      headerLabel = `${currentSubNumber}_ ${clean || 'سؤال فرعي'}`;
+    }
+
+    let body = '';
+    switch(q.type){
+      case 'mcq':
+        body = '<ol>' + (q.items||[]).map(it => {
+          const opts = (it.options||[]).filter(o => o != null && String(o).trim() !== '');
+          const choiceStr = opts.length ? opts.map(o => esc(o)).join(' / ') : '';
+          return `<li>${esc(it.text)}${choiceStr ? ` <span class="choices">( ${choiceStr} )</span>` : ''}</li>`;
+        }).join('') + '</ol>';
+        break;
+      case 'meaning':
+        body = '<ol>' + (q.words||[]).map(w =>
+          `<li>${esc(w)} &nbsp;→&nbsp; <span class="write-line"></span></li>`
+        ).join('') + '</ol>';
+        break;
+      case 'match':
+        body = `<table><tr><th>Column A</th><th>Column B</th></tr>` +
+          (q.left||[]).map((l,li)=>
+            `<tr><td>${li+1}. &nbsp;${esc(l)}</td><td>${esc((q.right||[])[li]||'')}</td></tr>`
+          ).join('') + `</table>`;
+        break;
+      case 'circle': {
+        const n = Math.max(0, Number(q.lines)||0);
+        body = `<div class="circle-box">${esc(q.box||'')}</div>` +
+          (n ? Array.from({length:n}).map(()=>'<span class="answer-line"></span>').join('') : '');
+        break;
+      }
+      case 'essay':
+      case 'list': {
+        const n = Math.max(1, Number(q.lines)||4);
+        body = Array.from({length:n}).map(()=>'<span class="answer-line"></span>').join('');
+        break;
+      }
+      case 'fill':
+      case 'truefalse':
+      case 'correct':
+      case 'order':
+        body = '<ol>' + (q.items||[]).map(w =>
+          `<li>${esc(w)} &nbsp; <span class="write-line" style="width:160px;"></span></li>`
+        ).join('') + '</ol>';
+        break;
+      default:
+        body = '';
+    }
+
+    const subClass = isSub ? 'question-sub' : '';
+    const marksText = Number(q.marks) > 0 ? `<span class="marks">${Number(q.marks)} Marks</span>` : '';
+
+    return `<div class="question ${subClass}" data-qidx="${i}">
+      <div class="q-head">
+        <span>${esc(headerLabel)}</span>
+        ${marksText}
+      </div>
+      <div>${body}</div>
+      ${imgHtml}
+    </div>`;
+  }).join('');
+
+  return `<div class="paper tpl-minimal" style="--paper-dir:${dir}; --paper-align:${align}; direction:${dir}; text-align:${align};">
+    <div class="header">
+      <div class="right">
+        ${headerImgHtml}
+        <div>${esc(m.country)}</div>
+        <div>${esc(m.ministry)}</div>
+        <div>${esc(m.governorate)}</div>
+        <div>${esc(m.office)}</div>
+      </div>
+      <div class="center">
+        بسم الله الرحمن الرحيم
+      </div>
+      <div class="left">
+        <div>${esc(m.school)}</div>
+        <div>${esc(m.className)}</div>
+        <div>${esc(m.subject)}</div>
+        <div>${esc(m.duration)}</div>
+      </div>
+    </div>
+
+    <div class="exam-title">
+      ${esc(m.examTitle)}
+    </div>
+
+    <div class="info-bar">
+      <span>${esc(m.studentLabel)}: ______________________</span>
+      <span>Total Marks: ${total}</span>
+    </div>
+
+    ${qs}
+
+    <div class="footer">
+      <span class="f-left">${esc(m.footerLeft || 'Good Luck')}</span>
+      <span class="f-center">T/ ${esc(m.teacher)}</span>
+      <span class="f-right">Total: ${total} Marks</span>
+    </div>
+  </div>`;
+}
+
+function renderModernTemplate(mode){
   const m = state.meta;
   const s = state.style;
   const isPreview = mode === 'preview';
@@ -963,7 +1441,6 @@ function paperHTML(mode){
     `--fs-title:${s.titleSize}px; --col-title:${s.titleColor}; --bg-title:${s.titleBg}; ` +
     `--fs-header:${s.headerSize}px; --paper-dir:${dir}; --paper-align:${align}; direction:${dir}; text-align:${align};`;
 
-  // شعار الترويسة
   let headerImgHtml = '';
   if(m.logoImage){
     headerImgHtml = `<img src="${m.logoImage}" class="header-logo">`;
@@ -971,7 +1448,6 @@ function paperHTML(mode){
     headerImgHtml = `<div class="img-placeholder header-img-slot" data-img="header-logo">🖼️ شعار</div>`;
   }
 
-  // بناء الأسئلة
   let currentMainNumber = 0;
   let currentSubNumber = 1;
 
@@ -1009,7 +1485,7 @@ function paperHTML(mode){
     </div>`;
   }).join('');
 
-  return `<div class="paper" style="${styleVars}">
+  return `<div class="paper tpl-modern" style="${styleVars}">
     <div class="p-header">
       <div class="ph-col ph-right">
         ${headerImgHtml}
@@ -1044,8 +1520,28 @@ function paperHTML(mode){
   </div>`;
 }
 
+function updateTemplateButtons(){
+  const tpl = state.paperTemplate || 'academic';
+  $$('#paperTemplateGrid .tpl-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tpl === tpl);
+  });
+}
+
+function paperHTML(mode){
+  mode = mode || 'preview';
+  const tpl = state.paperTemplate || 'academic';
+  if(tpl === 'minimal'){
+    return renderMinimalTemplate(mode);
+  } else if(tpl === 'modern'){
+    return renderModernTemplate(mode);
+  } else {
+    return renderAcademicTemplate(mode);
+  }
+}
+
 function renderPreview(){
   $('#previewPaper').innerHTML = paperHTML('preview');
+  updateTemplateButtons();
 }
 
 /* ============ محرر الأسئلة ============ */
@@ -1449,13 +1945,14 @@ toggleStyleBtn.addEventListener('click', ()=>{
 /* ============ أدوات القوالب ============ */
 $('#btnSaveTemplate').addEventListener('click', ()=>{
   const defName = (state.meta.school || 'مدرسة') + ' - ' + (state.meta.subject || 'اختبار');
-  const name = prompt('اكتب اسماً للقالب (لحفظ الترويسة، الشعار، وإعدادات الألوان):', defName);
+  const name = prompt('اكتب اسماً للقالب (لحفظ الترويسة، الشعار، شكل القالب، وإعدادات الألوان):', defName);
   if(!name || !name.trim()) return;
   const list = loadTemplates();
   const newTpl = {
     id: 'tpl_' + Date.now(),
     name: name.trim(),
     date: new Date().toLocaleDateString('ar-EG'),
+    paperTemplate: state.paperTemplate || 'academic',
     meta: JSON.parse(JSON.stringify(state.meta)),
     style: JSON.parse(JSON.stringify(state.style))
   };
@@ -1472,9 +1969,10 @@ $('#btnApplyTemplate').addEventListener('click', ()=>{
   const list = loadTemplates();
   const tpl = list.find(t => t.id === id);
   if(!tpl) return toast('القالب غير موجود', 'err');
-  if(!confirm(`تطبيق قالب "${tpl.name}"؟ سيتم تحديث الترويسة والألوان مع بقاء الأسئلة كما هي.`)) return;
+  if(!confirm(`تطبيق قالب "${tpl.name}"؟ سيتم تحديث الترويسة ونموذج القالب والألوان مع بقاء الأسئلة كما هي.`)) return;
   state.meta = JSON.parse(JSON.stringify(tpl.meta));
   state.style = JSON.parse(JSON.stringify(tpl.style));
+  if(tpl.paperTemplate) state.paperTemplate = tpl.paperTemplate;
   saveLocal();
   bindMetaValues();
   bindStyleValues();
@@ -1608,6 +2106,26 @@ $$('.tabs button').forEach(btn=>{
     window.scrollTo({top:0, behavior:'smooth'});
   });
 });
+
+/* ============ اختيار قالب الورقة ============ */
+const templateGrid = $('#paperTemplateGrid');
+if(templateGrid){
+  templateGrid.addEventListener('click', e => {
+    const btn = e.target.closest('.tpl-btn');
+    if(!btn) return;
+    const tpl = btn.dataset.tpl;
+    state.paperTemplate = tpl;
+    updateTemplateButtons();
+    saveLocal();
+    renderPreview();
+    const names = {
+      academic: 'القالب 1: الأكاديمي الرسمي (Formal)',
+      minimal: 'القالب 2: القياسي المبسط (Minimal)',
+      modern: 'القالب 3: الأزرق العصري (Modern)'
+    };
+    toast('✅ تم تطبيق: ' + (names[tpl] || tpl), 'ok');
+  });
+}
 
 /* ==================================================
    إنشاء PDF + الحفظ + المشاركة
