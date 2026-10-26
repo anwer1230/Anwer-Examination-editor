@@ -218,7 +218,7 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   font-weight:bold;font-size:15px;
 }
 .p-footer .f1{color:#145a32;}
-.p-footer .f2{color:#7b241c;}
+.p-footer .f2{color:#7b241c;font-size:16px;}
 .p-footer .f3{color:#1a5276;}
 
 /* صور داخل الورقة */
@@ -356,6 +356,20 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 <main>
   <section id="tab-edit">
 
+    <!-- قوالب الترويسة والتنسيق -->
+    <div class="card">
+      <h2>📋 قوالب الترويسة والألوان (Templates)</h2>
+      <p class="hint" style="margin-top:0;">احفظ إعدادات المدرسة والترويسة والألوان كقالب للرجوع إليها مستقبلاً وتطبيقها بضغطة زر عند إنشاء أي اختبار جديد.</p>
+      <div class="toolbar" style="align-items:center;">
+        <button id="btnSaveTemplate" class="btn success">💾 حفظ الإعدادات الحالية كقالب</button>
+        <select id="selTemplates" class="sel" style="max-width:270px;">
+          <option value="">-- اختر قالباً محفوظاً --</option>
+        </select>
+        <button id="btnApplyTemplate" class="btn primary">📥 تطبيق القالب</button>
+        <button id="btnDeleteTemplate" class="btn ghost danger" style="color:var(--danger);border-color:#e8b5ae;">🗑 حذف القالب</button>
+      </div>
+    </div>
+
     <!-- بيانات الترويسة -->
     <div class="card">
       <h2>بيانات الترويسة والتذييل</h2>
@@ -414,7 +428,10 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 
     <!-- الأسئلة -->
     <div class="card">
-      <h2>الأسئلة</h2>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+        <h2 style="margin:0;">الأسئلة</h2>
+        <button id="btnAutoFormat" class="mini add" style="font-size:13px;padding:7px 14px;">🪄 تنسيق وترقيم الأسئلة (Auto-format)</button>
+      </div>
       <div id="qlist"></div>
       <div class="row" style="margin-top:12px;flex-wrap:wrap;">
         <select id="newType" class="sel"></select>
@@ -423,11 +440,12 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
     </div>
 
     <div class="card">
-      <h2>أدوات المشروع</h2>
+      <h2>أدوات المشروع وإدارة الاختبار</h2>
       <div class="toolbar">
-        <button id="btnNewProject" class="btn warn">🆕 اختبار جديد (مسح الكل)</button>
+        <button id="btnClearQuestionsOnly" class="btn primary">🧹 مسح الأسئلة فقط (مع إبقاء الترويسة الحالية)</button>
+        <button id="btnNewProject" class="btn warn">🆕 اختبار جديد كلياً (مسح الكل للوضع الافتراضي)</button>
       </div>
-      <p class="hint">💾 حفظ تلقائي أثناء الكتابة. يعمل بدون إنترنت بعد أول فتح.</p>
+      <p class="hint">💾 حفظ تلقائي مستمر أثناء الكتابة. يعمل بدون إنترنت بعد أول فتح.</p>
     </div>
 
     <div class="dev">
@@ -483,6 +501,7 @@ const $  = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 const LETTERS = ['a','b','c','d','e','f','g'];
 const LS_KEY = 'anwer_exam_editor_v2';
+const TPL_KEY = 'anwer_exam_templates_v2';
 
 const esc = s => String(s == null ? '' : s)
   .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -532,23 +551,23 @@ function defaultState(){
     },
     style: defaultStyle(),
     questions:[
-      { type:'mcq', title:'Choose the best answer.', marks:10, items:[
+      { type:'mcq', title:'Q1: Choose the best answer.', marks:10, items:[
         { text:'We ................ to Aden last week.', options:['go','goes','went'] },
         { text:'Ali is ................ football.', options:['playing','played','play'] },
         { text:'Ahmed ................ to Aden every day.', options:['go','goes','went'] },
         { text:'Mohammed ................ football last day.', options:['playing','played','play'] },
         { text:'I am ................ to Aden next week.', options:['going','will','go'] }
       ], image:'' },
-      { type:'meaning', title:'What is the Arabic meaning?', marks:10,
+      { type:'meaning', title:'Q2: What is the Arabic meaning?', marks:10,
         words:['Wife','Holiday','Play','Help','Go','Dry','Work','Present','Hot','Cool'], image:'' },
-      { type:'match', title:'Match the following verbs.', marks:5,
+      { type:'match', title:'Q3: Match the following verbs.', marks:5,
         left:['Go','Help','Work','Do','Are'],
         right:['Helped','Worked','Went','Were','Did'], image:'' },
-      { type:'circle', title:'Circle the helping verbs.', marks:5,
+      { type:'circle', title:'Q4: Circle the helping verbs.', marks:5,
         box:'Help     am     Are     Came     is     we     is     do     you     Did',
         lines:2, image:'' },
-      { type:'essay', title:'Describe your best friend.', marks:5, lines:4, image:'' },
-      { type:'list', title:'Write the months of the year.', marks:5, lines:3, image:'' }
+      { type:'essay', title:'Q5: Describe your best friend.', marks:5, lines:4, image:'' },
+      { type:'list', title:'Q6: Write the months of the year.', marks:5, lines:3, image:'' }
     ]
   };
 }
@@ -591,6 +610,45 @@ function loadState(){
     if(!s || !s.meta || !Array.isArray(s.questions)) return null;
     return s;
   }catch(e){ return null; }
+}
+
+/* ============ قوالب الترويسة والألوان (Templates) ============ */
+function loadTemplates(){
+  try{
+    const raw = localStorage.getItem(TPL_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      if(Array.isArray(parsed)) return parsed;
+    }
+  }catch(e){}
+  return [];
+}
+
+function saveTemplates(tpls){
+  try{ localStorage.setItem(TPL_KEY, JSON.stringify(tpls)); }
+  catch(e){ console.warn('فشل حفظ القوالب:', e); }
+}
+
+function refreshTemplateSelect(){
+  const sel = $('#selTemplates');
+  if(!sel) return;
+  const list = loadTemplates();
+  sel.innerHTML = '<option value="">-- اختر قالباً محفوظاً --</option>' +
+    list.map(t => `<option value="${t.id}">${esc(t.name)} (${esc(t.date || '')})</option>`).join('');
+}
+
+/* ============ تنسيق وترقيم الأسئلة تلقائياً (Auto-format) ============ */
+function autoFormatQuestionNumbers(silent = false){
+  state.questions.forEach((q, idx) => {
+    let clean = String(q.title || '').replace(/^\s*(?:Q\s*\d+|Question\s*\d+|س\s*\d+)[\s_:.\-–]*/i, '').trim();
+    q.title = `Q${idx + 1}: ${clean}`.trim();
+  });
+  saveLocal();
+  renderEditor();
+  renderPreview();
+  if(!silent){
+    toast('🪄 تم إعادة ترقيم وتنسيق كافة الأسئلة بالتسلسل الصحيح (Q1, Q2, Q3...)', 'ok');
+  }
 }
 
 /* ============ رفع الصور ============ */
@@ -854,9 +912,9 @@ function qCard(q, qi){
         <input type="number" min="0" class="inp tiny" data-act="marks" data-i="0" data-j="0" value="${Number(q.marks)||0}">
       </label>
       <div class="qcard-tools">
-        <button class="mini" data-btn="up">▲</button>
-        <button class="mini" data-btn="down">▼</button>
-        <button class="mini danger" data-btn="del">🗑</button>
+        <button class="mini" data-btn="up" title="نقل لأعلى">▲</button>
+        <button class="mini" data-btn="down" title="نقل لأسفل">▼</button>
+        <button class="mini danger" data-btn="del" title="حذف السؤال">🗑</button>
       </div>
     </div>
     <div class="qcard-title">
@@ -945,16 +1003,21 @@ qlist.addEventListener('click', e => {
         const t = state.questions[qi-1];
         state.questions[qi-1] = state.questions[qi];
         state.questions[qi] = t;
+        autoFormatQuestionNumbers(true);
       } break;
     case 'down':
       if(qi < state.questions.length-1){
         const t = state.questions[qi+1];
         state.questions[qi+1] = state.questions[qi];
         state.questions[qi] = t;
+        autoFormatQuestionNumbers(true);
       } break;
     case 'del':
       if(!confirm('حذف هذا السؤال بالكامل؟')) return;
-      state.questions.splice(qi,1); break;
+      state.questions.splice(qi,1);
+      autoFormatQuestionNumbers(true); // إعادة الترقيم تلقائياً بالتسلسل الصحيح
+      toast('🗑 تم حذف السؤال وإعادة ترقيم باقي الأسئلة تلقائياً', 'ok');
+      break;
     case 'addsub':
       q.items.push({ text:'', options:['','',''] }); break;
     case 'delsub':
@@ -1019,13 +1082,81 @@ $('#btnAddQ').addEventListener('click', ()=>{
   window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'});
 });
 
-/* ============ اختبار جديد ============ */
+/* ============ زر تنسيق وترقيم الأسئلة ============ */
+$('#btnAutoFormat').addEventListener('click', ()=>{
+  autoFormatQuestionNumbers(false);
+});
+
+/* ============ أدوات القوالب ============ */
+$('#btnSaveTemplate').addEventListener('click', ()=>{
+  const defName = (state.meta.school || 'مدرسة') + ' - ' + (state.meta.subject || 'اختبار');
+  const name = prompt('اكتب اسماً للقالب (لحفظ الترويسة، الشعار، وإعدادات الألوان):', defName);
+  if(!name || !name.trim()) return;
+  const list = loadTemplates();
+  const newTpl = {
+    id: 'tpl_' + Date.now(),
+    name: name.trim(),
+    date: new Date().toLocaleDateString('ar-EG'),
+    meta: JSON.parse(JSON.stringify(state.meta)),
+    style: JSON.parse(JSON.stringify(state.style))
+  };
+  list.push(newTpl);
+  saveTemplates(list);
+  refreshTemplateSelect();
+  $('#selTemplates').value = newTpl.id;
+  toast(`✅ تم حفظ القالب بنجاح: "${newTpl.name}"`, 'ok');
+});
+
+$('#btnApplyTemplate').addEventListener('click', ()=>{
+  const id = $('#selTemplates').value;
+  if(!id) return toast('يرجى اختيار قالب من القائمة أولاً', 'err');
+  const list = loadTemplates();
+  const tpl = list.find(t => t.id === id);
+  if(!tpl) return toast('القالب غير موجود', 'err');
+  if(!confirm(`تطبيق قالب "${tpl.name}"؟ سيتم تحديث الترويسة والألوان مع بقاء الأسئلة كما هي.`)) return;
+  state.meta = JSON.parse(JSON.stringify(tpl.meta));
+  state.style = JSON.parse(JSON.stringify(tpl.style));
+  saveLocal();
+  bindMetaValues();
+  bindStyleValues();
+  renderEditor();
+  renderPreview();
+  toast(`✅ تم تطبيق القالب: "${tpl.name}"`, 'ok');
+});
+
+$('#btnDeleteTemplate').addEventListener('click', ()=>{
+  const id = $('#selTemplates').value;
+  if(!id) return toast('يرجى اختيار قالب لحذفه من القائمة', 'err');
+  const list = loadTemplates();
+  const idx = list.findIndex(t => t.id === id);
+  if(idx === -1) return;
+  if(!confirm(`هل أنت متأكد من حذف قالب "${list[idx].name}"؟`)) return;
+  const removedName = list[idx].name;
+  list.splice(idx, 1);
+  saveTemplates(list);
+  refreshTemplateSelect();
+  toast(`🗑 تم حذف القالب: "${removedName}"`, 'ok');
+});
+
+/* ============ أدوات المشروع ============ */
+$('#btnClearQuestionsOnly').addEventListener('click', ()=>{
+  if(!confirm('هل تريد مسح جميع الأسئلة والبدء بأسئلة جديدة مع الاحتفاظ ببيانات الترويسة والألوان الحالية؟')) return;
+  state.questions = [
+    makeQuestion('mcq')
+  ];
+  state.questions[0].title = 'Q1: Choose the correct answer.';
+  saveLocal();
+  renderEditor();
+  renderPreview();
+  toast('🧹 تم تفريغ الأسئلة والبدء بسؤال جديد مع الحفاظ على الترويسة والقالب', 'ok');
+});
+
 $('#btnNewProject').addEventListener('click', ()=>{
-  if(!confirm('سيتم مسح جميع الأسئلة والبيانات. متأكد؟')) return;
+  if(!confirm('سيتم مسح جميع الأسئلة والبيانات والعودة للوضع الافتراضي. متأكد؟')) return;
   state = defaultState();
   saveLocal(); bindMetaValues(); bindStyleValues();
   renderEditor(); renderPreview();
-  toast('تم بدء اختبار جديد', 'ok');
+  toast('تم بدء اختبار جديد بالكامل', 'ok');
 });
 
 /* ============ بيانات الترويسة ============ */
@@ -1308,6 +1439,7 @@ updateOnline();
 function init(){
   bindMetaValues();
   bindStyleValues();
+  refreshTemplateSelect();
   renderEditor();
   renderPreview();
 }
