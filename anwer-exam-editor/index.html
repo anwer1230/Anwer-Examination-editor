@@ -147,6 +147,9 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 .qcard{
   background:#fff;border:2px solid #cfdfeb;border-radius:12px;margin-bottom:14px;overflow:hidden;
 }
+.qcard.qcard-sub{
+  margin-inline-start:24px;border:2px dashed #2874a6;border-inline-start:6px solid #2874a6;background:#fbfdff;
+}
 .qcard-head{
   display:flex;align-items:center;gap:8px;flex-wrap:wrap;
   background:linear-gradient(90deg,#e8f2f9,#f6fbff);padding:9px 11px;border-bottom:2px solid #cfdfeb;
@@ -154,6 +157,9 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 .qbadge{
   background:var(--primary);color:#fff;font-size:12px;font-weight:bold;
   padding:4px 10px;border-radius:20px;white-space:nowrap;
+}
+.qbadge.sub{
+  background:#1b4f72;border:1px solid #14496b;
 }
 .sel{
   padding:7px 9px;border:1.6px solid #c3d4e0;border-radius:8px;font-family:inherit;
@@ -242,10 +248,16 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   direction:var(--paper-dir, rtl);text-align:var(--paper-align, right);margin-bottom:13px;border:2px solid #2874a6;
   border-radius:8px;padding:9px 12px;background:#eaf4fb;
 }
+.question.question-sub{
+  margin-inline-start:20px;background:#f5faff;border:2px dashed #2874a6;border-inline-start:6px solid #2874a6;
+}
 .q-head{
   display:flex;justify-content:space-between;align-items:center;gap:8px;
   background:#2874a6;color:#fff;font-weight:bold;font-size:14.5px;
   padding:5px 10px;border-radius:6px;margin-bottom:9px;
+}
+.q-head.q-head-sub{
+  background:linear-gradient(90deg, #1b4f72, #2874a6);font-size:13.5px;padding:4px 9px;
 }
 .marks{
   background:#f1c40f;color:#000;padding:1px 9px;border-radius:20px;
@@ -408,8 +420,10 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   body{background:#fff;padding:0;margin:0;}
   .paper{border:3px solid #1a5276 !important;border-radius:10px !important;direction:var(--paper-dir, rtl) !important;text-align:var(--paper-align, right) !important;}
   .question{background:#eaf4fb !important;direction:var(--paper-dir, rtl) !important;text-align:var(--paper-align, right) !important;}
+  .question.question-sub{background:#f5faff !important;border-inline-start:6px solid #2874a6 !important;}
   .p-footer{direction:var(--paper-dir, rtl) !important;}
   .q-head{background:#2874a6 !important;color:#fff !important;}
+  .q-head.q-head-sub{background:#1b4f72 !important;color:#fff !important;}
   .p-title{background:var(--bg-title, #1a5276) !important;color:var(--col-title, #fff) !important;}
   .mt th{background:#1a5276 !important;color:#fff !important;}
   .marks{background:#f1c40f !important;color:#000 !important;}
@@ -466,29 +480,43 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
       </div>
     </div>
 
-    <!-- بيانات الترويسة -->
-    <div class="card">
-      <h2>بيانات الترويسة والتذييل</h2>
-      <div class="meta-grid">
-        <label>الجهة العليا 1 <input class="inp" data-meta="country"></label>
-        <label>الجهة العليا 2 <input class="inp" data-meta="ministry"></label>
-        <label>الجهة العليا 3 <input class="inp" data-meta="governorate"></label>
-        <label>الجهة العليا 4 <input class="inp" data-meta="office"></label>
-        <label>اسم المدرسة <input class="inp" data-meta="school"></label>
-        <label>الصف <input class="inp" data-meta="className"></label>
-        <label>المادة <input class="inp" data-meta="subject"></label>
-        <label>المدة <input class="inp" data-meta="duration"></label>
-        <label>عنوان الاختبار <input class="inp" data-meta="examTitle"></label>
-        <label>خانة اسم الطالب <input class="inp" data-meta="studentLabel"></label>
-        <label>اسم المعلم (التذييل) <input class="inp" data-meta="teacher"></label>
-        <label>نص التذييل (Good Luck) <input class="inp" data-meta="footerLeft"></label>
+    <!-- بيانات الترويسة والتذييل (قائمة منسدلة قابلة للطي والفتح) -->
+    <div class="card accordion-card" id="headerCard">
+      <div class="accordion-head" id="toggleHeaderBtn" role="button" tabindex="0" title="اضغط لإظهار أو إخفاء بيانات الترويسة والتذييل">
+        <div class="acc-left">
+          <div class="acc-icon" style="background:#eaf2f8;color:var(--primary);border-color:#b9d3e4;">🏫</div>
+          <div class="acc-title">
+            <h2>بيانات الترويسة والتذييل</h2>
+            <p>انقر هنا لإظهار / إخفاء بيانات المدرسة والجهات العليا والشعار والتذييل</p>
+          </div>
+        </div>
+        <div class="acc-badge-wrap">
+          <span class="acc-badge" id="headerBadgeStatus">اضغط للفتح ▼</span>
+          <span class="acc-arrow" id="headerArrow">▼</span>
+        </div>
       </div>
+      <div class="accordion-body" id="headerBody" style="display:none;margin-top:14px;">
+        <div class="meta-grid">
+          <label>الجهة العليا 1 <input class="inp" data-meta="country"></label>
+          <label>الجهة العليا 2 <input class="inp" data-meta="ministry"></label>
+          <label>الجهة العليا 3 <input class="inp" data-meta="governorate"></label>
+          <label>الجهة العليا 4 <input class="inp" data-meta="office"></label>
+          <label>اسم المدرسة <input class="inp" data-meta="school"></label>
+          <label>الصف <input class="inp" data-meta="className"></label>
+          <label>المادة <input class="inp" data-meta="subject"></label>
+          <label>المدة <input class="inp" data-meta="duration"></label>
+          <label>عنوان الاختبار <input class="inp" data-meta="examTitle"></label>
+          <label>خانة اسم الطالب <input class="inp" data-meta="studentLabel"></label>
+          <label>اسم المعلم (التذييل) <input class="inp" data-meta="teacher"></label>
+          <label>نص التذييل (Good Luck) <input class="inp" data-meta="footerLeft"></label>
+        </div>
 
-      <div style="margin-top:12px;">
-        <button class="btn primary" id="btnHeaderImg">🖼️ رفع شعار المدرسة</button>
-        <button class="btn ghost" id="btnRemoveHeaderImg">❌ حذف الشعار</button>
+        <div style="margin-top:12px;">
+          <button class="btn primary" id="btnHeaderImg">🖼️ رفع شعار المدرسة</button>
+          <button class="btn ghost" id="btnRemoveHeaderImg">❌ حذف الشعار</button>
+        </div>
+        <div id="headerImgPreview"></div>
       </div>
-      <div id="headerImgPreview"></div>
     </div>
 
     <!-- إعدادات الخط والألوان (أيقونة وقائمة منسدلة قابلة للطي والفتح) -->
@@ -543,9 +571,10 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
         <button id="btnAutoFormat" class="mini add" style="font-size:13px;padding:7px 14px;">🪄 تنسيق وترقيم الأسئلة (Auto-format)</button>
       </div>
       <div id="qlist"></div>
-      <div class="row" style="margin-top:12px;flex-wrap:wrap;">
-        <select id="newType" class="sel"></select>
-        <button id="btnAddQ" class="btn primary">➕ إضافة سؤال</button>
+      <div class="row" style="margin-top:12px;flex-wrap:wrap;gap:8px;">
+        <select id="newType" class="sel" style="min-width:180px;"></select>
+        <button id="btnAddQ" class="btn primary">➕ إضافة سؤال رئيسي (Q)</button>
+        <button id="btnAddSubQ" class="btn success">➕ إضافة سؤال فرعي (2_, 3_...)</button>
       </div>
     </div>
 
@@ -783,17 +812,58 @@ function refreshTemplateSelect(){
     list.map(t => `<option value="${t.id}">${esc(t.name)} (${esc(t.date || '')})</option>`).join('');
 }
 
+function getQuestionMeta(qi){
+  let currentMain = 0;
+  let currentSub = 1; // السؤال الرئيسي نفسه يعتبر رقم 1
+  for(let k = 0; k <= qi; k++){
+    const q = state.questions[k];
+    if(!q.isSub){
+      currentMain++;
+      currentSub = 1;
+    } else {
+      currentSub++;
+    }
+  }
+  const isSub = !!state.questions[qi]?.isSub;
+  return {
+    isSub,
+    mainNum: currentMain,
+    subNum: isSub ? currentSub : 1,
+    badgeText: isSub ? `فرعي (${currentSub}_)` : `سؤال ${currentMain}`,
+    parentLabel: `سؤال ${currentMain}`
+  };
+}
+
 /* ============ تنسيق وترقيم الأسئلة تلقائياً (Auto-format) ============ */
 function autoFormatQuestionNumbers(silent = false){
-  state.questions.forEach((q, idx) => {
-    let clean = String(q.title || '').replace(/^\s*(?:Q\s*\d+|Question\s*\d+|س\s*\d+)[\s_:.\-–]*/i, '').trim();
-    q.title = `Q${idx + 1}: ${clean}`.trim();
+  let currentMain = 0;
+  let currentSub = 1;
+
+  state.questions.forEach((q) => {
+    if(q.isSub == null){
+      if(/^\s*[2-9]\d*[\s_–\-.]/i.test(q.title) && !/^\s*Q/i.test(q.title)){
+        q.isSub = true;
+      } else {
+        q.isSub = false;
+      }
+    }
+
+    if(!q.isSub){
+      currentMain++;
+      currentSub = 1;
+      let clean = String(q.title || '').replace(/^\s*(?:Q\s*\d+|Question\s*\d+|س\s*\d+|\d+)[\s_:.\-–]*/i, '').trim();
+      q.title = `Q${currentMain}: ${clean}`.trim();
+    } else {
+      currentSub++;
+      let clean = String(q.title || '').replace(/^\s*(?:Q\s*\d+|Question\s*\d+|س\s*\d+|\d+)[\s_:.\-–]*/i, '').trim();
+      q.title = `${currentSub}_ ${clean}`.trim();
+    }
   });
   saveLocal();
   renderEditor();
   renderPreview();
   if(!silent){
-    toast('🪄 تم إعادة ترقيم وتنسيق كافة الأسئلة بالتسلسل الصحيح (Q1, Q2, Q3...)', 'ok');
+    toast('🪄 تم إعادة ترقيم وتنسيق الأسئلة الرئيسية (Q1, Q2..) والفرعية (2_, 3_..) بالتسلسل الصحيح', 'ok');
   }
 }
 
@@ -902,6 +972,9 @@ function paperHTML(mode){
   }
 
   // بناء الأسئلة
+  let currentMainNumber = 0;
+  let currentSubNumber = 1;
+
   const qs = state.questions.map((q,i) => {
     let imgHtml = '';
     if(q.image){
@@ -910,11 +983,26 @@ function paperHTML(mode){
       imgHtml = `<div class="img-placeholder" data-img-q="${i}">🖼️ اضغط لإضافة صورة للسؤال</div>`;
     }
 
-    const clean = String(q.title||'').replace(/^\s*Q\s*\d+\s*[_:.\-–]?\s*/i,'').trim();
-    return `<div class="question" data-qidx="${i}">
-      <div class="q-head">
-        <span>Q${i+1}: ${esc(clean || 'Question')}</span>
-        <span class="marks">${Number(q.marks)||0} Marks</span>
+    let headerLabel = '';
+    const isSub = !!q.isSub;
+    if(!isSub){
+      currentMainNumber++;
+      currentSubNumber = 1;
+      const clean = String(q.title||'').replace(/^\s*(?:Q\s*\d+|Question\s*\d+|س\s*\d+|\d+)[\s_:.\-–]*/i,'').trim();
+      headerLabel = `Q${currentMainNumber}: ${clean || 'Question'}`;
+    } else {
+      currentSubNumber++;
+      const clean = String(q.title||'').replace(/^\s*(?:Q\s*\d+|Question\s*\d+|س\s*\d+|\d+)[\s_:.\-–]*/i,'').trim();
+      headerLabel = `${currentSubNumber}_ ${clean || 'سؤال فرعي'}`;
+    }
+
+    const subClass = isSub ? 'question-sub' : '';
+    const marksText = Number(q.marks) > 0 ? `<span class="marks">${Number(q.marks)} Marks</span>` : '';
+
+    return `<div class="question ${subClass}" data-qidx="${i}">
+      <div class="q-head ${isSub ? 'q-head-sub' : ''}">
+        <span>${esc(headerLabel)}</span>
+        ${marksText}
       </div>
       <div class="q-body">${bodyHTML(q)}</div>
       ${imgHtml}
@@ -1038,6 +1126,7 @@ function bodyEditor(q){
 }
 
 function qCard(q, qi){
+  const meta = getQuestionMeta(qi);
   const opts = Object.keys(TYPES)
     .map(k=>`<option value="${k}"${k===q.type?' selected':''}>${TYPES[k].label}</option>`).join('');
 
@@ -1050,14 +1139,22 @@ function qCard(q, qi){
        </div>`
     : `<button class="mini add" data-btn="uploadimg" data-qi="${qi}">🖼️ رفع صورة للسؤال</button>`;
 
-  return `<div class="qcard" data-qi="${qi}">
+  const cardClass = meta.isSub ? 'qcard qcard-sub' : 'qcard';
+  const badgeClass = meta.isSub ? 'qbadge sub' : 'qbadge';
+
+  return `<div class="${cardClass}" data-qi="${qi}">
     <div class="qcard-head">
-      <span class="qbadge">سؤال ${qi+1}</span>
+      <span class="${badgeClass}">${meta.badgeText}</span>
+      <select class="mini" data-btn="togglesub" data-qi="${qi}" title="نوع السؤال: رئيسي أو فرعي">
+        <option value="main"${!meta.isSub?' selected':''}>سؤال رئيسي (Q)</option>
+        <option value="sub"${meta.isSub?' selected':''}>سؤال فرعي (2_, 3_)</option>
+      </select>
       <select class="sel" data-btn="type">${opts}</select>
       <label class="marks-lbl">الدرجة
         <input type="number" min="0" class="inp tiny" data-act="marks" data-i="0" data-j="0" value="${Number(q.marks)||0}">
       </label>
       <div class="qcard-tools">
+        <button class="mini add" data-btn="addsubq" data-qi="${qi}" title="إضافة سؤال فرعي تابع لهذا السؤال يبدأ بترقيم 2_ ثم 3_">➕ فرعي</button>
         <button class="mini" data-btn="up" title="نقل لأعلى">▲</button>
         <button class="mini" data-btn="down" title="نقل لأسفل">▼</button>
         <button class="mini danger" data-btn="del" title="حذف السؤال">🗑</button>
@@ -1065,7 +1162,7 @@ function qCard(q, qi){
     </div>
     <div class="qcard-title">
       <input class="inp" data-act="title" data-i="0" data-j="0"
-             value="${esc(q.title)}" placeholder="نص السؤال الرئيسي">
+             value="${esc(q.title)}" placeholder="${meta.isSub ? 'نص السؤال الفرعي (مثال: 2_ أجب عما يلي)' : 'نص السؤال الرئيسي'}">
     </div>
     <div class="qcard-body">${bodyEditor(q)}</div>
     <div style="padding:0 11px 12px;">${imgPreview}</div>
@@ -1137,6 +1234,32 @@ qlist.addEventListener('click', e => {
     return;
   }
 
+  // إضافة سؤال فرعي تابع للسؤال الحالي
+  if(btn.dataset.btn === 'addsubq'){
+    const qi = Number(btn.dataset.qi);
+    let parentIdx = qi;
+    while(parentIdx > 0 && state.questions[parentIdx].isSub){
+      parentIdx--;
+    }
+    let insertIdx = parentIdx + 1;
+    let subCount = 1; // السؤال الرئيسي نفسه يعتبر رقم 1
+    while(insertIdx < state.questions.length && state.questions[insertIdx].isSub){
+      subCount++;
+      insertIdx++;
+    }
+    subCount++; // السؤال الفرعي يبدأ من 2_ ثم 3_
+    const fresh = makeQuestion(newType.value || 'essay');
+    fresh.isSub = true;
+    fresh.title = `${subCount}_ `;
+    state.questions.splice(insertIdx, 0, fresh);
+    saveLocal();
+    renderEditor();
+    renderPreview();
+    const parentMeta = getQuestionMeta(parentIdx);
+    toast(`➕ تمت إضافة سؤال فرعي (${subCount}_) تابع لـ ${parentMeta.parentLabel}`, 'ok');
+    return;
+  }
+
   const card = btn.closest('.qcard'); if(!card) return;
   const qi = Number(card.dataset.qi);
   const q = state.questions[qi]; if(!q) return;
@@ -1159,7 +1282,7 @@ qlist.addEventListener('click', e => {
         autoFormatQuestionNumbers(true);
       } break;
     case 'del':
-      if(!confirm('حذف هذا السؤال بالكامل؟')) return;
+      if(!confirm('حذف هذا السؤال؟')) return;
       state.questions.splice(qi,1);
       autoFormatQuestionNumbers(true); // إعادة الترقيم تلقائياً بالتسلسل الصحيح
       toast('🗑 تم حذف السؤال وإعادة ترقيم باقي الأسئلة تلقائياً', 'ok');
@@ -1195,6 +1318,17 @@ qlist.addEventListener('click', e => {
 });
 
 qlist.addEventListener('change', e => {
+  // تبديل نوع السؤال (رئيسي أو فرعي)
+  const toggleSubSel = e.target.closest('select[data-btn="togglesub"]');
+  if(toggleSubSel){
+    const card = toggleSubSel.closest('.qcard');
+    const qi = Number(card.dataset.qi);
+    state.questions[qi].isSub = (toggleSubSel.value === 'sub');
+    autoFormatQuestionNumbers(true);
+    toast(state.questions[qi].isSub ? 'تم تحويل السؤال إلى سؤال فرعي' : 'تم تحويل السؤال إلى سؤال رئيسي', 'ok');
+    return;
+  }
+
   const sel = e.target.closest('select[data-btn="type"]');
   if(!sel) return;
   const card = sel.closest('.qcard');
@@ -1207,13 +1341,14 @@ qlist.addEventListener('change', e => {
   fresh.title = old.title;
   fresh.marks = old.marks;
   fresh.image = old.image || '';
+  fresh.isSub = !!old.isSub;
   state.questions[qi] = fresh;
   saveLocal();
   renderEditor();
   renderPreview();
 });
 
-/* ============ إضافة سؤال ============ */
+/* ============ إضافة سؤال رئيسي أو فرعي ============ */
 const newType = $('#newType');
 newType.innerHTML = Object.keys(TYPES)
   .map(k=>`<option value="${k}">${TYPES[k].label}</option>`).join('');
@@ -1221,10 +1356,40 @@ newType.innerHTML = Object.keys(TYPES)
 $('#btnAddQ').addEventListener('click', ()=>{
   const type = newType.value;
   const q = makeQuestion(type);
-  q.title = 'Q' + (state.questions.length + 1) + ': ';
+  q.isSub = false;
+  const mainCount = state.questions.filter(it => !it.isSub).length;
+  q.title = 'Q' + (mainCount + 1) + ': ';
   state.questions.push(q);
   saveLocal(); renderEditor(); renderPreview();
-  toast('تمت إضافة سؤال جديد', 'ok');
+  toast('تمت إضافة سؤال رئيسي جديد (Q' + (mainCount + 1) + ')', 'ok');
+  window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'});
+});
+
+$('#btnAddSubQ').addEventListener('click', ()=>{
+  if(state.questions.length === 0){
+    const q = makeQuestion(newType.value);
+    q.isSub = false;
+    q.title = 'Q1: ';
+    state.questions.push(q);
+    toast('تمت إضافة السؤال الأول (Q1)', 'ok');
+  } else {
+    let lastMainIdx = state.questions.length - 1;
+    while(lastMainIdx > 0 && state.questions[lastMainIdx].isSub){
+      lastMainIdx--;
+    }
+    let subCounter = 1;
+    for(let k = lastMainIdx + 1; k < state.questions.length; k++){
+      if(state.questions[k].isSub) subCounter++;
+    }
+    subCounter++; // يبدأ من 2_ ثم 3_
+    const q = makeQuestion(newType.value);
+    q.isSub = true;
+    q.title = `${subCounter}_ `;
+    state.questions.push(q);
+    const parentMeta = getQuestionMeta(lastMainIdx);
+    toast(`➕ تمت إضافة سؤال فرعي (${subCounter}_) تابع لـ ${parentMeta.parentLabel}`, 'ok');
+  }
+  saveLocal(); renderEditor(); renderPreview();
   window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'});
 });
 
@@ -1232,6 +1397,31 @@ $('#btnAddQ').addEventListener('click', ()=>{
 $('#btnAutoFormat').addEventListener('click', ()=>{
   autoFormatQuestionNumbers(false);
 });
+
+/* ============ تبديل إظهار/إخفاء بيانات الترويسة والتذييل (Accordion) ============ */
+const toggleHeaderBtn = $('#toggleHeaderBtn');
+const headerBody = $('#headerBody');
+const headerArrow = $('#headerArrow');
+const headerBadgeStatus = $('#headerBadgeStatus');
+
+if(toggleHeaderBtn && headerBody){
+  toggleHeaderBtn.addEventListener('click', ()=>{
+    const isHidden = headerBody.style.display === 'none';
+    if(isHidden){
+      headerBody.style.display = 'block';
+      headerArrow.classList.add('open');
+      headerBadgeStatus.textContent = 'اضغط للإغلاق ▲';
+      headerBadgeStatus.style.background = '#eafaf1';
+      headerBadgeStatus.style.color = '#146c43';
+    } else {
+      headerBody.style.display = 'none';
+      headerArrow.classList.remove('open');
+      headerBadgeStatus.textContent = 'اضغط للفتح ▼';
+      headerBadgeStatus.style.background = '#eef6fc';
+      headerBadgeStatus.style.color = 'var(--primary)';
+    }
+  });
+}
 
 /* ============ تبديل إظهار/إخفاء إعدادات الخط والألوان (Accordion) ============ */
 const toggleStyleBtn = $('#toggleStyleBtn');
