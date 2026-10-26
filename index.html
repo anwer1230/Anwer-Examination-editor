@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<meta name="theme-color" content="#1a5276">
+<meta name="description" content="تطبيق لإنشاء وتعديل الاختبارات المدرسية وحفظها PDF ومشاركتها - تصميم وبرمجة الأستاذ أنور سيف">
+<meta property="og:title" content="محرر الاختبارات أنور الصبري">
+<meta property="og:description" content="تطبيق لإنشاء وتعديل الاختبارات المدرسية وحفظها PDF ومشاركتها - تصميم وبرمجة الأستاذ أنور سيف">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="محرر الاختبارات">
+<title>محرر الاختبارات أنور الصبري</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{
+  --primary:#1a5276; --primary2:#2874a6; --accent:#f1c40f;
+  --danger:#c0392b; --ok:#1e8449; --bg:#eef3f7; --ink:#12222e;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; font-family:Tahoma,"Segoe UI",Arial,sans-serif;
+  background:var(--bg); color:var(--ink); padding-bottom:40px;
+}
+
+/* ============ شريط التطبيق ============ */
+.appbar{
+  background:linear-gradient(135deg,#123a55,#1a5276 55%,#2874a6);
+  color:#fff; padding:12px 16px; display:flex; justify-content:space-between;
+  align-items:center; gap:10px; flex-wrap:wrap;
+  box-shadow:0 3px 12px rgba(0,0,0,.25);
+}
+.brand{display:flex; align-items:center; gap:10px;}
+.logo{
+  width:44px;height:44px;border-radius:12px;background:#f1c40f;color:#123a55;
+  display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:bold;
+}
+.brand h1{font-size:17px;margin:0;line-height:1.3;}
+.brand p{font-size:11.5px;margin:2px 0 0;opacity:.85;}
+.contact{display:flex;gap:8px;flex-wrap:wrap;}
+.contact a{
+  color:#123a55;background:#f1c40f;text-decoration:none;font-size:12px;
+  font-weight:bold;padding:7px 11px;border-radius:20px;white-space:nowrap;
+}
+.contact a.wa{background:#25d366;color:#04361a;}
+
+/* ============ التبويبات ============ */
+.tabs{display:flex;background:#fff;border-bottom:3px solid var(--primary);position:sticky;top:0;z-index:20;}
+.tabs button{
+  flex:1;padding:12px;border:0;background:transparent;font-size:14.5px;
+  font-weight:bold;font-family:inherit;color:#456;cursor:pointer;border-bottom:4px solid transparent;
+}
+.tabs button.active{color:var(--primary);border-bottom-color:var(--accent);background:#f7fbfe;}
+
+main{max-width:900px;margin:0 auto;padding:14px;}
+
+/* ============ عناصر النموذج ============ */
+.card{
+  background:#fff;border-radius:12px;padding:14px;margin-bottom:14px;
+  box-shadow:0 2px 8px rgba(18,58,85,.10);
+}
+.card h2{
+  font-size:15px;margin:0 0 12px;color:var(--primary);
+  border-right:5px solid var(--accent);padding-right:9px;
+}
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:10px;}
+.meta-grid label{display:flex;flex-direction:column;font-size:12.5px;font-weight:bold;color:#46606f;gap:5px;}
+.inp{
+  width:100%;padding:9px 11px;border:1.6px solid #c3d4e0;border-radius:9px;
+  font-family:inherit;font-size:14px;background:#fbfdff;color:var(--ink);
+}
+.inp:focus{outline:none;border-color:var(--primary2);background:#fff;box-shadow:0 0 0 3px rgba(40,116,166,.15);}
+.inp.tiny{width:70px;padding:5px 8px;}
+textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
+
+/* ============ ألوان وأحجام ============ */
+.style-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;
+  border:2px dashed #b9d3e4;border-radius:10px;padding:12px;background:#fbfdff;
+}
+.style-grid label{display:flex;flex-direction:column;font-size:12.5px;font-weight:bold;color:#46606f;gap:5px;}
+.style-grid input[type="color"]{
+  height:40px;border:1.6px solid #c3d4e0;border-radius:9px;cursor:pointer;
+  padding:3px;background:#fff;
+}
+
+/* ============ بطاقة السؤال ============ */
+.qcard{
+  background:#fff;border:2px solid #cfdfeb;border-radius:12px;margin-bottom:14px;overflow:hidden;
+}
+.qcard-head{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  background:linear-gradient(90deg,#e8f2f9,#f6fbff);padding:9px 11px;border-bottom:2px solid #cfdfeb;
+}
+.qbadge{
+  background:var(--primary);color:#fff;font-size:12px;font-weight:bold;
+  padding:4px 10px;border-radius:20px;white-space:nowrap;
+}
+.sel{
+  padding:7px 9px;border:1.6px solid #c3d4e0;border-radius:8px;font-family:inherit;
+  font-size:13px;background:#fff;flex:1;min-width:150px;
+}
+.marks-lbl{font-size:12.5px;font-weight:bold;color:#7b241c;display:flex;align-items:center;gap:5px;}
+.qcard-tools{margin-right:auto;display:flex;gap:5px;}
+.qcard-title{padding:10px 11px 0;}
+.qcard-body{padding:10px 11px 12px;}
+
+.mini{
+  border:1.6px solid #c3d4e0;background:#fff;color:var(--primary);
+  border-radius:8px;padding:5px 10px;font-size:12.5px;font-weight:bold;
+  cursor:pointer;font-family:inherit;
+}
+.mini:hover{background:#eef6fc;}
+.mini.danger{color:var(--danger);border-color:#e8b5ae;}
+.mini.danger:hover{background:#fdeeec;}
+.mini.add{background:#eafaf1;border-color:#a9dfc4;color:#146c43;margin-top:4px;}
+
+.row{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+.row.indent{padding-right:18px;}
+.num{
+  min-width:26px;height:26px;border-radius:50%;background:var(--primary2);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;flex-shrink:0;
+}
+.num.sm{background:#7b241c;width:24px;height:24px;font-size:11px;}
+.arrow{color:var(--primary2);font-weight:bold;flex-shrink:0;}
+.subcard{
+  border:1.6px dashed #b9d3e4;border-radius:10px;padding:9px;margin-bottom:9px;background:#fbfdff;
+}
+
+/* معاينة الصورة في المحرر */
+.img-preview{
+  display:flex;align-items:center;gap:10px;margin:6px 0;padding:7px;
+  background:#f7fbfe;border:1.6px dashed #b9d3e4;border-radius:9px;
+}
+.img-preview img{max-width:80px;max-height:60px;border-radius:6px;border:1px solid #c3d4e0;}
+.img-preview span{font-size:12px;color:#46606f;flex:1;}
+
+/* ============ المعاينة ============ */
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.btn{
+  border:0;border-radius:10px;padding:11px 16px;font-size:14px;font-weight:bold;
+  font-family:inherit;cursor:pointer;color:#fff;background:var(--primary2);
+  box-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+.btn.primary{background:linear-gradient(135deg,#1a5276,#2874a6);}
+.btn.success{background:linear-gradient(135deg,#1e8449,#25d366);color:#04361a;}
+.btn.warn{background:linear-gradient(135deg,#b9770e,#f1c40f);color:#3d2a00;}
+.btn.ghost{background:#fff;color:var(--primary);border:2px solid #c3d4e0;box-shadow:none;}
+.btn:active{transform:scale(.97);}
+
+#previewPaper{overflow:auto;padding-bottom:10px;}
+
+/* ============ ورقة الاختبار ============ */
+.paper{
+  direction:var(--paper-dir, rtl); text-align:var(--paper-align, right); background:#fff; color:var(--col-base, #12222e);
+  border:3px solid #1a5276; border-radius:10px;
+  padding:16px 18px; width:794px; margin:0 auto;
+  font-family:"Times New Roman",Tahoma,Arial,sans-serif;
+  font-size:var(--fs-base, 14.5px);
+}
+.paper *{box-sizing:border-box;}
+
+.p-header{
+  display:flex; justify-content:space-between; align-items:flex-start; gap:10px;
+  border-bottom:3px double #1a5276; padding-bottom:10px; margin-bottom:8px;
+  direction:var(--paper-dir, rtl);
+}
+.ph-col{width:34%;font-size:var(--fs-header, 13.5px);font-weight:bold;color:#1a5276;line-height:1.75;}
+.ph-right{text-align:start;display:flex;flex-direction:column;gap:4px;align-items:flex-start;}
+.ph-left{text-align:end;display:flex;flex-direction:column;gap:4px;align-items:flex-end;}
+.ph-center{width:32%;text-align:center;font-size:19px;font-weight:bold;color:#145a32;padding-top:8px;}
+
+.p-title{
+  text-align:center;font-size:var(--fs-title, 20px);font-weight:bold;
+  color:var(--col-title, #ffffff);background:var(--bg-title, #1a5276);
+  padding:7px;border-radius:6px;margin:10px 0;letter-spacing:.5px;
+}
+.p-info{
+  display:flex;justify-content:space-between;font-size:13.5px;font-weight:bold;color:#7b241c;
+  border:2px dashed #7b241c;padding:5px 10px;border-radius:6px;margin-bottom:14px;
+}
+.question{
+  direction:var(--paper-dir, rtl);text-align:var(--paper-align, right);margin-bottom:13px;border:2px solid #2874a6;
+  border-radius:8px;padding:9px 12px;background:#eaf4fb;
+}
+.q-head{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+  background:#2874a6;color:#fff;font-weight:bold;font-size:14.5px;
+  padding:5px 10px;border-radius:6px;margin-bottom:9px;
+}
+.marks{
+  background:#f1c40f;color:#000;padding:1px 9px;border-radius:20px;
+  font-size:12.5px;white-space:nowrap;
+}
+.q-body{font-size:var(--fs-base, 14.5px);line-height:1.65;}
+.q-body ol{margin:0;padding-inline-start:22px;}
+.q-body li{margin-bottom:7px;}
+.opts{margin-top:3px;}
+.opts .opt{display:inline-block;margin-inline-end:14px;color:#7b241c;font-weight:bold;}
+.dot{display:inline-block;border-bottom:1px dotted #333;width:120px;margin-inline-start:8px;}
+.line{display:block;border-bottom:1px dotted #333;height:20px;margin-top:6px;}
+.mt{width:100%;border-collapse:collapse;font-size:calc(var(--fs-base, 14.5px) - 1px);}
+.mt th,.mt td{border:1.5px solid #2874a6;padding:5px 8px;text-align:center;}
+.mt th{background:#1a5276;color:#fff;}
+.circlebox{
+  border:2px dotted #2874a6;border-radius:8px;padding:10px;text-align:center;
+  font-weight:bold;color:#1a5276;font-size:15.5px;line-height:2.1;word-spacing:12px;
+}
+.p-footer{
+  direction:var(--paper-dir, rtl);display:flex;justify-content:space-between;align-items:center;
+  border-top:3px double #1a5276;margin-top:16px;padding-top:8px;
+  font-weight:bold;font-size:15px;
+}
+.p-footer .f1{color:#145a32;}
+.p-footer .f2{color:#7b241c;font-size:16px;}
+.p-footer .f3{color:#1a5276;}
+
+/* صور داخل الورقة */
+.header-logo{max-height:65px;max-width:140px;border-radius:6px;margin-bottom:5px;}
+.q-img{max-width:100%;max-height:280px;border-radius:6px;margin-top:8px;display:block;}
+.img-placeholder{
+  border:2px dashed #b9d3e4;border-radius:8px;padding:14px;
+  text-align:center;color:#7b8c99;font-size:12.5px;cursor:pointer;
+  background:#fbfdff;margin:6px 0;transition:background .2s;
+  direction:rtl;
+}
+.img-placeholder:hover{background:#eef6fc;border-color:#2874a6;color:var(--primary);}
+.header-img-slot{width:130px;min-height:50px;display:flex;align-items:center;justify-content:center;}
+
+#capturePaper{
+  position:absolute;left:-99999px;top:0;width:794px;background:#fff;z-index:-1;
+}
+
+/* ============ النافذة المنبثقة ============ */
+.modal{
+  position:fixed;inset:0;background:rgba(8,25,38,.62);display:flex;
+  align-items:center;justify-content:center;padding:18px;z-index:100;
+}
+.modal[hidden]{display:none;}
+.modal-box{
+  background:#fff;border-radius:16px;padding:20px;width:100%;max-width:420px;
+  box-shadow:0 12px 40px rgba(0,0,0,.35);
+}
+.modal-box h3{margin:0 0 14px;color:var(--primary);font-size:17px;}
+.modal-box label{font-size:13px;font-weight:bold;color:#46606f;display:block;margin-bottom:6px;}
+.hint{font-size:11.5px;color:#7b8c99;margin:7px 0 14px;}
+.modal-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.modal-actions .btn{flex:1;min-width:110px;}
+
+/* ============ مؤشرات ============ */
+.busy{
+  position:fixed;inset:0;background:rgba(8,25,38,.72);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:14px;color:#fff;z-index:200;font-weight:bold;
+}
+.busy[hidden]{display:none;}
+.spinner{
+  width:52px;height:52px;border:5px solid rgba(255,255,255,.25);
+  border-top-color:#f1c40f;border-radius:50%;animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.toast{
+  position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(140%);
+  background:#12222e;color:#fff;padding:12px 20px;border-radius:30px;
+  font-size:13.5px;font-weight:bold;z-index:300;transition:transform .35s;
+  max-width:92%;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.3);
+}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.err{background:#7b241c;}
+.toast.ok{background:#145a32;}
+
+.dev{
+  text-align:center;font-size:12.5px;color:#5b7285;padding:14px;
+  background:#fff;border-radius:12px;line-height:2;
+}
+.dev b{color:var(--primary);}
+
+#printRoot{display:none;}
+
+/* تثبيت PWA */
+.install-bar{
+  display:none;background:linear-gradient(135deg,#145a32,#1e8449);
+  color:#fff;padding:10px 16px;align-items:center;justify-content:space-between;
+  gap:10px;flex-wrap:wrap;font-size:13px;font-weight:bold;
+}
+.install-bar.show{display:flex;}
+.install-bar button{
+  background:#f1c40f;color:#04361a;border:0;padding:8px 16px;
+  border-radius:20px;font-weight:bold;font-family:inherit;cursor:pointer;
+}
+.online-dot{
+  display:inline-block;width:8px;height:8px;border-radius:50%;
+  background:#25d366;margin-left:5px;vertical-align:middle;
+}
+.online-dot.off{background:#c0392b;}
+
+/* ============ الطباعة ============ */
+@media print{
+  .appbar,.tabs,main,.modal,.busy,.toast,.install-bar{display:none !important;}
+  #printRoot{display:block !important;}
+  body{background:#fff;padding:0;margin:0;}
+  .paper{border:3px solid #1a5276 !important;border-radius:10px !important;direction:var(--paper-dir, rtl) !important;text-align:var(--paper-align, right) !important;}
+  .question{background:#eaf4fb !important;direction:var(--paper-dir, rtl) !important;text-align:var(--paper-align, right) !important;}
+  .p-footer{direction:var(--paper-dir, rtl) !important;}
+  .q-head{background:#2874a6 !important;color:#fff !important;}
+  .p-title{background:var(--bg-title, #1a5276) !important;color:var(--col-title, #fff) !important;}
+  .mt th{background:#1a5276 !important;color:#fff !important;}
+  .marks{background:#f1c40f !important;color:#000 !important;}
+  .ph-col{color:#1a5276 !important;}
+  .ph-center{color:#145a32 !important;}
+  .p-info{color:#7b241c !important;border-color:#7b241c !important;}
+  .circlebox{color:#1a5276 !important;border-color:#2874a6 !important;}
+  .p-footer .f1{color:#145a32 !important;}
+  .p-footer .f2{color:#7b241c !important;}
+  .p-footer .f3{color:#1a5276 !important;}
+  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+  @page{size:A4;margin:8mm;}
+}
+</style>
+</head>
+<body>
+
+<!-- شريط التثبيت -->
+<div class="install-bar" id="installBar">
+  <span>📱 ثبّت التطبيق على جهازك للعمل بدون إنترنت</span>
+  <button id="btnInstall">تثبيت الآن</button>
+</div>
+
+<!-- شريط التطبيق -->
+<div class="appbar">
+  <div class="brand">
+    <div class="logo">✎</div>
+    <div>
+      <h1>محرر الاختبارات أنور الصبري <span class="online-dot" id="onlineDot"></span></h1>
+      <p>تصميم وبرمجة: الأستاذ / أنور سيف</p>
+    </div>
+  </div>
+  <div class="contact">
+    <a href="tel:772997043">📞 772997043</a>
+    <a class="wa" href="https://wa.me/966510349663" target="_blank" rel="noopener">💬 واتساب</a>
+  </div>
+</div>
+
+<!-- التبويبات -->
+<div class="tabs">
+  <button data-tab="edit" class="active">✏️ المحرر</button>
+  <button data-tab="preview">👁️ المعاينة والحفظ</button>
+</div>
+
+<main>
+  <section id="tab-edit">
+
+    <!-- بيانات الترويسة -->
+    <div class="card">
+      <h2>بيانات الترويسة والتذييل</h2>
+      <div class="meta-grid">
+        <label>الجهة العليا 1 <input class="inp" data-meta="country"></label>
+        <label>الجهة العليا 2 <input class="inp" data-meta="ministry"></label>
+        <label>الجهة العليا 3 <input class="inp" data-meta="governorate"></label>
+        <label>الجهة العليا 4 <input class="inp" data-meta="office"></label>
+        <label>اسم المدرسة <input class="inp" data-meta="school"></label>
+        <label>الصف <input class="inp" data-meta="className"></label>
+        <label>المادة <input class="inp" data-meta="subject"></label>
+        <label>المدة <input class="inp" data-meta="duration"></label>
+        <label>عنوان الاختبار <input class="inp" data-meta="examTitle"></label>
+        <label>خانة اسم الطالب <input class="inp" data-meta="studentLabel"></label>
+        <label>اسم المعلم (التذييل) <input class="inp" data-meta="teacher"></label>
+        <label>نص التذييل (Good Luck) <input class="inp" data-meta="footerLeft"></label>
+      </div>
+
+      <div style="margin-top:12px;">
+        <button class="btn primary" id="btnHeaderImg">🖼️ رفع شعار المدرسة</button>
+        <button class="btn ghost" id="btnRemoveHeaderImg">❌ حذف الشعار</button>
+      </div>
+      <div id="headerImgPreview"></div>
+    </div>
+
+    <!-- إعدادات الخط والألوان -->
+    <div class="card">
+      <h2>🎨 حجم الخط والألوان</h2>
+      <div class="style-grid">
+        <label>حجم الخط الأساسي
+          <input type="number" class="inp" data-style="baseFontSize" min="10" max="20" step="0.5">
+        </label>
+        <label>لون النص الأساسي
+          <input type="color" data-style="baseColor">
+        </label>
+        <label>حجم عنوان الاختبار
+          <input type="number" class="inp" data-style="titleSize" min="14" max="30" step="0.5">
+        </label>
+        <label>لون نص العنوان
+          <input type="color" data-style="titleColor">
+        </label>
+        <label>لون خلفية العنوان
+          <input type="color" data-style="titleBg">
+        </label>
+        <label>حجم الترويسة
+          <input type="number" class="inp" data-style="headerSize" min="10" max="18" step="0.5">
+        </label>
+        <label>اتجاه النص في الورقة
+          <select class="inp" data-style="direction">
+            <option value="rtl">من اليمين لليسار (RTL - عربي)</option>
+            <option value="ltr">من اليسار لليمين (LTR - إنجليزي)</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <!-- الأسئلة -->
+    <div class="card">
+      <h2>الأسئلة</h2>
+      <div id="qlist"></div>
+      <div class="row" style="margin-top:12px;flex-wrap:wrap;">
+        <select id="newType" class="sel"></select>
+        <button id="btnAddQ" class="btn primary">➕ إضافة سؤال</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>أدوات المشروع</h2>
+      <div class="toolbar">
+        <button id="btnNewProject" class="btn warn">🆕 اختبار جديد (مسح الكل)</button>
+      </div>
+      <p class="hint">💾 حفظ تلقائي أثناء الكتابة. يعمل بدون إنترنت بعد أول فتح.</p>
+    </div>
+
+    <div class="dev">
+      <b>محرر الاختبارات أنور الصبري</b><br>
+      تصميم وبرمجة: <b>الأستاذ / أنور سيف</b><br>
+      اتصال مباشر: <b>772997043</b> &nbsp;|&nbsp; واتساب: <b>+966510349663</b>
+    </div>
+  </section>
+
+  <section id="tab-preview" hidden>
+    <div class="toolbar">
+      <button id="btnSavePdf" class="btn primary">💾 حفظ PDF</button>
+      <button id="btnShare" class="btn success">📤 مشاركة</button>
+      <button id="btnPrint" class="btn ghost">🖨️ طباعة</button>
+    </div>
+    <p class="hint">💡 اضغط أي مكان مخصص للصورة داخل الورقة لرفع صورة من جهازك.</p>
+    <div id="previewPaper"></div>
+  </section>
+</main>
+
+<!-- نافذة اسم الملف -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-box">
+    <h3>💾 حفظ / مشاركة الملف</h3>
+    <label>اكتب اسم الملف</label>
+    <input id="fileName" class="inp" placeholder="مثال: اختبار_سبتمبر_الصف_التاسع">
+    <p class="hint">سيُحفظ الملف بصيغة PDF تلقائياً بالاسم الذي تكتبه.</p>
+    <div class="modal-actions">
+      <button id="mSave" class="btn primary">💾 حفظ في الجهاز</button>
+      <button id="mShare" class="btn success">📤 مشاركة</button>
+      <button id="mCancel" class="btn ghost">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<div class="busy" id="busy" hidden>
+  <div class="spinner"></div>
+  <div id="busyText">جارٍ إنشاء ملف PDF...</div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="capturePaper"></div>
+<div id="printRoot"></div>
+
+<script>
+/* ==================================================
+   محرر الاختبارات أنور الصبري - النسخة الاحترافية v2
+   تصميم وبرمجة: الأستاذ / أنور سيف
+   اتصال: 772997043 | واتساب: +966510349663
+================================================== */
+
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const LETTERS = ['a','b','c','d','e','f','g'];
+const LS_KEY = 'anwer_exam_editor_v2';
+
+const esc = s => String(s == null ? '' : s)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/"/g,'&quot;');
+
+const TYPES = {
+  mcq:       { label:'اختيار من متعدد' },
+  match:     { label:'صل بين العمودين' },
+  meaning:   { label:'معاني الكلمات' },
+  fill:      { label:'أكمل الفراغ' },
+  essay:     { label:'سؤال مقالي / وصف' },
+  list:      { label:'اكتب قائمة' },
+  truefalse: { label:'صح / خطأ' },
+  correct:   { label:'صحح الخطأ' },
+  order:     { label:'رتب الكلمات' },
+  circle:    { label:'ضع دائرة حول' }
+};
+
+function defaultStyle(){
+  return {
+    baseFontSize: 14.5,
+    baseColor: '#12222e',
+    titleSize: 20,
+    titleColor: '#ffffff',
+    titleBg: '#1a5276',
+    headerSize: 13.5,
+    direction: 'rtl'
+  };
+}
+
+function defaultState(){
+  return {
+    meta:{
+      country:'الجمهورية اليمنية',
+      ministry:'وزارة التربية والتعليم',
+      governorate:'محافظة مأرب',
+      office:'مكتب تربية حريب',
+      school:'مدرسة الوحدة الأساسية الثانوية',
+      className:'الصف التاسع أساسي',
+      subject:'اللغة الإنجليزية',
+      duration:'45 دقيقة',
+      examTitle:'الاختبار الشهري – سبتمبر',
+      studentLabel:'اسم الطالب',
+      teacher:'أنور سيف',
+      footerLeft:'Good Luck',
+      logoImage:''
+    },
+    style: defaultStyle(),
+    questions:[
+      { type:'mcq', title:'Choose the best answer.', marks:10, items:[
+        { text:'We ................ to Aden last week.', options:['go','goes','went'] },
+        { text:'Ali is ................ football.', options:['playing','played','play'] },
+        { text:'Ahmed ................ to Aden every day.', options:['go','goes','went'] },
+        { text:'Mohammed ................ football last day.', options:['playing','played','play'] },
+        { text:'I am ................ to Aden next week.', options:['going','will','go'] }
+      ], image:'' },
+      { type:'meaning', title:'What is the Arabic meaning?', marks:10,
+        words:['Wife','Holiday','Play','Help','Go','Dry','Work','Present','Hot','Cool'], image:'' },
+      { type:'match', title:'Match the following verbs.', marks:5,
+        left:['Go','Help','Work','Do','Are'],
+        right:['Helped','Worked','Went','Were','Did'], image:'' },
+      { type:'circle', title:'Circle the helping verbs.', marks:5,
+        box:'Help     am     Are     Came     is     we     is     do     you     Did',
+        lines:2, image:'' },
+      { type:'essay', title:'Describe your best friend.', marks:5, lines:4, image:'' },
+      { type:'list', title:'Write the months of the year.', marks:5, lines:3, image:'' }
+    ]
+  };
+}
+
+function makeQuestion(type){
+  const base = { type, title:'', marks:5, image:'' };
+  switch(type){
+    case 'mcq':       return { ...base, items:[{ text:'', options:['','',''] }] };
+    case 'match':     return { ...base, left:['','',''], right:['','',''] };
+    case 'meaning':   return { ...base, words:['','',''] };
+    case 'fill':
+    case 'truefalse':
+    case 'correct':
+    case 'order':     return { ...base, items:['','',''] };
+    case 'essay':
+    case 'list':      return { ...base, lines:4 };
+    case 'circle':    return { ...base, box:'', lines:2 };
+    default:          return { ...base, items:['','',''] };
+  }
+}
+
+/* ============ التخزين ============ */
+let state = loadState() || defaultState();
+if(!state.style) state.style = defaultStyle();
+if(!state.style.direction) state.style.direction = 'rtl';
+if(state.meta.logoImage == null) state.meta.logoImage = '';
+
+function saveLocal(){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+  catch(e){
+    console.warn('فشل الحفظ:', e);
+    toast('⚠️ الذاكرة ممتلئة. احذف بعض الصور لتوفير مساحة.', 'err');
+  }
+}
+function loadState(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return null;
+    const s = JSON.parse(raw);
+    if(!s || !s.meta || !Array.isArray(s.questions)) return null;
+    return s;
+  }catch(e){ return null; }
+}
+
+/* ============ رفع الصور ============ */
+function resizeImage(file, maxW, maxH, cb){
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      if(w > maxW){ h = h * maxW / w; w = maxW; }
+      if(h > maxH){ w = w * maxH / h; h = maxH; }
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(w);
+      canvas.height = Math.round(h);
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      cb(canvas.toDataURL('image/jpeg', 0.85));
+    };
+    img.onerror = () => toast('صورة غير صالحة', 'err');
+    img.src = e.target.result;
+  };
+  reader.onerror = () => toast('فشل قراءة الملف', 'err');
+  reader.readAsDataURL(file);
+}
+
+function pickImage(callback){
+  const inp = document.createElement('input');
+  inp.type = 'file';
+  inp.accept = 'image/*';
+  inp.style.display = 'none';
+  document.body.appendChild(inp);
+  inp.onchange = e => {
+    const f = e.target.files[0];
+    if(!f) return;
+    if(f.size > 8 * 1024 * 1024){
+      toast('الصورة كبيرة جداً (الحد 8MB)', 'err');
+      return;
+    }
+    resizeImage(f, 800, 800, data => {
+      callback(data);
+    });
+  };
+  inp.click();
+  setTimeout(() => inp.remove(), 60000);
+}
+
+/* ============ بناء ورقة الاختبار ============ */
+function bodyHTML(q){
+  switch(q.type){
+    case 'mcq':
+      return '<ol>' + (q.items||[]).map(it =>
+        `<li>${esc(it.text)}
+          <div class="opts">${(it.options||[]).map((o,oi)=>
+            `<span class="opt">${LETTERS[oi]}) ${esc(o)}</span>`).join('')}</div>
+        </li>`).join('') + '</ol>';
+    case 'match':
+      return `<table class="mt"><tr><th>Column A</th><th>Column B</th></tr>` +
+        (q.left||[]).map((l,i)=>
+          `<tr><td>${i+1}. ${esc(l)}</td><td>${esc((q.right||[])[i]||'')}</td></tr>`).join('') +
+        `</table>`;
+    case 'meaning':
+      return '<ol>' + (q.words||[]).map(w =>
+        `<li>${esc(w)} <span class="dot"></span></li>`).join('') + '</ol>';
+    case 'fill':
+    case 'truefalse':
+    case 'correct':
+    case 'order':
+      return '<ol>' + (q.items||[]).map(w =>
+        `<li>${esc(w)} <span class="dot"></span></li>`).join('') + '</ol>';
+    case 'essay':
+    case 'list': {
+      const n = Math.max(1, Number(q.lines)||3);
+      return '<div>' + Array.from({length:n}).map(()=>'<span class="line"></span>').join('') + '</div>';
+    }
+    case 'circle': {
+      const n = Math.max(0, Number(q.lines)||0);
+      return `<div class="circlebox">${esc(q.box||'')}</div>` +
+        (n ? '<div>' + Array.from({length:n}).map(()=>'<span class="line"></span>').join('') + '</div>' : '');
+    }
+    default: return '';
+  }
+}
+
+function paperHTML(mode){
+  mode = mode || 'preview';
+  const m = state.meta;
+  const s = state.style;
+  const isPreview = mode === 'preview';
+  const total = state.questions.reduce((a,q)=>a + (Number(q.marks)||0), 0);
+  const dir = s.direction === 'ltr' ? 'ltr' : 'rtl';
+  const align = dir === 'rtl' ? 'right' : 'left';
+
+  const styleVars = `--fs-base:${s.baseFontSize}px; --col-base:${s.baseColor}; ` +
+    `--fs-title:${s.titleSize}px; --col-title:${s.titleColor}; --bg-title:${s.titleBg}; ` +
+    `--fs-header:${s.headerSize}px; --paper-dir:${dir}; --paper-align:${align}; direction:${dir}; text-align:${align};`;
+
+  // شعار الترويسة
+  let headerImgHtml = '';
+  if(m.logoImage){
+    headerImgHtml = `<img src="${m.logoImage}" class="header-logo">`;
+  } else if(isPreview){
+    headerImgHtml = `<div class="img-placeholder header-img-slot" data-img="header-logo">🖼️ شعار</div>`;
+  }
+
+  // بناء الأسئلة
+  const qs = state.questions.map((q,i) => {
+    let imgHtml = '';
+    if(q.image){
+      imgHtml = `<img src="${q.image}" class="q-img">`;
+    } else if(isPreview){
+      imgHtml = `<div class="img-placeholder" data-img-q="${i}">🖼️ اضغط لإضافة صورة للسؤال</div>`;
+    }
+
+    const clean = String(q.title||'').replace(/^\s*Q\s*\d+\s*[_:.\-–]?\s*/i,'').trim();
+    return `<div class="question" data-qidx="${i}">
+      <div class="q-head">
+        <span>Q${i+1}: ${esc(clean || 'Question')}</span>
+        <span class="marks">${Number(q.marks)||0} Marks</span>
+      </div>
+      <div class="q-body">${bodyHTML(q)}</div>
+      ${imgHtml}
+    </div>`;
+  }).join('');
+
+  return `<div class="paper" style="${styleVars}">
+    <div class="p-header">
+      <div class="ph-col ph-right">
+        ${headerImgHtml}
+        <div>${esc(m.country)}</div>
+        <div>${esc(m.ministry)}</div>
+        <div>${esc(m.governorate)}</div>
+        <div>${esc(m.office)}</div>
+      </div>
+      <div class="ph-center">بسم الله الرحمن الرحيم</div>
+      <div class="ph-col ph-left">
+        <div>${esc(m.school)}</div>
+        <div>${esc(m.className)}</div>
+        <div>${esc(m.subject)}</div>
+        <div>${esc(m.duration)}</div>
+      </div>
+    </div>
+
+    <div class="p-title">${esc(m.examTitle)}</div>
+
+    <div class="p-info">
+      <span>${esc(m.studentLabel)}: ______________________</span>
+      <span>Total Marks: ${total}</span>
+    </div>
+
+    ${qs}
+
+    <div class="p-footer">
+      <span class="f1">${esc(m.footerLeft)}</span>
+      <span class="f2">T/ ${esc(m.teacher)}</span>
+      <span class="f3">Total: ${total} Marks</span>
+    </div>
+  </div>`;
+}
+
+function renderPreview(){
+  $('#previewPaper').innerHTML = paperHTML('preview');
+}
+
+/* ============ محرر الأسئلة ============ */
+function bodyEditor(q){
+  const num = i => `<span class="num">${i+1}</span>`;
+
+  if(q.type === 'mcq'){
+    let h = (q.items||[]).map((it,ii)=>`
+      <div class="subcard">
+        <div class="row">
+          ${num(ii)}
+          <input class="inp" data-act="itext" data-i="${ii}" data-j="0"
+                 value="${esc(it.text)}" placeholder="نص السؤال الفرعي">
+          <button class="mini danger" data-btn="delsub" data-i="${ii}">✕</button>
+        </div>
+        ${(it.options||[]).map((o,oi)=>`
+          <div class="row indent">
+            <span class="num sm">${LETTERS[oi]}</span>
+            <input class="inp" data-act="iopt" data-i="${ii}" data-j="${oi}"
+                   value="${esc(o)}" placeholder="الخيار ${LETTERS[oi]}">
+            <button class="mini" data-btn="delopt" data-i="${ii}" data-j="${oi}">−</button>
+          </div>`).join('')}
+        <button class="mini add" data-btn="addopt" data-i="${ii}">+ خيار</button>
+      </div>`).join('');
+    return h + `<button class="mini add" data-btn="addsub">+ سؤال فرعي</button>`;
+  }
+
+  if(q.type === 'match'){
+    return (q.left||[]).map((l,i)=>`
+      <div class="row">
+        ${num(i)}
+        <input class="inp" data-act="left" data-i="${i}" data-j="0" value="${esc(l)}" placeholder="العمود A">
+        <span class="arrow">⟵</span>
+        <input class="inp" data-act="right" data-i="${i}" data-j="0" value="${esc((q.right||[])[i]||'')}" placeholder="العمود B">
+        <button class="mini danger" data-btn="delpair" data-i="${i}">✕</button>
+      </div>`).join('') +
+      `<button class="mini add" data-btn="addpair">+ زوج جديد</button>`;
+  }
+
+  if(q.type === 'meaning'){
+    return (q.words||[]).map((w,i)=>`
+      <div class="row">
+        ${num(i)}
+        <input class="inp" data-act="word" data-i="${i}" data-j="0" value="${esc(w)}" placeholder="الكلمة">
+        <button class="mini danger" data-btn="delline" data-i="${i}">✕</button>
+      </div>`).join('') +
+      `<button class="mini add" data-btn="addline">+ كلمة</button>`;
+  }
+
+  if(['fill','truefalse','correct','order'].includes(q.type)){
+    return (q.items||[]).map((w,i)=>`
+      <div class="row">
+        ${num(i)}
+        <input class="inp" data-act="item" data-i="${i}" data-j="0" value="${esc(w)}" placeholder="نص العنصر">
+        <button class="mini danger" data-btn="delline" data-i="${i}">✕</button>
+      </div>`).join('') +
+      `<button class="mini add" data-btn="addline">+ عنصر</button>`;
+  }
+
+  if(q.type === 'essay' || q.type === 'list'){
+    return `<div class="row">
+      <label class="marks-lbl">عدد الأسطر:</label>
+      <input type="number" min="1" max="30" class="inp tiny" data-act="lines" data-i="0" data-j="0" value="${Number(q.lines)||4}">
+    </div>`;
+  }
+
+  if(q.type === 'circle'){
+    return `<div class="row" style="align-items:flex-start;">
+        <textarea class="inp" data-act="box" data-i="0" data-j="0"
+          placeholder="اكتب الكلمات مفصولة بمسافات">${esc(q.box||'')}</textarea>
+      </div>
+      <div class="row">
+        <label class="marks-lbl">عدد الأسطر:</label>
+        <input type="number" min="0" max="20" class="inp tiny" data-act="lines" data-i="0" data-j="0" value="${Number(q.lines)||0}">
+      </div>`;
+  }
+  return '';
+}
+
+function qCard(q, qi){
+  const opts = Object.keys(TYPES)
+    .map(k=>`<option value="${k}"${k===q.type?' selected':''}>${TYPES[k].label}</option>`).join('');
+
+  const imgPreview = q.image
+    ? `<div class="img-preview">
+        <img src="${q.image}" alt="صورة">
+        <span>✅ صورة مرفقة</span>
+        <button class="mini" data-btn="changeimg" data-qi="${qi}">🔄 استبدال</button>
+        <button class="mini danger" data-btn="delimg" data-qi="${qi}">🗑 حذف</button>
+       </div>`
+    : `<button class="mini add" data-btn="uploadimg" data-qi="${qi}">🖼️ رفع صورة للسؤال</button>`;
+
+  return `<div class="qcard" data-qi="${qi}">
+    <div class="qcard-head">
+      <span class="qbadge">سؤال ${qi+1}</span>
+      <select class="sel" data-btn="type">${opts}</select>
+      <label class="marks-lbl">الدرجة
+        <input type="number" min="0" class="inp tiny" data-act="marks" data-i="0" data-j="0" value="${Number(q.marks)||0}">
+      </label>
+      <div class="qcard-tools">
+        <button class="mini" data-btn="up">▲</button>
+        <button class="mini" data-btn="down">▼</button>
+        <button class="mini danger" data-btn="del">🗑</button>
+      </div>
+    </div>
+    <div class="qcard-title">
+      <input class="inp" data-act="title" data-i="0" data-j="0"
+             value="${esc(q.title)}" placeholder="نص السؤال الرئيسي">
+    </div>
+    <div class="qcard-body">${bodyEditor(q)}</div>
+    <div style="padding:0 11px 12px;">${imgPreview}</div>
+  </div>`;
+}
+
+function renderEditor(){
+  $('#qlist').innerHTML = state.questions.map((q,i)=>qCard(q,i)).join('');
+  // تحديث معاينة الشعار
+  $('#headerImgPreview').innerHTML = state.meta.logoImage
+    ? `<div class="img-preview"><img src="${state.meta.logoImage}"><span>✅ شعار مرفق</span></div>`
+    : '';
+}
+
+/* ============ أحداث المحرر ============ */
+const qlist = $('#qlist');
+
+qlist.addEventListener('input', e => {
+  const el = e.target;
+  if(el.tagName === 'SELECT' || el.type === 'file') return;
+  const card = el.closest('.qcard'); if(!card) return;
+  const qi = Number(card.dataset.qi);
+  const q = state.questions[qi]; if(!q) return;
+
+  const act = el.dataset.act;
+  const i = (el.dataset.i === '' || el.dataset.i == null) ? 0 : Number(el.dataset.i);
+  const j = (el.dataset.j === '' || el.dataset.j == null) ? 0 : Number(el.dataset.j);
+
+  switch(act){
+    case 'title': q.title = el.value; break;
+    case 'marks': q.marks = Math.max(0, Number(el.value)||0); break;
+    case 'itext': q.items[i].text = el.value; break;
+    case 'iopt':  q.items[i].options[j] = el.value; break;
+    case 'left':  q.left[i] = el.value; break;
+    case 'right': q.right[i] = el.value; break;
+    case 'word':  q.words[i] = el.value; break;
+    case 'item':  q.items[i] = el.value; break;
+    case 'lines': q.lines = Math.max(0, Number(el.value)||0); break;
+    case 'box':   q.box = el.value; break;
+    default: return;
+  }
+  renderPreview();
+  saveLocal();
+});
+
+qlist.addEventListener('click', e => {
+  const btn = e.target.closest('button[data-btn]');
+  if(!btn) return;
+
+  // أزرار الصور تعمل بدون card.closest
+  if(btn.dataset.btn === 'uploadimg' || btn.dataset.btn === 'changeimg'){
+    const qi = Number(btn.dataset.qi);
+    pickImage(data => {
+      state.questions[qi].image = data;
+      saveLocal();
+      renderEditor();
+      renderPreview();
+      toast('✅ تمت إضافة الصورة', 'ok');
+    });
+    return;
+  }
+  if(btn.dataset.btn === 'delimg'){
+    const qi = Number(btn.dataset.qi);
+    if(!confirm('حذف الصورة من هذا السؤال؟')) return;
+    state.questions[qi].image = '';
+    saveLocal();
+    renderEditor();
+    renderPreview();
+    return;
+  }
+
+  const card = btn.closest('.qcard'); if(!card) return;
+  const qi = Number(card.dataset.qi);
+  const q = state.questions[qi]; if(!q) return;
+  const i = btn.dataset.i != null ? Number(btn.dataset.i) : 0;
+  const j = btn.dataset.j != null ? Number(btn.dataset.j) : 0;
+
+  switch(btn.dataset.btn){
+    case 'up':
+      if(qi > 0){
+        const t = state.questions[qi-1];
+        state.questions[qi-1] = state.questions[qi];
+        state.questions[qi] = t;
+      } break;
+    case 'down':
+      if(qi < state.questions.length-1){
+        const t = state.questions[qi+1];
+        state.questions[qi+1] = state.questions[qi];
+        state.questions[qi] = t;
+      } break;
+    case 'del':
+      if(!confirm('حذف هذا السؤال بالكامل؟')) return;
+      state.questions.splice(qi,1); break;
+    case 'addsub':
+      q.items.push({ text:'', options:['','',''] }); break;
+    case 'delsub':
+      if(q.items.length <= 1) return;
+      q.items.splice(i,1); break;
+    case 'addopt':
+      if(q.items[i].options.length < 6) q.items[i].options.push(''); break;
+    case 'delopt':
+      if(q.items[i].options.length <= 2) return;
+      q.items[i].options.splice(j,1); break;
+    case 'addpair':
+      q.left.push(''); q.right.push(''); break;
+    case 'delpair':
+      if(q.left.length <= 1) return;
+      q.left.splice(i,1); q.right.splice(i,1); break;
+    case 'addline':
+      if(q.words) q.words.push('');
+      else if(q.items) q.items.push('');
+      break;
+    case 'delline':
+      const arr = q.words || q.items;
+      if(arr && arr.length > 1) arr.splice(i,1);
+      break;
+    default: return;
+  }
+  saveLocal();
+  renderEditor();
+  renderPreview();
+});
+
+qlist.addEventListener('change', e => {
+  const sel = e.target.closest('select[data-btn="type"]');
+  if(!sel) return;
+  const card = sel.closest('.qcard');
+  const qi = Number(card.dataset.qi);
+  const old = state.questions[qi];
+  if(!confirm('تغيير نوع السؤال سيمسح محتواه. هل تريد المتابعة؟')){
+    sel.value = old.type; return;
+  }
+  const fresh = makeQuestion(sel.value);
+  fresh.title = old.title;
+  fresh.marks = old.marks;
+  fresh.image = old.image || '';
+  state.questions[qi] = fresh;
+  saveLocal();
+  renderEditor();
+  renderPreview();
+});
+
+/* ============ إضافة سؤال ============ */
+const newType = $('#newType');
+newType.innerHTML = Object.keys(TYPES)
+  .map(k=>`<option value="${k}">${TYPES[k].label}</option>`).join('');
+
+$('#btnAddQ').addEventListener('click', ()=>{
+  const type = newType.value;
+  const q = makeQuestion(type);
+  q.title = 'Q' + (state.questions.length + 1) + ': ';
+  state.questions.push(q);
+  saveLocal(); renderEditor(); renderPreview();
+  toast('تمت إضافة سؤال جديد', 'ok');
+  window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'});
+});
+
+/* ============ اختبار جديد ============ */
+$('#btnNewProject').addEventListener('click', ()=>{
+  if(!confirm('سيتم مسح جميع الأسئلة والبيانات. متأكد؟')) return;
+  state = defaultState();
+  saveLocal(); bindMetaValues(); bindStyleValues();
+  renderEditor(); renderPreview();
+  toast('تم بدء اختبار جديد', 'ok');
+});
+
+/* ============ بيانات الترويسة ============ */
+function bindMetaValues(){
+  $$('[data-meta]').forEach(inp=>{
+    inp.value = state.meta[inp.dataset.meta] || '';
+  });
+}
+$$('[data-meta]').forEach(inp=>{
+  inp.addEventListener('input', ()=>{
+    state.meta[inp.dataset.meta] = inp.value;
+    renderPreview();
+    saveLocal();
+  });
+});
+
+/* ============ شعار الترويسة ============ */
+$('#btnHeaderImg').addEventListener('click', ()=>{
+  pickImage(data => {
+    state.meta.logoImage = data;
+    saveLocal();
+    renderEditor();
+    renderPreview();
+    toast('✅ تم رفع الشعار', 'ok');
+  });
+});
+$('#btnRemoveHeaderImg').addEventListener('click', ()=>{
+  if(!state.meta.logoImage) return toast('لا يوجد شعار', 'err');
+  if(!confirm('حذف الشعار؟')) return;
+  state.meta.logoImage = '';
+  saveLocal();
+  renderEditor();
+  renderPreview();
+});
+
+/* ============ إعدادات الألوان والأحجام ============ */
+function bindStyleValues(){
+  $$('[data-style]').forEach(inp=>{
+    if(state.style[inp.dataset.style] !== undefined){
+      inp.value = state.style[inp.dataset.style];
+    }
+  });
+}
+$$('[data-style]').forEach(inp=>{
+  const onUpdate = ()=>{
+    const key = inp.dataset.style;
+    let v = inp.value;
+    if(inp.type === 'number') v = Number(v) || 14;
+    state.style[key] = v;
+    renderPreview();
+    saveLocal();
+  };
+  inp.addEventListener('input', onUpdate);
+  inp.addEventListener('change', onUpdate);
+});
+
+/* ============ رفع صورة بالنقر داخل المعاينة ============ */
+$('#previewPaper').addEventListener('click', e => {
+  const el = e.target.closest('[data-img], [data-img-q]');
+  if(!el) return;
+  if(el.dataset.img === 'header-logo'){
+    pickImage(data => {
+      state.meta.logoImage = data;
+      saveLocal();
+      renderEditor();
+      renderPreview();
+      toast('✅ تم رفع الشعار', 'ok');
+    });
+  } else if(el.dataset.imgQ != null){
+    const qi = Number(el.dataset.imgQ);
+    pickImage(data => {
+      state.questions[qi].image = data;
+      saveLocal();
+      renderEditor();
+      renderPreview();
+      toast('✅ تمت إضافة الصورة للسؤال ' + (qi+1), 'ok');
+    });
+  }
+});
+
+/* ============ التبويبات ============ */
+$$('.tabs button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    $$('.tabs button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const tab = btn.dataset.tab;
+    $('#tab-edit').hidden = tab !== 'edit';
+    $('#tab-preview').hidden = tab !== 'preview';
+    if(tab === 'preview') renderPreview();
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+
+/* ==================================================
+   إنشاء PDF + الحفظ + المشاركة
+================================================== */
+function showBusy(txt){
+  $('#busyText').textContent = txt || 'جارٍ إنشاء ملف PDF...';
+  $('#busy').hidden = false;
+}
+function hideBusy(){ $('#busy').hidden = true; }
+
+let toastTimer = null;
+function toast(msg, type){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' ' + type : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ t.className = 'toast'; }, 3800);
+}
+
+async function generatePDF(){
+  if(!window.html2canvas || !window.jspdf){
+    throw new Error('مكتبات PDF لم تُحمّل. تأكد من الإنترنت في أول فتح.');
+  }
+  const cap = $('#capturePaper');
+  cap.innerHTML = paperHTML('capture');
+  await new Promise(r => setTimeout(r, 120));
+
+  const canvas = await html2canvas(cap, {
+    scale: 2,
+    backgroundColor: '#ffffff',
+    useCORS: true,
+    logging: false,
+    windowWidth: 794
+  });
+
+  const imgData = canvas.toDataURL('image/jpeg', 0.92);
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF('p','mm','a4');
+
+  const pageW = 210, pageH = 297;
+  const imgW = pageW;
+  const imgH = canvas.height * imgW / canvas.width;
+
+  let remaining = imgH;
+  let pos = 0;
+  pdf.addImage(imgData, 'JPEG', 0, pos, imgW, imgH);
+  remaining -= pageH;
+
+  while(remaining > 1){
+    pos -= pageH;
+    pdf.addPage();
+    pdf.addImage(imgData, 'JPEG', 0, pos, imgW, imgH);
+    remaining -= pageH;
+  }
+
+  return pdf.output('blob');
+}
+
+function downloadBlob(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 8000);
+}
+
+function defaultFileName(){
+  const t = (state.meta.examTitle || 'اختبار').trim();
+  const c = (state.meta.className || '').trim();
+  return (t + (c ? '_' + c : '')).replace(/[\\/:*?"<>|]/g,'_').replace(/\s+/g,'_');
+}
+
+const modal = $('#modal');
+const fileNameInput = $('#fileName');
+
+function openModal(){
+  fileNameInput.value = defaultFileName();
+  modal.hidden = false;
+  setTimeout(()=>{ fileNameInput.focus(); fileNameInput.select(); }, 120);
+}
+function closeModal(){ modal.hidden = true; }
+
+$('#btnSavePdf').addEventListener('click', openModal);
+$('#btnShare').addEventListener('click', openModal);
+$('#mCancel').addEventListener('click', closeModal);
+modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
+
+$('#mSave').addEventListener('click', async ()=>{
+  let name = fileNameInput.value.trim();
+  if(!name){ toast('اكتب اسم الملف أولاً', 'err'); fileNameInput.focus(); return; }
+  name = name.replace(/\.pdf$/i,'');
+  closeModal();
+  showBusy('جارٍ إنشاء الملف وحفظه...');
+  try{
+    const blob = await generatePDF();
+    downloadBlob(blob, name + '.pdf');
+    toast('✅ تم حفظ الملف: ' + name + '.pdf', 'ok');
+  }catch(err){
+    toast('تعذر إنشاء الملف: ' + err.message, 'err');
+  }finally{
+    hideBusy();
+  }
+});
+
+$('#mShare').addEventListener('click', async ()=>{
+  let name = fileNameInput.value.trim();
+  if(!name){ toast('اكتب اسم الملف أولاً', 'err'); fileNameInput.focus(); return; }
+  name = name.replace(/\.pdf$/i,'');
+  closeModal();
+  showBusy('جارٍ تجهيز الملف للمشاركة...');
+  try{
+    const blob = await generatePDF();
+    const file = new File([blob], name + '.pdf', { type:'application/pdf' });
+
+    if(navigator.canShare && navigator.canShare({ files:[file] })){
+      await navigator.share({
+        files:[file],
+        title: name,
+        text: 'اختبار: ' + name
+      });
+      toast('✅ تمت المشاركة', 'ok');
+    }else{
+      downloadBlob(blob, name + '.pdf');
+      toast('تم حفظ الملف — أرسله عبر واتساب من تطبيق الملفات', 'ok');
+    }
+  }catch(err){
+    if(err && err.name === 'AbortError'){ /* ألغى المستخدم */ }
+    else{ toast('تعذر المشاركة: ' + err.message, 'err'); }
+  }finally{
+    hideBusy();
+  }
+});
+
+/* ============ الطباعة ============ */
+$('#btnPrint').addEventListener('click', ()=>{
+  $('#printRoot').innerHTML = paperHTML('capture');
+  setTimeout(()=>window.print(), 120);
+});
+
+/* ==================================================
+   PWA - تثبيت + العمل بدون إنترنت
+================================================== */
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  $('#installBar').classList.add('show');
+});
+
+$('#btnInstall').addEventListener('click', async ()=>{
+  if(!deferredPrompt){ toast('التثبيت غير متاح حالياً', 'err'); return; }
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if(outcome === 'accepted') toast('✅ تم التثبيت', 'ok');
+  deferredPrompt = null;
+  $('#installBar').classList.remove('show');
+});
+
+window.addEventListener('appinstalled', ()=>{
+  $('#installBar').classList.remove('show');
+  toast('✅ التطبيق مثبّت الآن', 'ok');
+});
+
+// تسجيل Service Worker (فقط على https أو localhost)
+if('serviceWorker' in navigator && location.protocol !== 'file:'){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(err => {
+      console.log('SW registration failed:', err);
+    });
+  });
+}
+
+// مؤشر الاتصال
+function updateOnline(){
+  const dot = $('#onlineDot');
+  if(navigator.onLine) dot.classList.remove('off');
+  else dot.classList.add('off');
+}
+window.addEventListener('online', updateOnline);
+window.addEventListener('offline', updateOnline);
+updateOnline();
+
+/* ============ التشغيل ============ */
+function init(){
+  bindMetaValues();
+  bindStyleValues();
+  renderEditor();
+  renderPreview();
+}
+init();
+</script>
+</body>
+</html>

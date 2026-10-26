@@ -1,0 +1,21 @@
+{
+  "name": "محرر الاختبارات أنور الصبري",
+  "short_name": "محرر الاختبارات",
+  "description": "تطبيق لإنشاء وتعديل الاختبارات المدرسية وحفظها PDF ومشاركتها - تصميم الأستاذ أنور سيف",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#1a5276",
+  "background_color": "#eef3f7",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
