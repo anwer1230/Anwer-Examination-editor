@@ -88,24 +88,50 @@ main{max-width:900px;margin:0 auto;padding:14px;}
 .inp.tiny{width:70px;padding:5px 8px;}
 textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 
-/* ============ قائمة منسدلة قابلة للطي: حجم الخط والألوان ============ */
+/* ============ القوائم المنسدلة القابلة للطي داخل الأيقونات ============ */
 .accordion-card{
-  border:2px solid #b9d3e4;background:#fff;transition:border-color .2s;
+  border:2px solid #b9d3e4;background:#fff;border-radius:14px;
+  transition:border-color .2s ease, box-shadow .2s ease;
+  overflow:hidden;
+}
+.accordion-card.open{
+  border-color:var(--primary);
+  box-shadow:0 4px 18px rgba(18,58,85,.12);
 }
 .accordion-head{
   display:flex;justify-content:space-between;align-items:center;cursor:pointer;
-  user-select:none;padding:2px 0;border-radius:8px;
+  user-select:none;padding:6px 6px;border-radius:10px;transition:background .2s;
+}
+.accordion-head:hover{
+  background:#f4f9fd;
+}
+.accordion-head:focus-visible{
+  outline:2px solid var(--primary);outline-offset:2px;
 }
 .accordion-head:hover .acc-title h2{
   color:var(--primary2);
+}
+.accordion-head:hover .acc-icon{
+  transform:scale(1.06);
 }
 .acc-left{
   display:flex;align-items:center;gap:12px;
 }
 .acc-icon{
-  width:42px;height:42px;border-radius:12px;background:#fef9e7;color:#b9770e;
-  display:flex;align-items:center;justify-content:center;font-size:22px;
-  border:1.5px solid #f9e79f;flex-shrink:0;box-shadow:0 2px 6px rgba(185,119,14,0.12);
+  width:46px;height:46px;border-radius:14px;background:#eaf2f8;color:var(--primary);
+  display:flex;align-items:center;justify-content:center;font-size:24px;
+  border:2px solid #b9d3e4;flex-shrink:0;box-shadow:0 3px 8px rgba(18,58,85,0.10);
+  transition:all .25s ease;
+}
+.accordion-card.open .acc-icon{
+  background:var(--primary);color:#fff;border-color:var(--primary);
+  box-shadow:0 4px 12px rgba(26,82,118,0.25);
+}
+.acc-icon.style-icon{
+  background:#fef9e7;color:#b9770e;border-color:#f9e79f;
+}
+.accordion-card.open .acc-icon.style-icon{
+  background:#b9770e;color:#fff;border-color:#b9770e;
 }
 .acc-title h2{
   font-size:15px;margin:0;color:var(--primary);border:none;padding:0;line-height:1.3;
@@ -117,19 +143,21 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   display:flex;align-items:center;gap:8px;
 }
 .acc-badge{
-  font-size:11px;font-weight:bold;background:#eef6fc;color:var(--primary);
-  padding:4px 8px;border-radius:12px;border:1px solid #c3d4e0;
+  font-size:11.5px;font-weight:bold;background:#eef6fc;color:var(--primary);
+  padding:5px 11px;border-radius:20px;border:1px solid #c3d4e0;
+  transition:all .2s ease;
 }
 .acc-arrow{
   width:32px;height:32px;border-radius:50%;background:#eef6fc;color:var(--primary);
   display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;
   transition:transform .3s ease, background .2s, color .2s;
+  flex-shrink:0;
 }
 .acc-arrow.open{
   transform:rotate(180deg);background:var(--primary);color:#fff;
 }
 .accordion-body{
-  overflow:hidden;transition:all .3s ease;
+  overflow:hidden;transition:all .3s ease;border-top:1.5px dashed #c3d4e0;padding-top:14px;
 }
 
 /* ============ ألوان وأحجام ============ */
@@ -799,22 +827,26 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
       </div>
     </div>
 
-    <!-- بيانات الترويسة والتذييل (قائمة منسدلة قابلة للطي والفتح) -->
+    <!-- أيقونة بيانات الترويسة والتذييل (قائمة منسدلة قابلة للطي والفتح داخل الأيقونة) -->
     <div class="card accordion-card" id="headerCard">
-      <div class="accordion-head" id="toggleHeaderBtn" role="button" tabindex="0" title="اضغط لإظهار أو إخفاء بيانات الترويسة والتذييل">
+      <div class="accordion-head" id="toggleHeaderBtn" role="button" tabindex="0" title="اضغط على الأيقونة لإظهار أو طي بيانات الترويسة والتذييل كقائمة منسدلة">
         <div class="acc-left">
-          <div class="acc-icon" style="background:#eaf2f8;color:var(--primary);border-color:#b9d3e4;">🏫</div>
+          <div class="acc-icon" id="headerIconBtn" title="أيقونة بيانات الترويسة والتذييل">🏫</div>
           <div class="acc-title">
             <h2>بيانات الترويسة والتذييل</h2>
-            <p>انقر هنا لإظهار / إخفاء بيانات المدرسة والجهات العليا والشعار والتذييل</p>
+            <p>أيقونة منسدلة: اضغط هنا لعرض أو طي بيانات المدرسة والترويسة والشعار</p>
           </div>
         </div>
         <div class="acc-badge-wrap">
-          <span class="acc-badge" id="headerBadgeStatus">اضغط للفتح ▼</span>
+          <span class="acc-badge" id="headerBadgeStatus">قائمة منسدلة (مغلقة) ▼ اضغط للعرض</span>
           <span class="acc-arrow" id="headerArrow">▼</span>
         </div>
       </div>
       <div class="accordion-body" id="headerBody" style="display:none;margin-top:14px;">
+        <div style="background:#f4f9fd;border:1.5px solid #d4e6f1;border-radius:10px;padding:9px 12px;margin-bottom:12px;font-size:12.5px;color:#1a5276;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <span>📝 <b>إعدادات الترويسة والتذييل:</b> أدخل أو عدّل البيانات أدناه، وسيتم حفظها وتطبيقها تلقائياً.</span>
+          <button type="button" class="mini" id="btnCloseHeaderTop" style="color:var(--primary);border-color:#b9d3e4;">▲ طي القائمة المنسدلة</button>
+        </div>
         <div class="meta-grid">
           <label>الجهة العليا 1 <input class="inp" data-meta="country"></label>
           <label>الجهة العليا 2 <input class="inp" data-meta="ministry"></label>
@@ -830,9 +862,10 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
           <label>نص التذييل (Good Luck) <input class="inp" data-meta="footerLeft"></label>
         </div>
 
-        <div style="margin-top:12px;">
+        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-top:1px dashed #c3d4e0;padding-top:12px;">
           <button class="btn primary" id="btnHeaderImg">🖼️ رفع شعار المدرسة</button>
           <button class="btn ghost" id="btnRemoveHeaderImg">❌ حذف الشعار</button>
+          <button type="button" class="btn ghost" id="btnCloseHeaderBottom" style="margin-right:auto;font-size:12.5px;padding:8px 14px;">▲ طي وإخفاء الإعدادات داخل الأيقونة</button>
         </div>
         <div id="headerImgPreview"></div>
       </div>
@@ -840,20 +873,24 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 
     <!-- إعدادات الخط والألوان (أيقونة وقائمة منسدلة قابلة للطي والفتح) -->
     <div class="card accordion-card" id="styleCard">
-      <div class="accordion-head" id="toggleStyleBtn" role="button" tabindex="0" title="اضغط لإظهار أو إخفاء إعدادات الخط والألوان">
+      <div class="accordion-head" id="toggleStyleBtn" role="button" tabindex="0" title="اضغط لإظهار أو طي إعدادات الخط والألوان كقائمة منسدلة">
         <div class="acc-left">
-          <div class="acc-icon">🎨</div>
+          <div class="acc-icon style-icon" id="styleIconBtn" title="أيقونة الخط والألوان">🎨</div>
           <div class="acc-title">
             <h2>حجم الخط والألوان</h2>
-            <p>انقر هنا لإظهار / إخفاء خيارات الخطوط والألوان والاتجاه</p>
+            <p>أيقونة منسدلة: اضغط هنا لعرض أو طي خيارات الخطوط والألوان والاتجاه</p>
           </div>
         </div>
         <div class="acc-badge-wrap">
-          <span class="acc-badge" id="styleBadgeStatus">اضغط للفتح</span>
+          <span class="acc-badge" id="styleBadgeStatus">قائمة منسدلة (مغلقة) ▼ اضغط للعرض</span>
           <span class="acc-arrow" id="styleArrow">▼</span>
         </div>
       </div>
       <div class="accordion-body" id="styleBody" style="display:none;margin-top:14px;">
+        <div style="background:#fef9e7;border:1.5px solid #f9e79f;border-radius:10px;padding:9px 12px;margin-bottom:12px;font-size:12.5px;color:#8f5b08;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <span>🎨 <b>تخصيص الخط والألوان:</b> تحكّم بحجم الخطوط وألوان الورقة ثم اطوِ القائمة عند الانتهاء.</span>
+          <button type="button" class="mini" id="btnCloseStyleTop" style="color:#8f5b08;border-color:#f9e79f;">▲ طي القائمة المنسدلة</button>
+        </div>
         <div class="style-grid">
           <label>حجم الخط الأساسي
             <input type="number" class="inp" data-style="baseFontSize" min="10" max="20" step="0.5">
@@ -879,6 +916,9 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
               <option value="ltr">من اليسار لليمين (LTR - إنجليزي)</option>
             </select>
           </label>
+        </div>
+        <div style="margin-top:14px;display:flex;justify-content:flex-end;border-top:1px dashed #c3d4e0;padding-top:10px;">
+          <button type="button" class="btn ghost" id="btnCloseStyleBottom" style="font-size:12.5px;padding:8px 14px;">▲ طي وإخفاء الإعدادات داخل الأيقونة</button>
         </div>
       </div>
     </div>
@@ -2210,52 +2250,108 @@ $('#btnAutoFormat').addEventListener('click', ()=>{
   autoFormatQuestionNumbers(false);
 });
 
-/* ============ تبديل إظهار/إخفاء بيانات الترويسة والتذييل (Accordion) ============ */
+/* ============ تبديل إظهار/إخفاء بيانات الترويسة والتذييل (أيقونة وقائمة منسدلة) ============ */
 const toggleHeaderBtn = $('#toggleHeaderBtn');
 const headerBody = $('#headerBody');
 const headerArrow = $('#headerArrow');
 const headerBadgeStatus = $('#headerBadgeStatus');
+const headerCard = $('#headerCard');
 
-if(toggleHeaderBtn && headerBody){
-  toggleHeaderBtn.addEventListener('click', ()=>{
-    const isHidden = headerBody.style.display === 'none';
-    if(isHidden){
-      headerBody.style.display = 'block';
-      headerArrow.classList.add('open');
-      headerBadgeStatus.textContent = 'اضغط للإغلاق ▲';
+function toggleHeaderDropdown(forceState){
+  if(!headerBody) return;
+  const isHidden = (typeof forceState === 'boolean') ? !forceState : (headerBody.style.display === 'none');
+  if(isHidden){
+    headerBody.style.display = 'block';
+    if(headerArrow) headerArrow.classList.add('open');
+    if(headerCard) headerCard.classList.add('open');
+    if(headerBadgeStatus){
+      headerBadgeStatus.textContent = 'قائمة منسدلة (مفتوحة) ▲ اضغط للطي';
       headerBadgeStatus.style.background = '#eafaf1';
       headerBadgeStatus.style.color = '#146c43';
-    } else {
-      headerBody.style.display = 'none';
-      headerArrow.classList.remove('open');
-      headerBadgeStatus.textContent = 'اضغط للفتح ▼';
+      headerBadgeStatus.style.borderColor = '#a9dfc4';
+    }
+  } else {
+    headerBody.style.display = 'none';
+    if(headerArrow) headerArrow.classList.remove('open');
+    if(headerCard) headerCard.classList.remove('open');
+    if(headerBadgeStatus){
+      headerBadgeStatus.textContent = 'قائمة منسدلة (مغلقة) ▼ اضغط للعرض';
       headerBadgeStatus.style.background = '#eef6fc';
       headerBadgeStatus.style.color = 'var(--primary)';
+      headerBadgeStatus.style.borderColor = '#c3d4e0';
+    }
+  }
+}
+
+if(toggleHeaderBtn){
+  toggleHeaderBtn.addEventListener('click', ()=> toggleHeaderDropdown());
+  toggleHeaderBtn.addEventListener('keydown', e => {
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      toggleHeaderDropdown();
     }
   });
 }
 
-/* ============ تبديل إظهار/إخفاء إعدادات الخط والألوان (Accordion) ============ */
+const btnCloseHeaderTop = $('#btnCloseHeaderTop');
+if(btnCloseHeaderTop) btnCloseHeaderTop.addEventListener('click', ()=> toggleHeaderDropdown(false));
+
+const btnCloseHeaderBottom = $('#btnCloseHeaderBottom');
+if(btnCloseHeaderBottom) btnCloseHeaderBottom.addEventListener('click', ()=>{
+  toggleHeaderDropdown(false);
+  if(toggleHeaderBtn) toggleHeaderBtn.scrollIntoView({ behavior:'smooth', block:'center' });
+});
+
+/* ============ تبديل إظهار/إخفاء إعدادات الخط والألوان (أيقونة وقائمة منسدلة) ============ */
 const toggleStyleBtn = $('#toggleStyleBtn');
 const styleBody = $('#styleBody');
 const styleArrow = $('#styleArrow');
 const styleBadgeStatus = $('#styleBadgeStatus');
+const styleCard = $('#styleCard');
 
-toggleStyleBtn.addEventListener('click', ()=>{
-  const isHidden = styleBody.style.display === 'none';
+function toggleStyleDropdown(forceState){
+  if(!styleBody) return;
+  const isHidden = (typeof forceState === 'boolean') ? !forceState : (styleBody.style.display === 'none');
   if(isHidden){
     styleBody.style.display = 'block';
-    styleArrow.classList.add('open');
-    styleBadgeStatus.textContent = 'اضغط للإغلاق ▲';
-    styleBadgeStatus.style.background = '#eafaf1';
-    styleBadgeStatus.style.color = '#146c43';
+    if(styleArrow) styleArrow.classList.add('open');
+    if(styleCard) styleCard.classList.add('open');
+    if(styleBadgeStatus){
+      styleBadgeStatus.textContent = 'قائمة منسدلة (مفتوحة) ▲ اضغط للطي';
+      styleBadgeStatus.style.background = '#fef9e7';
+      styleBadgeStatus.style.color = '#8f5b08';
+      styleBadgeStatus.style.borderColor = '#f9e79f';
+    }
   } else {
     styleBody.style.display = 'none';
-    styleArrow.classList.remove('open');
-    styleBadgeStatus.textContent = 'اضغط للفتح ▼';
-    styleBadgeStatus.style.background = '#eef6fc';
-    styleBadgeStatus.style.color = 'var(--primary)';
+    if(styleArrow) styleArrow.classList.remove('open');
+    if(styleCard) styleCard.classList.remove('open');
+    if(styleBadgeStatus){
+      styleBadgeStatus.textContent = 'قائمة منسدلة (مغلقة) ▼ اضغط للعرض';
+      styleBadgeStatus.style.background = '#eef6fc';
+      styleBadgeStatus.style.color = 'var(--primary)';
+      styleBadgeStatus.style.borderColor = '#c3d4e0';
+    }
   }
+}
+
+if(toggleStyleBtn){
+  toggleStyleBtn.addEventListener('click', ()=> toggleStyleDropdown());
+  toggleStyleBtn.addEventListener('keydown', e => {
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      toggleStyleDropdown();
+    }
+  });
+}
+
+const btnCloseStyleTop = $('#btnCloseStyleTop');
+if(btnCloseStyleTop) btnCloseStyleTop.addEventListener('click', ()=> toggleStyleDropdown(false));
+
+const btnCloseStyleBottom = $('#btnCloseStyleBottom');
+if(btnCloseStyleBottom) btnCloseStyleBottom.addEventListener('click', ()=>{
+  toggleStyleDropdown(false);
+  if(toggleStyleBtn) toggleStyleBtn.scrollIntoView({ behavior:'smooth', block:'center' });
 });
 
 /* ============ أدوات القوالب ============ */
