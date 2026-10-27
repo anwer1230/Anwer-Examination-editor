@@ -455,6 +455,21 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   font-size:11.5px;color:#5b7285;line-height:1.45;
 }
 
+/* شريط التبديل السريع للقوالب أعلى الورقة */
+.template-quick-bar{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  background:#fff;border:2px solid #2874a6;border-radius:12px;padding:9px 14px;margin:10px 0 14px;
+  box-shadow:0 2px 8px rgba(40,116,166,0.12);
+}
+.tqb-label{font-size:13.5px;font-weight:bold;color:var(--primary);display:flex;align-items:center;gap:6px;}
+.tqb-buttons{display:flex;gap:6px;flex-wrap:wrap;}
+.tqb-btn{
+  background:#f4f9fd;border:1.5px solid #b9d3e4;border-radius:8px;padding:7px 12px;
+  font-size:12.5px;font-weight:bold;cursor:pointer;font-family:inherit;color:#1a5276;transition:all .15s;
+}
+.tqb-btn:hover{background:#ebf5fb;border-color:#2874a6;}
+.tqb-btn.active{background:#1a5276;color:#fff;border-color:#1a5276;box-shadow:0 2px 6px rgba(26,82,118,.3);}
+
 /* ============ القالب 1: الأكاديمي الرسمي (Academic Formal) ============ */
 .paper.tpl-academic{
   max-width:850px;margin:0 auto;border:1px solid #000000;padding:28px 32px;
@@ -622,15 +637,80 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   justify-content:center !important;
 }
 
+/* ============ القالب 4: المضغوط الاقتصادي (Compact / Economic A4) ============ */
+.paper.tpl-compact{
+  max-width:794px;margin:0 auto;border:1px solid #000000;padding:10px 16px;
+  background:#ffffff;color:#000000;font-family:"Times New Roman", Arial, serif;
+  font-size:11px;line-height:1.3;border-radius:0;direction:var(--paper-dir, rtl);text-align:var(--paper-align, right);
+}
+.paper.tpl-compact .header{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  border-bottom:1px solid #000000;padding-bottom:6px;margin-bottom:4px;direction:var(--paper-dir, rtl);
+}
+.paper.tpl-compact .header .right,
+.paper.tpl-compact .header .left{
+  width:33%;font-size:10.5px;line-height:1.5;
+}
+.paper.tpl-compact .header .right{text-align:start;}
+.paper.tpl-compact .header .left{text-align:end;}
+.paper.tpl-compact .header .center{
+  width:34%;text-align:center;font-size:12px;font-weight:bold;padding-top:2px;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;
+}
+.paper.tpl-compact .header-logo{max-height:48px;max-width:110px;margin:3px auto 0 auto;display:block;}
+.paper.tpl-compact .exam-title{
+  text-align:center;font-size:12px;font-weight:bold;border-top:1px solid #000000;
+  border-bottom:1px solid #000000;padding:3px;margin:6px 0;
+}
+.paper.tpl-compact .info-bar{
+  display:flex;justify-content:space-between;font-size:10.5px;
+  border-bottom:1px solid #000000;padding-bottom:4px;margin-bottom:8px;
+}
+.paper.tpl-compact .question{
+  padding:6px 0;border:none;border-top:1px solid #000000;margin-bottom:0;border-radius:0;background:transparent;
+}
+.paper.tpl-compact .question:first-of-type{border-top:none;padding-top:0;}
+.paper.tpl-compact .question.question-sub{
+  margin-inline-start:16px;border-inline-start:2px solid #000000;padding-inline-start:8px;background:#fcfcfc;
+}
+.paper.tpl-compact .q-head{
+  display:flex;justify-content:space-between;align-items:baseline;font-weight:bold;
+  font-size:11px;margin-bottom:4px;padding-bottom:2px;border-bottom:1px dotted #000000;
+  background:transparent;color:#000000;border-radius:0;
+}
+.paper.tpl-compact .marks{
+  font-weight:normal;font-size:10px;font-style:italic;white-space:nowrap;
+  background:transparent;color:#000000;padding:0;
+}
+.paper.tpl-compact ol{margin-inline-start:18px;padding-inline-start:0;}
+.paper.tpl-compact ol li{margin-bottom:3px;font-size:11px;}
+.paper.tpl-compact .write-line{display:inline-block;border-bottom:1px dotted #000000;width:90px;margin-inline-start:6px;}
+.paper.tpl-compact .answer-line{display:block;border-bottom:1px dotted #000000;width:100%;height:18px;margin-top:2px;}
+.paper.tpl-compact .choices{font-weight:bold;font-style:italic;margin-inline-start:6px;}
+.paper.tpl-compact .circle-box{
+  border:1px solid #000000;padding:6px;margin-top:4px;font-size:11px;
+  line-height:1.8;text-align:center;word-spacing:10px;
+}
+.paper.tpl-compact table{width:100%;border-collapse:collapse;margin-top:3px;font-size:10px;}
+.paper.tpl-compact th, .paper.tpl-compact td{border:1px solid #000000;padding:3px 6px;text-align:center;}
+.paper.tpl-compact th{font-weight:bold;font-size:10px;background:transparent;color:#000000;}
+.paper.tpl-compact .footer{
+  display:flex;justify-content:space-between;align-items:center;font-size:10px;
+  border-top:1px solid #000000;margin-top:8px;padding-top:4px;
+}
+.paper.tpl-compact .footer .f-center{font-weight:bold;}
+
 /* ============ الطباعة ============ */
 @media print{
-  .appbar,.tabs,main,.modal,.busy,.toast,.pwa-notify-card,.template-selector-card{display:none !important;}
+  .appbar,.tabs,main,.modal,.busy,.toast,.pwa-notify-card,.template-selector-card,.template-quick-bar{display:none !important;}
   #printRoot{display:block !important;}
   body{background:#fff;padding:0;margin:0;}
   .paper{box-shadow:none !important;margin:0 auto !important;}
   .paper.tpl-academic{border:1px solid #000000 !important;padding:20px 24px !important;}
   .paper.tpl-academic .question{page-break-inside:avoid !important;}
   .paper.tpl-minimal{border:1px solid #000000 !important;padding:16px 20px !important;}
+  .paper.tpl-compact{border:1px solid #000000 !important;padding:8px 12px !important;}
+  .paper.tpl-compact .question{page-break-inside:avoid !important;}
   .paper.tpl-modern{border:3px solid #1a5276 !important;border-radius:10px !important;direction:var(--paper-dir, rtl) !important;text-align:var(--paper-align, right) !important;}
   .paper.tpl-modern .p-header{display:flex !important;justify-content:space-between !important;align-items:flex-start !important;}
   .paper.tpl-modern .question{background:#eaf4fb !important;direction:var(--paper-dir, rtl) !important;text-align:var(--paper-align, right) !important;}
@@ -688,11 +768,22 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 <!-- التبويبات -->
 <div class="tabs">
   <button data-tab="edit" class="active">✏️ المحرر</button>
-  <button data-tab="preview">👁️ المعاينة والحفظ</button>
+  <button data-tab="preview">👁️ المعاينة واختيار القالب (4 نماذج)</button>
 </div>
 
 <main>
   <section id="tab-edit">
+
+    <!-- بطاقة الوصول المباشر لمعاينة القوالب -->
+    <div style="display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#eaf2f8,#d4e6f1);border:2px solid #2874a6;padding:12px 16px;border-radius:12px;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+      <div>
+        <b style="color:#1a5276;font-size:15px;display:flex;align-items:center;gap:6px;"><span>📑</span> نماذج وقوالب ورقة الاختبار (4 نماذج جاهزة)</b>
+        <div style="font-size:12px;color:#5b7285;margin-top:2px;">الأكاديمي الرسمي، القياسي المبسط، الأزرق العصري، والمضغوط الاقتصادي (A4).</div>
+      </div>
+      <button type="button" class="btn success go-preview-btn" style="font-size:14px;padding:9px 18px;display:flex;align-items:center;gap:6px;">
+        <span>👁️</span> <b>معاينة واختيار القالب الآن</b>
+      </button>
+    </div>
 
     <!-- قوالب الترويسة والتنسيق -->
     <div class="card">
@@ -815,6 +906,12 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
       <p class="hint">💾 حفظ تلقائي مستمر أثناء الكتابة. يعمل بدون إنترنت بعد أول فتح.</p>
     </div>
 
+    <div style="text-align:center;margin:18px 0 12px;">
+      <button type="button" class="btn success go-preview-btn" style="font-size:16px;padding:14px 26px;box-shadow:0 4px 14px rgba(30,132,73,0.3);width:100%;max-width:500px;">
+        👁️ معاينة الاختبار واستعراض القوالب (4 نماذج جاهزة) 📑
+      </button>
+    </div>
+
     <div class="dev">
       <b>محرر الاختبارات أنور الصبري</b><br>
       تصميم وبرمجة: <b>الأستاذ / أنور سيف</b><br>
@@ -847,6 +944,22 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
           <div class="tpl-name">🎨 الأزرق العصري (Modern)</div>
           <div class="tpl-desc">تصميم ملون حديث، بطاقات أسئلة ملونة وقابلة لتخصيص الألوان والخطوط.</div>
         </button>
+        <button type="button" class="tpl-btn" data-tpl="compact">
+          <div class="tpl-badge">القالب 4</div>
+          <div class="tpl-name">⚡ المضغوط الاقتصادي (Compact)</div>
+          <div class="tpl-desc">تصميم مكثف واقتصادي لطباعة أكبر قدر من الأسئلة في ورقة واحدة A4 بخط 11px وترويسة مدمجة.</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- شريط التبديل السريع المباشر للقوالب -->
+    <div class="template-quick-bar">
+      <span class="tqb-label">📑 تبديل القالب المباشر:</span>
+      <div class="tqb-buttons">
+        <button type="button" class="tqb-btn" data-tpl="academic">🎓 1. الأكاديمي الرسمي</button>
+        <button type="button" class="tqb-btn" data-tpl="minimal">📄 2. القياسي المبسط</button>
+        <button type="button" class="tqb-btn" data-tpl="modern">🎨 3. الأزرق العصري</button>
+        <button type="button" class="tqb-btn" data-tpl="compact">⚡ 4. المضغوط الاقتصادي</button>
       </div>
     </div>
 
@@ -1576,9 +1689,147 @@ function renderModernTemplate(mode){
   </div>`;
 }
 
+function renderCompactTemplate(mode){
+  const m = state.meta;
+  const s = state.style;
+  const isPreview = mode === 'preview';
+  const total = state.questions.reduce((a,q)=>a + (Number(q.marks)||0), 0);
+  const dir = s.direction === 'ltr' ? 'ltr' : 'rtl';
+  const align = dir === 'rtl' ? 'right' : 'left';
+
+  let headerImgHtml = '';
+  if(m.logoImage){
+    headerImgHtml = `<img src="${m.logoImage}" class="header-logo" style="max-height:48px;margin-top:4px;display:block;">`;
+  } else if(isPreview){
+    headerImgHtml = `<div class="img-placeholder header-img-slot" data-img="header-logo" style="margin-top:4px;min-height:36px;padding:6px;font-size:11px;">🖼️ شعار</div>`;
+  }
+
+  let currentMainNumber = 0;
+  let currentSubNumber = 1;
+
+  const qs = state.questions.map((q, i) => {
+    let imgHtml = '';
+    if(q.image){
+      imgHtml = `<img src="${q.image}" class="q-img" style="max-width:100%;max-height:220px;margin-top:6px;display:block;">`;
+    } else if(isPreview){
+      imgHtml = `<div class="img-placeholder" data-img-q="${i}" style="padding:8px;font-size:11px;">🖼️ اضغط لإضافة صورة للسؤال</div>`;
+    }
+
+    let headerLabel = '';
+    const isSub = !!q.isSub;
+    if(!isSub){
+      currentMainNumber++;
+      currentSubNumber = 1;
+      const clean = String(q.title||'').replace(/^\s*(?:Q\s*\d+|Question\s*\d+|س\s*\d+|\d+)[\s_:.\-–]*/i,'').trim();
+      headerLabel = `Q${currentMainNumber}: ${clean || 'Question'}`;
+    } else {
+      currentSubNumber++;
+      const clean = String(q.title||'').replace(/^\s*(?:Q\s*\d+|Question\s*\d+|س\s*\d+|\d+)[\s_:.\-–]*/i,'').trim();
+      headerLabel = `${currentSubNumber}_ ${clean || 'سؤال فرعي'}`;
+    }
+
+    let body = '';
+    switch(q.type){
+      case 'mcq':
+        body = '<ol>' + (q.items||[]).map(it => {
+          const opts = (it.options||[]).filter(o => o != null && String(o).trim() !== '');
+          const choiceStr = opts.length ? opts.map(o => esc(o)).join(' / ') : '';
+          return `<li>${esc(it.text)}${choiceStr ? ` <span class="choices">( ${choiceStr} )</span>` : ''}</li>`;
+        }).join('') + '</ol>';
+        break;
+      case 'meaning':
+        body = '<ol>' + (q.words||[]).map(w =>
+          `<li>${esc(w)} &nbsp;→&nbsp; <span class="write-line"></span></li>`
+        ).join('') + '</ol>';
+        break;
+      case 'match':
+        body = `<table><tr><th>Column A</th><th>Column B</th></tr>` +
+          (q.left||[]).map((l,li)=>
+            `<tr><td>${li+1}. &nbsp;${esc(l)}</td><td>${esc((q.right||[])[li]||'')}</td></tr>`
+          ).join('') + `</table>`;
+        break;
+      case 'circle': {
+        const n = Math.max(0, Number(q.lines)||0);
+        body = `<div class="circle-box">${esc(q.box||'')}</div>` +
+          (n ? Array.from({length:n}).map(()=>'<span class="answer-line"></span>').join('') : '');
+        break;
+      }
+      case 'essay':
+      case 'list': {
+        const n = Math.max(1, Number(q.lines)||3);
+        body = Array.from({length:n}).map(()=>'<span class="answer-line"></span>').join('');
+        break;
+      }
+      case 'fill':
+      case 'truefalse':
+      case 'correct':
+      case 'order':
+        body = '<ol>' + (q.items||[]).map(w =>
+          `<li>${esc(w)} &nbsp; <span class="write-line" style="width:110px;"></span></li>`
+        ).join('') + '</ol>';
+        break;
+      default:
+        body = '';
+    }
+
+    const subClass = isSub ? 'question-sub' : '';
+    const marksText = Number(q.marks) > 0 ? `<span class="marks">${Number(q.marks)} Marks</span>` : '';
+
+    return `<div class="question ${subClass}" data-qidx="${i}">
+      <div class="q-head">
+        <span>${esc(headerLabel)}</span>
+        ${marksText}
+      </div>
+      <div>${body}</div>
+      ${imgHtml}
+    </div>`;
+  }).join('');
+
+  return `<div class="paper tpl-compact" style="--paper-dir:${dir}; --paper-align:${align}; direction:${dir}; text-align:${align};">
+    <div class="header">
+      <div class="right">
+        <div>${esc(m.country)}</div>
+        <div>${esc(m.ministry)}</div>
+        <div>${esc(m.governorate)}</div>
+        <div>${esc(m.office)}</div>
+      </div>
+      <div class="center ph-center">
+        <div>بسم الله الرحمن الرحيم</div>
+        ${headerImgHtml}
+      </div>
+      <div class="left">
+        <div>${esc(m.school)}</div>
+        <div>${esc(m.className)}</div>
+        <div>${esc(m.subject)}</div>
+        <div>${esc(m.duration)}</div>
+      </div>
+    </div>
+
+    <div class="exam-title">
+      ${esc(m.examTitle)}
+    </div>
+
+    <div class="info-bar">
+      <span>${esc(m.studentLabel)}: ______________________</span>
+      <span>Total Marks: ${total}</span>
+    </div>
+
+    ${qs}
+
+    <div class="footer">
+      <span class="f-left">${esc(m.footerLeft || 'Good Luck')}</span>
+      <span class="f-center">T/ ${esc(m.teacher)}</span>
+      <span class="f-right">Total: ${total} Marks</span>
+    </div>
+  </div>`;
+}
+
 function updateTemplateButtons(){
   const tpl = state.paperTemplate || 'academic';
-  $$('#paperTemplateGrid .tpl-btn').forEach(btn => {
+  $$('.tpl-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tpl === tpl);
+  });
+  $$('.tqb-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tpl === tpl);
   });
 }
@@ -1590,6 +1841,8 @@ function paperHTML(mode){
     return renderMinimalTemplate(mode);
   } else if(tpl === 'modern'){
     return renderModernTemplate(mode);
+  } else if(tpl === 'compact'){
+    return renderCompactTemplate(mode);
   } else {
     return renderAcademicTemplate(mode);
   }
@@ -2151,6 +2404,16 @@ $('#previewPaper').addEventListener('click', e => {
 });
 
 /* ============ التبويبات ============ */
+function switchToPreviewTab(){
+  $$('.tabs button').forEach(b => b.classList.remove('active'));
+  const prevBtn = $('[data-tab="preview"]');
+  if(prevBtn) prevBtn.classList.add('active');
+  $('#tab-edit').hidden = true;
+  $('#tab-preview').hidden = false;
+  renderPreview();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
 $$('.tabs button').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     $$('.tabs button').forEach(b=>b.classList.remove('active'));
@@ -2163,25 +2426,30 @@ $$('.tabs button').forEach(btn=>{
   });
 });
 
+document.addEventListener('click', e => {
+  if(e.target.closest('.go-preview-btn')){
+    switchToPreviewTab();
+  }
+});
+
 /* ============ اختيار قالب الورقة ============ */
-const templateGrid = $('#paperTemplateGrid');
-if(templateGrid){
-  templateGrid.addEventListener('click', e => {
-    const btn = e.target.closest('.tpl-btn');
-    if(!btn) return;
-    const tpl = btn.dataset.tpl;
-    state.paperTemplate = tpl;
-    updateTemplateButtons();
-    saveLocal();
-    renderPreview();
-    const names = {
-      academic: 'القالب 1: الأكاديمي الرسمي (Formal)',
-      minimal: 'القالب 2: القياسي المبسط (Minimal)',
-      modern: 'القالب 3: الأزرق العصري (Modern)'
-    };
-    toast('✅ تم تطبيق: ' + (names[tpl] || tpl), 'ok');
-  });
-}
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.tpl-btn, .tqb-btn');
+  if(!btn) return;
+  const tpl = btn.dataset.tpl;
+  if(!tpl) return;
+  state.paperTemplate = tpl;
+  updateTemplateButtons();
+  saveLocal();
+  renderPreview();
+  const names = {
+    academic: 'القالب 1: الأكاديمي الرسمي (Formal)',
+    minimal: 'القالب 2: القياسي المبسط (Minimal)',
+    modern: 'القالب 3: الأزرق العصري (Modern)',
+    compact: 'القالب 4: المضغوط الاقتصادي (Compact A4)'
+  };
+  toast('✅ تم تطبيق: ' + (names[tpl] || tpl), 'ok');
+});
 
 /* ==================================================
    إنشاء PDF + الحفظ + المشاركة
