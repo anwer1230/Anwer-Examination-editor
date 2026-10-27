@@ -439,7 +439,7 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   border-color:#2874a6;background:#f4f9fd;transform:translateY(-1px);
 }
 .tpl-btn.active{
-  border-color:#1a5276;background:#ebf5fb;box-shadow:0 0 0 2px #1a5276;
+  border-color:#1a5276;background:#eaf4fb;box-shadow:0 0 0 2px #1a5276, 0 4px 12px rgba(26,82,118,0.18);
 }
 .tpl-badge{
   font-size:11px;font-weight:bold;color:#1a5276;background:#d4e6f1;
@@ -1077,6 +1077,7 @@ function defaultStyle(){
 
 function defaultState(){
   return {
+    paperTemplate: 'academic',
     meta:{
       country:'الجمهورية اليمنية',
       ministry:'وزارة التربية والتعليم',
@@ -1849,7 +1850,13 @@ function paperHTML(mode){
 }
 
 function renderPreview(){
-  $('#previewPaper').innerHTML = paperHTML('preview');
+  const tpl = state.paperTemplate || 'academic';
+  const prev = $('#previewPaper');
+  if(prev){
+    prev.classList.remove('tpl-academic', 'tpl-minimal', 'tpl-modern', 'tpl-compact');
+    prev.classList.add('tpl-' + tpl);
+    prev.innerHTML = paperHTML('preview');
+  }
   updateTemplateButtons();
 }
 
