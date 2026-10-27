@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="theme-color" content="#1a5276">
 <meta name="description" content="تطبيق لإنشاء وتعديل الاختبارات المدرسية وحفظها PDF ومشاركتها - تصميم وبرمجة الأستاذ أنور سيف">
 <meta property="og:title" content="محرر الاختبارات أنور الصبري">
@@ -261,15 +264,15 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 .ph-col{width:34%;font-size:var(--fs-header, 13.5px);font-weight:bold;color:#1a5276;line-height:1.75;}
 .ph-right{text-align:start;display:flex;flex-direction:column;gap:4px;align-items:flex-start;}
 .ph-left{text-align:end;display:flex;flex-direction:column;gap:4px;align-items:flex-end;}
-.ph-center{
-  width:32%;text-align:center;font-size:19px;font-weight:bold;color:#145a32;padding-top:4px;
-  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;
+.ph-center, .header .center, .p-header .ph-center{
+  width:34%;text-align:center;font-size:18px;font-weight:bold;color:#145a32;padding-top:4px;
+  display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:flex-start !important;gap:6px !important;
 }
-.ph-center .header-logo{
-  margin:4px auto 0 auto;max-height:65px;max-width:140px;display:block;
+.ph-center .header-logo, .header .center .header-logo, .p-header .ph-center .header-logo{
+  margin:4px auto 0 auto !important;max-height:65px !important;max-width:140px !important;display:block !important;
 }
-.ph-center .header-img-slot{
-  margin:4px auto 0 auto;
+.ph-center .header-img-slot, .header .center .header-img-slot{
+  margin:4px auto 0 auto !important;display:flex !important;align-items:center !important;justify-content:center !important;
 }
 
 .p-title{
@@ -802,15 +805,23 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 <main>
   <section id="tab-edit">
 
-    <!-- بطاقة الوصول المباشر لمعاينة القوالب -->
-    <div style="display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#eaf2f8,#d4e6f1);border:2px solid #2874a6;padding:12px 16px;border-radius:12px;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
-      <div>
-        <b style="color:#1a5276;font-size:15px;display:flex;align-items:center;gap:6px;"><span>📑</span> نماذج وقوالب ورقة الاختبار (4 نماذج جاهزة)</b>
-        <div style="font-size:12px;color:#5b7285;margin-top:2px;">الأكاديمي الرسمي، القياسي المبسط، الأزرق العصري، والمضغوط الاقتصادي (A4).</div>
+    <!-- بطاقة نماذج وقوالب ورقة الاختبار المباشرة -->
+    <div style="background:linear-gradient(135deg,#eaf2f8,#d4e6f1);border:2px solid #2874a6;padding:14px 16px;border-radius:14px;margin-bottom:14px;box-shadow:0 3px 10px rgba(40,116,166,0.12);">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
+        <div>
+          <b style="color:#1a5276;font-size:15px;display:flex;align-items:center;gap:6px;"><span>📑</span> نماذج وقوالب ورقة الاختبار (اختر أي قالب للاستعراض والتطبيق):</b>
+          <div style="font-size:12px;color:#5b7285;margin-top:2px;">يتم تطبيق محتوى أسئلتك تلقائياً داخل القالب المختار فوراً:</div>
+        </div>
+        <button type="button" class="btn success go-preview-btn" style="font-size:13.5px;padding:8px 16px;display:flex;align-items:center;gap:6px;">
+          <span>👁️</span> <b>فتح المعاينة الكاملة</b>
+        </button>
       </div>
-      <button type="button" class="btn success go-preview-btn" style="font-size:14px;padding:9px 18px;display:flex;align-items:center;gap:6px;">
-        <span>👁️</span> <b>معاينة واختيار القالب الآن</b>
-      </button>
+      <div class="tqb-buttons" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:8px;">
+        <button type="button" class="tqb-btn" data-tpl="academic" style="padding:10px;text-align:center;">🎓 1. الأكاديمي الرسمي</button>
+        <button type="button" class="tqb-btn" data-tpl="minimal" style="padding:10px;text-align:center;">📄 2. القياسي المبسط</button>
+        <button type="button" class="tqb-btn" data-tpl="modern" style="padding:10px;text-align:center;">🎨 3. الأزرق العصري</button>
+        <button type="button" class="tqb-btn" data-tpl="compact" style="padding:10px;text-align:center;">⚡ 4. المضغوط الاقتصادي (A4)</button>
+      </div>
     </div>
 
     <!-- قوالب الترويسة والتنسيق -->
@@ -2802,10 +2813,12 @@ window.addEventListener('appinstalled', ()=>{
   toast('📱 تم تثبيت التطبيق بنجاح في جهازك ويعمل الآن بدون إنترنت!', 'ok');
 });
 
-// تسجيل Service Worker (فقط على https أو localhost)
+// تسجيل Service Worker مع إجبار التحقق من التحديث الفوري
 if('serviceWorker' in navigator && location.protocol !== 'file:'){
   window.addEventListener('load', ()=>{
-    navigator.serviceWorker.register('sw.js').catch(err => {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      reg.update();
+    }).catch(err => {
       console.log('SW registration failed:', err);
     });
   });

@@ -1,5 +1,5 @@
-/* محرر الاختبارات أنور الصبري - Service Worker */
-const CACHE_NAME = 'anwer-exam-v2';
+/* محرر الاختبارات أنور الصبري - Service Worker (Network-First) */
+const CACHE_NAME = 'anwer-exam-v10-network-first';
 const ASSETS = [
   './',
   './index.html',
@@ -13,10 +13,10 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', event => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(ASSETS).catch(err => console.warn('cache addAll failed:', err)))
-      .then(() => self.skipWaiting())
   );
 });
 
@@ -30,21 +30,20 @@ self.addEventListener('activate', event => {
   );
 });
 
+/* إستراتيجية Network-First: جلب أحدث نسخة دائماً من الشبكة، والرجوع للذاكرة المخزنة فقط عند انقطاع الإنترنت */
 self.addEventListener('fetch', event => {
   if(event.request.method !== 'GET') return;
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      if(cached) return cached;
-      return fetch(event.request).then(response => {
-        if(response && response.status === 200 && response.type !== 'opaque'){
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
-        } else if(response && response.type === 'opaque'){
+    fetch(event.request)
+      .then(response => {
+        if(response && response.status === 200){
           const clone = response.clone();
           caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
         }
         return response;
-      }).catch(() => cached);
-    })
+      })
+      .catch(() => {
+        return caches.match(event.request);
+      })
   );
 });
