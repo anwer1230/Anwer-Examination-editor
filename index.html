@@ -235,7 +235,13 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 .ph-left{text-align:end;display:flex;flex-direction:column;gap:4px;align-items:flex-end;}
 .ph-center{
   width:32%;text-align:center;font-size:19px;font-weight:bold;color:#145a32;padding-top:4px;
-  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;
+}
+.ph-center .header-logo{
+  margin:4px auto 0 auto;max-height:65px;max-width:140px;display:block;
+}
+.ph-center .header-img-slot{
+  margin:4px auto 0 auto;
 }
 
 .p-title{
@@ -468,7 +474,7 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 .paper.tpl-academic .header .left{text-align:end;}
 .paper.tpl-academic .header .center{
   width:34%;text-align:center;font-size:16px;font-weight:bold;padding-top:4px;font-style:italic;
-  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;
 }
 .paper.tpl-academic .header-rule{
   border:none;border-top:1px solid #000000;margin:0 0 14px 0;
@@ -537,7 +543,7 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 .paper.tpl-minimal .header .left{text-align:end;}
 .paper.tpl-minimal .header .center{
   width:34%;text-align:center;font-size:17px;font-weight:bold;padding-top:4px;
-  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;
 }
 .paper.tpl-minimal .exam-title{
   text-align:center;font-size:17px;font-weight:bold;border-top:1px solid #000000;
@@ -1262,7 +1268,7 @@ function renderAcademicTemplate(mode){
         <div>${esc(m.governorate)}</div>
         <div>${esc(m.office)}</div>
       </div>
-      <div class="center">
+      <div class="center ph-center">
         <div>بسم الله الرحمن الرحيم</div>
         ${headerImgHtml}
       </div>
@@ -1403,7 +1409,7 @@ function renderMinimalTemplate(mode){
         <div>${esc(m.governorate)}</div>
         <div>${esc(m.office)}</div>
       </div>
-      <div class="center">
+      <div class="center ph-center">
         <div>بسم الله الرحمن الرحيم</div>
         ${headerImgHtml}
       </div>
