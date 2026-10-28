@@ -1083,10 +1083,33 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 #tab-analysis .summary-row td {
   font-weight: bold;
   background-color: #f9f9f9;
-  text-align: right;
-  padding-right: 15px;
+  text-align: center;
+  padding: 6px 4px;
 }
-#tab-analysis .summary-val { text-align: center; color: #c0392b; }
+#tab-analysis .summary-row td.summary-label {
+  text-align: center;
+  font-weight: 800;
+  padding: 6px 8px;
+  white-space: nowrap;
+}
+#tab-analysis .summary-val { text-align: center; font-weight: 800; }
+
+#tab-analysis .summary-row.q-totals-row td {
+  background-color: #f0f9ff;
+  border-top: 2px solid #0284c7;
+  color: #0369a1;
+}
+#tab-analysis .summary-row.q-percents-row td {
+  background-color: #f0fdf4;
+  border-top: 1px solid #bbf7d0;
+  color: #15803d;
+}
+#tab-analysis .summary-row.q-grades-row td {
+  background-color: #fefce8;
+  border-top: 1px solid #fef08a;
+  border-bottom: 2px solid #ca8a04;
+  color: #854d0e;
+}
 
 #tab-analysis .summary-table-container {
   margin-bottom: 20px;
@@ -1583,12 +1606,62 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
           </thead>
           <tbody id="tableBody"></tbody>
           <tfoot>
-            <tr class="summary-row">
-              <td colspan="12">المجموع الكلي للفصل</td>
-              <td id="grand-total" class="summary-val">0</td>
-              <td id="grand-percent" class="summary-val">0%</td>
-              <td id="grand-grade" class="summary-val">-</td>
-              <td colspan="2"></td>
+            <!-- الصف 1: مجموع درجات كل سؤال -->
+            <tr class="summary-row q-totals-row" id="row-q-totals">
+              <td colspan="2" class="summary-label" style="background:#e0f2fe; color:#0369a1;">مجموع درجات كل سؤال 👈</td>
+              <td id="q-total-0" class="summary-val q-total-val" style="color:#0369a1; font-weight:800;">0</td>
+              <td id="q-total-1" class="summary-val q-total-val" style="color:#0369a1; font-weight:800;">0</td>
+              <td id="q-total-2" class="summary-val q-total-val" style="color:#0369a1; font-weight:800;">0</td>
+              <td id="q-total-3" class="summary-val q-total-val" style="color:#0369a1; font-weight:800;">0</td>
+              <td id="q-total-4" class="summary-val q-total-val" style="color:#0369a1; font-weight:800;">0</td>
+              <td id="q-total-5" class="summary-val q-total-val" style="color:#0369a1; font-weight:800;">0</td>
+              <td id="q-total-6" class="summary-val q-total-val" style="color:#0369a1; font-weight:800;">0</td>
+              <td id="q-total-7" class="summary-val q-total-val" style="color:#0369a1; font-weight:800;">0</td>
+              <td id="q-total-8" class="summary-val q-total-val" style="color:#0369a1; font-weight:800;">0</td>
+              <td id="q-total-9" class="summary-val q-total-val" style="color:#0369a1; font-weight:800;">0</td>
+              <td id="grand-total" class="summary-val" style="color:#0369a1; font-size:15px; background:#bae6fd;" title="المجموع الكلي لدرجات جميع الطلاب">0</td>
+              <td class="summary-val" style="color:#94a3b8;">-</td>
+              <td class="summary-val" style="color:#94a3b8;">-</td>
+              <td style="background:#f8fafc;"></td>
+              <td class="delete-col analysis-hide-print" style="background:#f8fafc;"></td>
+            </tr>
+            <!-- الصف 2: النسبة المئوية لكل سؤال -->
+            <tr class="summary-row q-percents-row" id="row-q-percents">
+              <td colspan="2" class="summary-label" style="background:#dcfce7; color:#15803d;">النسبة المئوية لكل سؤال 👈</td>
+              <td id="q-percent-0" class="summary-val q-percent-val" style="color:#15803d; font-weight:800;">0%</td>
+              <td id="q-percent-1" class="summary-val q-percent-val" style="color:#15803d; font-weight:800;">0%</td>
+              <td id="q-percent-2" class="summary-val q-percent-val" style="color:#15803d; font-weight:800;">0%</td>
+              <td id="q-percent-3" class="summary-val q-percent-val" style="color:#15803d; font-weight:800;">0%</td>
+              <td id="q-percent-4" class="summary-val q-percent-val" style="color:#15803d; font-weight:800;">0%</td>
+              <td id="q-percent-5" class="summary-val q-percent-val" style="color:#15803d; font-weight:800;">0%</td>
+              <td id="q-percent-6" class="summary-val q-percent-val" style="color:#15803d; font-weight:800;">0%</td>
+              <td id="q-percent-7" class="summary-val q-percent-val" style="color:#15803d; font-weight:800;">0%</td>
+              <td id="q-percent-8" class="summary-val q-percent-val" style="color:#15803d; font-weight:800;">0%</td>
+              <td id="q-percent-9" class="summary-val q-percent-val" style="color:#15803d; font-weight:800;">0%</td>
+              <td class="summary-label" style="background:#f0fdf4; color:#166534; font-size:11.5px;">النسبة العامة 👈</td>
+              <td id="grand-percent" class="summary-val" style="color:#15803d; font-size:14px; background:#bbf7d0;" title="النسبة المئوية العامة لنتيجة الاختبار">0%</td>
+              <td class="summary-val" style="color:#94a3b8;">-</td>
+              <td style="background:#f8fafc;"></td>
+              <td class="delete-col analysis-hide-print" style="background:#f8fafc;"></td>
+            </tr>
+            <!-- الصف 3: التقدير ومستوى السؤال -->
+            <tr class="summary-row q-grades-row" id="row-q-grades">
+              <td colspan="2" class="summary-label" style="background:#fef9c3; color:#854d0e;">التقدير ومستوى السؤال 👈</td>
+              <td id="q-grade-0" class="summary-val q-grade-val" style="font-weight:800;">-</td>
+              <td id="q-grade-1" class="summary-val q-grade-val" style="font-weight:800;">-</td>
+              <td id="q-grade-2" class="summary-val q-grade-val" style="font-weight:800;">-</td>
+              <td id="q-grade-3" class="summary-val q-grade-val" style="font-weight:800;">-</td>
+              <td id="q-grade-4" class="summary-val q-grade-val" style="font-weight:800;">-</td>
+              <td id="q-grade-5" class="summary-val q-grade-val" style="font-weight:800;">-</td>
+              <td id="q-grade-6" class="summary-val q-grade-val" style="font-weight:800;">-</td>
+              <td id="q-grade-7" class="summary-val q-grade-val" style="font-weight:800;">-</td>
+              <td id="q-grade-8" class="summary-val q-grade-val" style="font-weight:800;">-</td>
+              <td id="q-grade-9" class="summary-val q-grade-val" style="font-weight:800;">-</td>
+              <td class="summary-label" style="background:#fefce8; color:#854d0e; font-size:11.5px;">التقدير العام 👈</td>
+              <td class="summary-val" style="color:#94a3b8;">-</td>
+              <td id="grand-grade" class="summary-val" style="font-size:13px; font-weight:bold; background:#fef08a;" title="التقدير العام لمستوى الفصل">-</td>
+              <td style="background:#f8fafc;"></td>
+              <td class="delete-col analysis-hide-print" style="background:#f8fafc;"></td>
             </tr>
           </tfoot>
         </table>
@@ -3742,6 +3815,55 @@ const LS_ANALYSIS_KEY = 'anwer_exam_analysis_v2';
 let studentIdCounter = 1;
 let numQuestions = 10;
 
+function renderAnalysisFooter(count = numQuestions){
+  if(count && count > 0) numQuestions = count;
+  const tfoot = document.querySelector('#mainTable tfoot');
+  if(!tfoot) return;
+
+  let totalsHtml = '';
+  let percentsHtml = '';
+  let gradesHtml = '';
+
+  for(let i = 0; i < numQuestions; i++){
+    totalsHtml += `<td id="q-total-${i}" class="summary-val q-total-val" style="color:#0369a1; font-weight:800;">0</td>`;
+    percentsHtml += `<td id="q-percent-${i}" class="summary-val q-percent-val" style="color:#15803d; font-weight:800;">0%</td>`;
+    gradesHtml += `<td id="q-grade-${i}" class="summary-val q-grade-val" style="font-weight:800;">-</td>`;
+  }
+
+  tfoot.innerHTML = `
+    <!-- الصف 1: مجموع درجات كل سؤال -->
+    <tr class="summary-row q-totals-row" id="row-q-totals">
+      <td colspan="2" class="summary-label" style="background:#e0f2fe; color:#0369a1;">مجموع درجات كل سؤال 👈</td>
+      ${totalsHtml}
+      <td id="grand-total" class="summary-val" style="color:#0369a1; font-size:15px; background:#bae6fd;" title="المجموع الكلي لدرجات جميع الطلاب">0</td>
+      <td class="summary-val" style="color:#94a3b8;">-</td>
+      <td class="summary-val" style="color:#94a3b8;">-</td>
+      <td style="background:#f8fafc;"></td>
+      <td class="delete-col analysis-hide-print" style="background:#f8fafc;"></td>
+    </tr>
+    <!-- الصف 2: النسبة المئوية لكل سؤال -->
+    <tr class="summary-row q-percents-row" id="row-q-percents">
+      <td colspan="2" class="summary-label" style="background:#dcfce7; color:#15803d;">النسبة المئوية لكل سؤال 👈</td>
+      ${percentsHtml}
+      <td class="summary-label" style="background:#f0fdf4; color:#166534; font-size:11.5px;">النسبة العامة 👈</td>
+      <td id="grand-percent" class="summary-val" style="color:#15803d; font-size:14px; background:#bbf7d0;" title="النسبة المئوية العامة لنتيجة الاختبار">0%</td>
+      <td class="summary-val" style="color:#94a3b8;">-</td>
+      <td style="background:#f8fafc;"></td>
+      <td class="delete-col analysis-hide-print" style="background:#f8fafc;"></td>
+    </tr>
+    <!-- الصف 3: التقدير ومستوى السؤال -->
+    <tr class="summary-row q-grades-row" id="row-q-grades">
+      <td colspan="2" class="summary-label" style="background:#fef9c3; color:#854d0e;">التقدير ومستوى السؤال 👈</td>
+      ${gradesHtml}
+      <td class="summary-label" style="background:#fefce8; color:#854d0e; font-size:11.5px;">التقدير العام 👈</td>
+      <td class="summary-val" style="color:#94a3b8;">-</td>
+      <td id="grand-grade" class="summary-val" style="font-size:13px; font-weight:bold; background:#fef08a;" title="التقدير العام لمستوى الفصل">-</td>
+      <td style="background:#f8fafc;"></td>
+      <td class="delete-col analysis-hide-print" style="background:#f8fafc;"></td>
+    </tr>
+  `;
+}
+
 function initAnalysisTable(force = false, count = numQuestions){
   if(count && count > 0) numQuestions = count;
   const qHeader = document.getElementById('questions-header');
@@ -3766,10 +3888,7 @@ function initAnalysisTable(force = false, count = numQuestions){
     mainThCol.setAttribute('colspan', numQuestions);
     mainThCol.textContent = `الأسئلة (${numQuestions}) + الدرجة`;
   }
-  const footerTd = document.querySelector('#mainTable tfoot tr td:first-child');
-  if(footerTd){
-    footerTd.setAttribute('colspan', numQuestions + 2);
-  }
+  renderAnalysisFooter(numQuestions);
 }
 
 function addStudentRow(studentData){
@@ -3837,6 +3956,7 @@ function calculateAll(){
   const rows = document.querySelectorAll('#tableBody tr');
   let classTotalSum = 0;
   let validStudentsCount = 0;
+  let activeStudentsCount = 0;
 
   let countMmtaz = 0;
   let countJayidJiddan = 0;
@@ -3845,6 +3965,22 @@ function calculateAll(){
   let countDaif = 0;
 
   let lowAchieversData = [];
+
+  const actualNumQ = maxInputs.length || numQuestions;
+  const questionSums = new Array(actualNumQ).fill(0);
+  const questionAttemptCounts = new Array(actualNumQ).fill(0);
+
+  // حساب عدد الطلاب الفعليين (الذين لديهم اسم مسجل أو أي درجة مدخلة)
+  rows.forEach(r => {
+    const name = r.querySelector('.name-input')?.value.trim();
+    const hasAnyGrade = Array.from(r.querySelectorAll('.grade-input')).some(inp => inp.value !== '' && !isNaN(parseFloat(inp.value)));
+    if (name || hasAnyGrade) {
+      activeStudentsCount++;
+    }
+  });
+  if (activeStudentsCount === 0 && rows.length > 0) {
+    activeStudentsCount = rows.length;
+  }
 
   rows.forEach(row => {
     const id = row.id.split('-')[1];
@@ -3866,11 +4002,15 @@ function calculateAll(){
           input.value = maxVal;
         }
         studentTotal += val;
+        if (index < actualNumQ) {
+          questionSums[index] += val;
+          questionAttemptCounts[index]++;
+        }
       }
     });
 
     const totalEl = document.getElementById(`total-${id}`);
-    if(totalEl) totalEl.innerText = studentTotal;
+    if(totalEl) totalEl.innerText = Math.round(studentTotal * 10) / 10;
 
     let percentage = 0;
     if (totalPossibleMarks > 0) {
@@ -3908,26 +4048,98 @@ function calculateAll(){
     }
   });
 
+  // حساب وتحديث صفوف الأسئلة (المجموع، النسبة، التقدير)
+  const studentsBase = activeStudentsCount > 0 ? activeStudentsCount : (rows.length || 1);
+
+  for (let j = 0; j < actualNumQ; j++) {
+    const qSum = questionSums[j] || 0;
+    const maxVal = maxInputs[j] ? (parseFloat(maxInputs[j].value) || 0) : 0;
+    const qTotalEl = document.getElementById(`q-total-${j}`);
+    if (qTotalEl) {
+      qTotalEl.innerText = Math.round(qSum * 10) / 10;
+    }
+
+    // النسبة المئوية للسؤال = (مجموع درجات السؤال / (عدد الطلاب * الدرجة القصوى للسؤال)) * 100
+    const denomQ = studentsBase * maxVal;
+    let qPct = 0;
+    if (denomQ > 0) {
+      qPct = (qSum / denomQ) * 100;
+    }
+    const qPercentEl = document.getElementById(`q-percent-${j}`);
+    if (qPercentEl) {
+      qPercentEl.innerText = denomQ > 0 ? `${qPct.toFixed(1)}%` : '0%';
+    }
+
+    // التقدير ومستوى السؤال
+    const qGradeEl = document.getElementById(`q-grade-${j}`);
+    if (qGradeEl) {
+      if (denomQ === 0 || (qSum === 0 && questionAttemptCounts[j] === 0)) {
+        qGradeEl.innerText = '-';
+        qGradeEl.style.color = '#64748b';
+      } else {
+        let qGrade = 'ضعيف';
+        let qColor = '#dc2626';
+        if (qPct >= 90) {
+          qGrade = 'ممتاز';
+          qColor = '#15803d';
+        } else if (qPct >= 80) {
+          qGrade = 'جيد جداً';
+          qColor = '#0369a1';
+        } else if (qPct >= 65) {
+          qGrade = 'جيد';
+          qColor = '#b45309';
+        } else if (qPct >= 50) {
+          qGrade = 'متوسط';
+          qColor = '#c2410c';
+        }
+        qGradeEl.innerText = qGrade;
+        qGradeEl.style.color = qColor;
+      }
+    }
+  }
+
+  // حساب المجموع الكلي والنسبة والتقدير العام
   const grandTotalEl = document.getElementById('grand-total');
-  if(grandTotalEl) grandTotalEl.innerText = classTotalSum;
+  if(grandTotalEl) grandTotalEl.innerText = Math.round(classTotalSum * 10) / 10;
 
   const grandPercentEl = document.getElementById('grand-percent');
   const grandGradeEl = document.getElementById('grand-grade');
-  if (validStudentsCount > 0 && totalPossibleMarks > 0) {
-    let overallPercent = (classTotalSum / (validStudentsCount * totalPossibleMarks)) * 100;
+  const fullExamMark = totalPossibleMarks > 0 ? totalPossibleMarks : 40;
+  const grandDenom = studentsBase * fullExamMark;
+
+  if (validStudentsCount > 0 && grandDenom > 0) {
+    let overallPercent = (classTotalSum / grandDenom) * 100;
     if(grandPercentEl) grandPercentEl.innerText = `${overallPercent.toFixed(1)}%`;
 
     let overallGrade = "-";
-    if (overallPercent >= 90) overallGrade = "ممتاز";
-    else if (overallPercent >= 80) overallGrade = "جيد جداً";
-    else if (overallPercent >= 65) overallGrade = "جيد";
-    else if (overallPercent >= 50) overallGrade = "متوسط";
-    else overallGrade = "ضعيف";
+    let gColor = '#64748b';
+    if (overallPercent >= 90) {
+      overallGrade = "ممتاز";
+      gColor = '#15803d';
+    } else if (overallPercent >= 80) {
+      overallGrade = "جيد جداً";
+      gColor = '#0369a1';
+    } else if (overallPercent >= 65) {
+      overallGrade = "جيد";
+      gColor = '#b45309';
+    } else if (overallPercent >= 50) {
+      overallGrade = "متوسط";
+      gColor = '#c2410c';
+    } else {
+      overallGrade = "ضعيف";
+      gColor = '#dc2626';
+    }
 
-    if(grandGradeEl) grandGradeEl.innerText = overallGrade;
+    if(grandGradeEl) {
+      grandGradeEl.innerText = overallGrade;
+      grandGradeEl.style.color = gColor;
+    }
   } else {
     if(grandPercentEl) grandPercentEl.innerText = "0%";
-    if(grandGradeEl) grandGradeEl.innerText = "-";
+    if(grandGradeEl) {
+      grandGradeEl.innerText = "-";
+      grandGradeEl.style.color = '#64748b';
+    }
   }
 
   const cM = document.getElementById('count-mmtaz'); if(cM) cM.innerText = countMmtaz;
@@ -4147,6 +4359,20 @@ function generateAnalysisReportHTML(){
   const grandPercent = document.getElementById('grand-percent')?.innerText || '0%';
   const grandGrade = document.getElementById('grand-grade')?.innerText || '-';
 
+  let qTotalsCells = '';
+  let qPercentsCells = '';
+  let qGradesCells = '';
+
+  for(let i = 0; i < actualNumQuestions; i++){
+    const qTot = document.getElementById(`q-total-${i}`)?.innerText || '0';
+    const qPct = document.getElementById(`q-percent-${i}`)?.innerText || '0%';
+    const qGrd = document.getElementById(`q-grade-${i}`)?.innerText || '-';
+
+    qTotalsCells += `<td style="border:1px solid #000;padding:5px 2px;text-align:center;font-weight:bold;font-size:12px;color:#0369a1;background:#f0f9ff;">${esc(qTot)}</td>`;
+    qPercentsCells += `<td style="border:1px solid #000;padding:5px 2px;text-align:center;font-weight:bold;font-size:11.5px;color:#15803d;background:#f0fdf4;">${esc(qPct)}</td>`;
+    qGradesCells += `<td style="border:1px solid #000;padding:5px 2px;text-align:center;font-weight:bold;font-size:11px;background:#fefce8;">${esc(qGrd)}</td>`;
+  }
+
   const cM = document.getElementById('count-mmtaz')?.innerText || '0';
   const cJJ = document.getElementById('count-jayid-jiddan')?.innerText || '0';
   const cJ = document.getElementById('count-jayid')?.innerText || '0';
@@ -4210,11 +4436,31 @@ function generateAnalysisReportHTML(){
           ${studentsHtml}
         </tbody>
         <tfoot>
-          <tr style="background:#f4f4f4;font-weight:bold;">
-            <td colspan="${2 + actualNumQuestions}" style="border:1px solid #000;padding:5px 10px;text-align:right;">المجموع الكلي للفصل</td>
-            <td style="border:1px solid #000;padding:5px;text-align:center;color:#c0392b;font-size:13px;">${esc(grandTotal)}</td>
-            <td style="border:1px solid #000;padding:5px;text-align:center;color:#c0392b;font-size:12px;">${esc(grandPercent)}</td>
-            <td style="border:1px solid #000;padding:5px;text-align:center;color:#c0392b;font-size:12px;">${esc(grandGrade)}</td>
+          <!-- الصف 1: مجموع درجات كل سؤال -->
+          <tr style="background:#f0f9ff;font-weight:bold;">
+            <td colspan="2" style="border:1px solid #000;padding:5px 6px;text-align:center;color:#0369a1;font-size:12px;background:#e0f2fe;">مجموع درجات كل سؤال 👈</td>
+            ${qTotalsCells}
+            <td style="border:1px solid #000;padding:5px 2px;text-align:center;color:#0369a1;font-size:13px;font-weight:bold;background:#bae6fd;">${esc(grandTotal)}</td>
+            <td style="border:1px solid #000;padding:5px 2px;text-align:center;color:#94a3b8;">-</td>
+            <td style="border:1px solid #000;padding:5px 2px;text-align:center;color:#94a3b8;">-</td>
+            <td style="border:1px solid #000;"></td>
+          </tr>
+          <!-- الصف 2: النسبة المئوية لكل سؤال -->
+          <tr style="background:#f0fdf4;font-weight:bold;">
+            <td colspan="2" style="border:1px solid #000;padding:5px 6px;text-align:center;color:#15803d;font-size:12px;background:#dcfce7;">النسبة المئوية لكل سؤال 👈</td>
+            ${qPercentsCells}
+            <td style="border:1px solid #000;padding:5px 2px;text-align:center;color:#166534;font-size:11px;background:#dcfce7;">النسبة العامة 👈</td>
+            <td style="border:1px solid #000;padding:5px 2px;text-align:center;color:#15803d;font-size:12.5px;font-weight:bold;background:#bbf7d0;">${esc(grandPercent)}</td>
+            <td style="border:1px solid #000;padding:5px 2px;text-align:center;color:#94a3b8;">-</td>
+            <td style="border:1px solid #000;"></td>
+          </tr>
+          <!-- الصف 3: التقدير ومستوى السؤال -->
+          <tr style="background:#fefce8;font-weight:bold;">
+            <td colspan="2" style="border:1px solid #000;padding:5px 6px;text-align:center;color:#854d0e;font-size:12px;background:#fef9c3;">التقدير ومستوى السؤال 👈</td>
+            ${qGradesCells}
+            <td style="border:1px solid #000;padding:5px 2px;text-align:center;color:#854d0e;font-size:11px;background:#fef9c3;">التقدير العام 👈</td>
+            <td style="border:1px solid #000;padding:5px 2px;text-align:center;color:#94a3b8;">-</td>
+            <td style="border:1px solid #000;padding:5px 2px;text-align:center;color:#854d0e;font-size:12.5px;font-weight:bold;background:#fef08a;">${esc(grandGrade)}</td>
             <td style="border:1px solid #000;"></td>
           </tr>
         </tfoot>
@@ -4810,10 +5056,7 @@ function syncQuestionsFromExam(){
     mainThCol.textContent = `الأسئلة (${numQuestions}) + الدرجة`;
   }
 
-  const footerTd = document.querySelector('#mainTable tfoot tr td:first-child');
-  if(footerTd){
-    footerTd.setAttribute('colspan', numQuestions + 2);
-  }
+  renderAnalysisFooter(numQuestions);
 
   // تحديث صفوف الطلاب الموجودين لتتطابق مع الأعمدة الجديدة
   const studentRows = document.querySelectorAll('#tableBody tr');
