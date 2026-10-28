@@ -2938,7 +2938,28 @@ function switchToTab(tabName){
   if(anTab) anTab.hidden = tabName !== 'analysis';
   if(tabName === 'preview') renderPreview();
   if(tabName === 'analysis') {
-    calculateAll();
+    if(typeof initAnalysisTable === 'function'){
+      initAnalysisTable();
+    }
+    const tbody = document.getElementById('tableBody');
+    if(!tbody || tbody.children.length === 0){
+      const loaded = typeof loadAnalysisLocal === 'function' ? loadAnalysisLocal() : false;
+      if(!loaded && typeof addStudentRow === 'function'){
+        for(let i = 0; i < 5; i++) addStudentRow();
+      }
+    }
+    if($('#an-subject') && !$('#an-subject').value && state?.meta?.subject){
+      $('#an-subject').value = state.meta.subject;
+    }
+    if($('#an-class') && !$('#an-class').value && state?.meta?.className){
+      $('#an-class').value = state.meta.className;
+    }
+    if($('#an-month') && !$('#an-month').value && state?.meta?.examTitle){
+      $('#an-month').value = state.meta.examTitle;
+    }
+    if(typeof calculateAll === 'function'){
+      calculateAll();
+    }
   }
   const mainEl = $('main');
   if(mainEl){
@@ -3269,10 +3290,11 @@ const LS_ANALYSIS_KEY = 'anwer_exam_analysis_v2';
 let studentIdCounter = 1;
 const numQuestions = 10;
 
-function initAnalysisTable(){
+function initAnalysisTable(force = false){
   const qHeader = document.getElementById('questions-header');
   const maxHeader = document.getElementById('max-grades-row');
   if(!qHeader || !maxHeader) return;
+  if(!force && qHeader.children.length > 0) return;
 
   let qHtml = '';
   for (let i = 1; i <= numQuestions; i++) {
@@ -3596,6 +3618,44 @@ function printAnalysisReport(){
   }, 1000);
 }
 
+/* ربط أحداث الإدخال والحذف التلقائي لكشف التحليل */
+document.addEventListener('input', e => {
+  if(e.target && e.target.closest('#tab-analysis')){
+    if(e.target.matches('.name-input, .grade-input, .max-grade-input, .notes-input, .reasons-input, .solutions-input, .role-input, #an-year, #an-term, #an-subject, #an-class, #an-month')){
+      calculateAll();
+      saveAnalysisLocal();
+    }
+  }
+});
+
+document.addEventListener('click', e => {
+  if(e.target.closest('.add-row-btn, #btnAddStudent')){
+    addStudentRow();
+  }
+  const delBtn = e.target.closest('#tableBody .action-btn');
+  if(delBtn){
+    const tr = delBtn.closest('tr');
+    if(tr){
+      tr.remove();
+      renumberStudentRows();
+      calculateAll();
+      saveAnalysisLocal();
+    }
+  }
+});
+
+/* تصدير كافة دوال التحليل على كائن window لضمان الوصول المباشر */
+window.initAnalysisTable = initAnalysisTable;
+window.addStudentRow = addStudentRow;
+window.deleteRow = deleteRow;
+window.calculateAll = calculateAll;
+window.saveAnalysisLocal = saveAnalysisLocal;
+window.loadAnalysisLocal = loadAnalysisLocal;
+window.syncAnalysisHeaderFromMeta = syncAnalysisHeaderFromMeta;
+window.clearAnalysisData = clearAnalysisData;
+window.printAnalysisReport = printAnalysisReport;
+window.switchToAnalysisTab = switchToAnalysisTab;
+
 /* ============ التشغيل ============ */
 function init(){
   bindMetaValues();
@@ -3608,6 +3668,7 @@ function init(){
   if(!loadedAn){
     for(let i = 0; i < 5; i++) addStudentRow();
   }
+  calculateAll();
   if(isAppStandalone() && btnHeaderInstall){
     btnHeaderInstall.style.display = 'none';
   }
