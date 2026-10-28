@@ -1073,6 +1073,46 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
     border: 1px solid black !important;
   }
 }
+
+/* قواعد إظهار وإخفاء التبويبات بشكل قطعي */
+#tab-edit[hidden], #tab-preview[hidden], #tab-analysis[hidden] {
+  display: none !important;
+}
+#tab-edit:not([hidden]) {
+  display: block !important;
+}
+#tab-preview:not([hidden]) {
+  display: block !important;
+}
+#tab-analysis:not([hidden]) {
+  display: block !important;
+}
+.tab-btn, .tab-icon, .tab-label {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+/* تنسيقات أدوات القوالب والخط المصغرة في نافذة المعاينة (نصف الحجم الحالي) */
+.preview-mini-card {
+  font-size: 11px;
+}
+.preview-mini-card .mini-inp {
+  height: 27px;
+  font-size: 11px;
+  padding: 3px 6px;
+  border-radius: 6px;
+}
+.preview-mini-card label {
+  font-size: 11px;
+  color: #34495e;
+  font-weight: 600;
+}
+.preview-mini-card .btn.mini {
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
 </style>
 </head>
 <body>
@@ -1088,6 +1128,7 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   </div>
   <div class="contact">
     <button type="button" id="btnForceRefresh" class="contact-install" style="background:linear-gradient(135deg,#e67e22,#d35400);color:#fff;" title="تحديث لآخر نسخة وتفريغ الذاكرة المؤقتة">🔄 تحديث لآخر نسخة</button>
+    <button type="button" id="btnHeaderPreview" class="contact-install go-preview-btn" style="background:linear-gradient(135deg,#16a085,#1abc9c);color:#fff;" title="معاينة ورقة الاختبار والطباعة">👁️ المعاينة والطباعة</button>
     <button type="button" id="btnHeaderAnalysis" class="contact-install" style="background:linear-gradient(135deg,#2980b9,#1f618d);color:#fff;" title="التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم">📊 تحليل درجات الطلاب</button>
     <button type="button" id="btnHeaderInstall" class="contact-install" title="تثبيت التطبيق على الهاتف للعمل بدون إنترنت">📱 تثبيت التطبيق</button>
     <a href="tel:772997043">📞 772997043</a>
@@ -1281,12 +1322,116 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   </section>
 
   <section id="tab-preview" hidden>
-    <div class="toolbar">
-      <button id="btnSavePdf" class="btn primary">💾 حفظ PDF</button>
-      <button id="btnShare" class="btn success">📤 مشاركة</button>
-      <button id="btnPrint" class="btn ghost">🖨️ طباعة</button>
+    <!-- شريط أدوات المعاينة والطباعة الأساسي -->
+    <div class="toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+        <button type="button" id="btnSavePdf" class="btn primary" style="font-size:13px;padding:7px 14px;">💾 حفظ PDF</button>
+        <button type="button" id="btnShare" class="btn success" style="font-size:13px;padding:7px 14px;">📤 مشاركة</button>
+        <button type="button" id="btnPrint" class="btn ghost" style="font-size:13px;padding:7px 14px;">🖨️ طباعة</button>
+        <button type="button" class="btn" onclick="switchToTab('edit')" style="background:#eef3f7;color:#1a5276;font-size:12px;padding:6px 12px;border:1px solid #c3d4e0;cursor:pointer;">✏️ العودة للمحرر</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <button type="button" class="btn mini" id="btnToggleMiniSettings" onclick="togglePreviewMiniControls()" style="background:#eaf2f8;border:1.5px solid #2980b9;color:#1f618d;font-size:11.5px;padding:6px 12px;font-weight:bold;cursor:pointer;">
+          ⚙️ أدوات القوالب والخط المصغرة ▼
+        </button>
+      </div>
     </div>
-    <p class="hint">💡 اضغط أي مكان مخصص للصورة داخل الورقة لرفع صورة من جهازك.</p>
+
+    <!-- بطاقة أدوات القوالب والترويسة والألوان المصغرة في نافذة المعاينة (بنصف الحجم الحالي) -->
+    <div id="previewMiniControlsBox" class="preview-mini-card" style="background:#fff;border:1.5px solid #2980b9;border-radius:12px;padding:9px 12px;margin-bottom:12px;box-shadow:0 3px 10px rgba(41,128,185,0.08);">
+      
+      <!-- 1. شريط القوالب المصغر (Templates - نصف الحجم الحالي) -->
+      <div style="border-bottom:1px dashed #d4e6f1;padding-bottom:8px;margin-bottom:8px;">
+        <div style="font-size:11px;color:#5b7285;margin-bottom:6px;display:flex;align-items:center;gap:6px;">
+          <span>📋</span>
+          <b>اختر من القائمة المنسدلة أي قالب لتطبيقه فوراً على ورقة الاختبار، أو احفظ إعداداتك كقالب جديد:</b>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <button type="button" id="btnSaveTemplatePreview" onclick="saveTemplateFromPreview()" class="btn success mini" style="font-size:11px;padding:4px 9px;">
+            💾 حفظ الإعدادات الحالية كقالب
+          </button>
+          
+          <div style="display:inline-flex;align-items:center;gap:4px;background:#f4f9fd;border:1px solid #b9d3e4;border-radius:6px;padding:2px 6px;">
+            <span style="font-size:12px;">🎓</span>
+            <span style="font-size:11px;font-weight:bold;color:#1a5276;">القالب:</span>
+            <select id="selTemplatesPreview" onchange="onTemplateChangePreview(event)" class="sel mini" style="font-size:11px;padding:2px 6px;font-weight:bold;color:#1a5276;border:none;background:transparent;outline:none;cursor:pointer;max-width:270px;">
+              <optgroup label="📋 نماذج ورقة الاختبار:">
+                <option value="tpl:academic">🎓 القالب 1: الأكاديمي الرسمي (Formal)</option>
+                <option value="tpl:minimal">📄 القالب 2: القياسي المبسط (Minimal)</option>
+                <option value="tpl:modern">🎨 القالب 3: الأزرق العصري (Modern)</option>
+                <option value="tpl:compact">⚡ القالب 4: المضغوط الاقتصادي (Compact A4)</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <button type="button" id="btnApplyTemplatePreview" onclick="applyTemplateFromPreview()" class="btn primary mini" style="font-size:11px;padding:4px 9px;">
+            📥 تطبيق القالب
+          </button>
+          <button type="button" id="btnDeleteTemplatePreview" onclick="deleteTemplateFromPreview()" class="btn ghost danger mini" style="font-size:11px;padding:4px 8px;color:var(--danger);border-color:#e8b5ae;">
+            🗑 حذف القالب
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. أزرار الفتح السريع لقوائم الترويسة والخط والألوان المصغرة -->
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <button type="button" id="btnToggleMiniHeader" onclick="toggleMiniSection('miniHeaderSection')" style="background:#f4f9fd;border:1px solid #b9d3e4;color:#1a5276;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:bold;cursor:pointer;display:inline-flex;align-items:center;gap:4px;">
+          <span>🏫</span> بيانات الترويسة والتذييل <span>▼</span>
+        </button>
+        <button type="button" id="btnToggleMiniStyle" onclick="toggleMiniSection('miniStyleSection')" style="background:#fef9e7;border:1px solid #f9e79f;color:#8f5b08;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:bold;cursor:pointer;display:inline-flex;align-items:center;gap:4px;">
+          <span>🎨</span> حجم الخط والألوان <span>▼</span>
+        </button>
+        <span style="font-size:10px;color:#7f8c8d;">(ملاحظة: تظهر هذه الأدوات مصغرة بنصف حجمها لتوفير المساحة وتعديل الورقة وملاحظتها مباشرة)</span>
+      </div>
+
+      <!-- لوحة بيانات الترويسة والتذييل المصغرة (نصف الحجم الحالي) -->
+      <div id="miniHeaderSection" style="display:none;background:#f9fbfd;border:1px solid #d4e6f1;border-radius:8px;padding:8px 10px;margin-top:8px;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(135px, 1fr));gap:6px;font-size:11px;">
+          <label style="display:flex;flex-direction:column;gap:2px;">الجهة 1 <input class="inp mini-inp" data-meta="country" oninput="syncMiniMeta(this)"></label>
+          <label style="display:flex;flex-direction:column;gap:2px;">الجهة 2 <input class="inp mini-inp" data-meta="ministry" oninput="syncMiniMeta(this)"></label>
+          <label style="display:flex;flex-direction:column;gap:2px;">اسم المدرسة <input class="inp mini-inp" data-meta="school" oninput="syncMiniMeta(this)"></label>
+          <label style="display:flex;flex-direction:column;gap:2px;">الصف <input class="inp mini-inp" data-meta="className" oninput="syncMiniMeta(this)"></label>
+          <label style="display:flex;flex-direction:column;gap:2px;">المادة <input class="inp mini-inp" data-meta="subject" oninput="syncMiniMeta(this)"></label>
+          <label style="display:flex;flex-direction:column;gap:2px;">المدة <input class="inp mini-inp" data-meta="duration" oninput="syncMiniMeta(this)"></label>
+          <label style="display:flex;flex-direction:column;gap:2px;">عنوان الاختبار <input class="inp mini-inp" data-meta="examTitle" oninput="syncMiniMeta(this)"></label>
+          <label style="display:flex;flex-direction:column;gap:2px;">تذييل 1 <input class="inp mini-inp" data-meta="footer1" oninput="syncMiniMeta(this)"></label>
+          <label style="display:flex;flex-direction:column;gap:2px;">تذييل 2 <input class="inp mini-inp" data-meta="footer2" oninput="syncMiniMeta(this)"></label>
+        </div>
+      </div>
+
+      <!-- لوحة حجم الخط والألوان المصغرة (نصف الحجم الحالي) -->
+      <div id="miniStyleSection" style="display:none;background:#fffdf6;border:1px solid #f9e79f;border-radius:8px;padding:8px 10px;margin-top:8px;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));gap:6px;font-size:11px;">
+          <label style="display:flex;flex-direction:column;gap:2px;">حجم الخط الأساسي
+            <input type="number" class="inp mini-inp" data-style="baseFontSize" min="10" max="20" step="0.5" oninput="syncMiniStyle(this)">
+          </label>
+          <label style="display:flex;flex-direction:column;gap:2px;">لون النص
+            <input type="color" data-style="baseColor" style="height:25px;width:100%;padding:1px;border-radius:4px;cursor:pointer;" onchange="syncMiniStyle(this)">
+          </label>
+          <label style="display:flex;flex-direction:column;gap:2px;">حجم عنوان الاختبار
+            <input type="number" class="inp mini-inp" data-style="titleSize" min="14" max="30" step="0.5" oninput="syncMiniStyle(this)">
+          </label>
+          <label style="display:flex;flex-direction:column;gap:2px;">لون نص العنوان
+            <input type="color" data-style="titleColor" style="height:25px;width:100%;padding:1px;border-radius:4px;cursor:pointer;" onchange="syncMiniStyle(this)">
+          </label>
+          <label style="display:flex;flex-direction:column;gap:2px;">حجم خط الترويسة
+            <input type="number" class="inp mini-inp" data-style="headerSize" min="10" max="22" step="0.5" oninput="syncMiniStyle(this)">
+          </label>
+          <label style="display:flex;flex-direction:column;gap:2px;">حجم خط السؤال
+            <input type="number" class="inp mini-inp" data-style="qTitleSize" min="12" max="24" step="0.5" oninput="syncMiniStyle(this)">
+          </label>
+          <label style="display:flex;flex-direction:column;gap:2px;">لون السؤال
+            <input type="color" data-style="qColor" style="height:25px;width:100%;padding:1px;border-radius:4px;cursor:pointer;" onchange="syncMiniStyle(this)">
+          </label>
+          <label style="display:flex;flex-direction:column;gap:2px;">تباعد الأسطر
+            <input type="number" class="inp mini-inp" data-style="lineHeight" min="1.1" max="2.2" step="0.05" oninput="syncMiniStyle(this)">
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="hint" style="font-size:11px;margin:3px 0 8px;">💡 اضغط أي مكان مخصص للصورة داخل الورقة لرفع صورة من جهازك.</p>
     <div id="previewPaper"></div>
   </section>
 
@@ -1700,12 +1845,12 @@ function saveTemplates(tpls){
 }
 
 function refreshTemplateSelect(){
-  const sel = $('#selTemplates');
-  if(!sel) return;
+  const selects = $$('#selTemplates, #selTemplatesPreview');
+  if(selects.length === 0) return;
   const currentTpl = state.paperTemplate || 'academic';
   const list = loadTemplates();
 
-  let html = `
+  let optsHtml = `
     <optgroup label="📋 نماذج ورقة الاختبار (اختر أي نموذج للتطبيق فوراً):">
       <option value="tpl:academic" ${currentTpl === 'academic' ? 'selected' : ''}>🎓 القالب 1: الأكاديمي الرسمي (Formal)</option>
       <option value="tpl:minimal" ${currentTpl === 'minimal' ? 'selected' : ''}>📄 القالب 2: القياسي المبسط (Minimal)</option>
@@ -1715,17 +1860,19 @@ function refreshTemplateSelect(){
   `;
 
   if(list.length > 0){
-    html += `
+    optsHtml += `
       <optgroup label="💾 قوالب ترويسة وألوان محفوظة مسبقاً:">
-        ${list.map(t => `<option value="${t.id}">${esc(t.name)} (${esc(t.date || '')})</option>`).join('')}
+        ${list.map(t => `<option value="${t.id}">${esc(t.name)} (${esc(t.date || '')})`).join('')}
       </optgroup>
     `;
   }
 
-  sel.innerHTML = html;
-  if(!sel.value || sel.value.startsWith('tpl:')){
-    sel.value = 'tpl:' + currentTpl;
-  }
+  selects.forEach(sel => {
+    sel.innerHTML = optsHtml;
+    if(!sel.value || sel.value.startsWith('tpl:')){
+      sel.value = 'tpl:' + currentTpl;
+    }
+  });
 }
 
 function getQuestionMeta(qi){
@@ -3051,16 +3198,36 @@ function switchToTab(tabName){
   try {
     sessionStorage.setItem("anwer_active_tab", tabName);
   } catch(e){}
-  $$('.tabs button').forEach(b => {
+  
+  $('.tabs button, .tabs .tab-btn').forEach(b => {
     const isAct = b.dataset.tab === tabName;
     b.classList.toggle('active', isAct);
     b.setAttribute('aria-selected', isAct ? 'true' : 'false');
   });
-  $('#tab-edit').hidden = tabName !== 'edit';
-  $('#tab-preview').hidden = tabName !== 'preview';
-  const anTab = $('#tab-analysis');
-  if(anTab) anTab.hidden = tabName !== 'analysis';
-  if(tabName === 'preview') renderPreview();
+
+  const editSec = document.getElementById('tab-edit');
+  const prevSec = document.getElementById('tab-preview');
+  const anSec = document.getElementById('tab-analysis');
+
+  if(editSec){
+    editSec.hidden = (tabName !== 'edit');
+    editSec.style.display = (tabName === 'edit') ? 'block' : 'none';
+  }
+  if(prevSec){
+    prevSec.hidden = (tabName !== 'preview');
+    prevSec.style.display = (tabName === 'preview') ? 'block' : 'none';
+  }
+  if(anSec){
+    anSec.hidden = (tabName !== 'analysis');
+    anSec.style.display = (tabName === 'analysis') ? 'block' : 'none';
+  }
+
+  if(tabName === 'preview') {
+    bindMetaValues();
+    bindStyleValues();
+    refreshTemplateSelect();
+    renderPreview();
+  }
   if(tabName === 'analysis') {
     if(typeof initAnalysisTable === 'function'){
       initAnalysisTable();
@@ -3104,15 +3271,15 @@ function switchToAnalysisTab(){
   switchToTab('analysis');
 }
 
-$$('.tabs button').forEach(btn=>{
-  btn.addEventListener('click', (e)=>{
-    e.preventDefault();
-    switchToTab(btn.dataset.tab);
-  });
-});
-
+// استماع للنقر على التبويبات سواء نقر المستخدم على الزر أو الأيقونة أو النص
 document.addEventListener('click', e => {
-  const prevBtn = e.target.closest('.go-preview-btn');
+  const tabBtn = e.target.closest('[data-tab], .tab-btn');
+  if(tabBtn && tabBtn.dataset.tab){
+    e.preventDefault();
+    switchToTab(tabBtn.dataset.tab);
+    return;
+  }
+  const prevBtn = e.target.closest('.go-preview-btn, #btnHeaderPreview');
   if(prevBtn){
     e.preventDefault();
     e.stopPropagation();
@@ -4367,6 +4534,116 @@ function syncQuestionsFromExam(){
   const totalExamMarks = mainQuestions.reduce((sum, mq) => sum + mq.marks, 0);
   toast(`🎉 تمت مزامنة ${mainQuestions.length} أسئلة رئيسية بنجاح! إجمالي درجات الامتحان: ${totalExamMarks} درجة`, 'ok');
 }
+
+
+/* ========================================================
+   أدوات القوالب والترويسة والخط المصغرة في نافذة المعاينة (نصف الحجم)
+   ======================================================== */
+function togglePreviewMiniControls(){
+  const box = document.getElementById('previewMiniControlsBox');
+  if(!box) return;
+  const isHidden = box.style.display === 'none';
+  box.style.display = isHidden ? 'block' : 'none';
+  const btn = document.getElementById('btnToggleMiniSettings');
+  if(btn) btn.innerHTML = isHidden ? '⚙️ أدوات القوالب والخط المصغرة ▲' : '⚙️ أدوات القوالب والخط المصغرة ▼';
+}
+
+function toggleMiniSection(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const isHidden = el.style.display === 'none';
+  el.style.display = isHidden ? 'block' : 'none';
+}
+
+function onTemplateChangePreview(e){
+  const val = e.target.value;
+  if(!val) return;
+  if(val.startsWith('tpl:')){
+    applyPaperTemplateByKey(val.replace('tpl:', ''));
+  } else {
+    applyCustomTemplateById(val, false);
+  }
+  $('#selTemplates, #selTemplatesPreview').forEach(s => s.value = val);
+}
+
+function saveTemplateFromPreview(){
+  const defName = (state.meta.school || 'مدرسة') + ' - ' + (state.meta.subject || 'اختبار');
+  const name = prompt('اكتب اسماً للقالب (لحفظ الترويسة، الشعار، شكل القالب، وإعدادات الألوان): ', defName);
+  if(!name || !name.trim()) return;
+  const list = loadTemplates();
+  const newTpl = {
+    id: 'tpl_' + Date.now(),
+    name: name.trim(),
+    date: new Date().toLocaleDateString('ar-EG'),
+    paperTemplate: state.paperTemplate || 'academic',
+    meta: JSON.parse(JSON.stringify(state.meta)),
+    style: JSON.parse(JSON.stringify(state.style))
+  };
+  list.push(newTpl);
+  saveTemplates(list);
+  refreshTemplateSelect();
+  $('#selTemplates, #selTemplatesPreview').forEach(s => s.value = newTpl.id);
+  toast(`✅ تم حفظ القالب بنجاح: "${newTpl.name}"`, 'ok');
+}
+
+function applyTemplateFromPreview(){
+  const val = $('#selTemplatesPreview')?.value || $('#selTemplates')?.value;
+  if(!val) return toast('يرجى اختيار قالب من القائمة أولاً', 'err');
+  if(val.startsWith('tpl:')){
+    applyPaperTemplateByKey(val.replace('tpl:', ''));
+  } else {
+    applyCustomTemplateById(val, true);
+  }
+}
+
+function deleteTemplateFromPreview(){
+  const val = $('#selTemplatesPreview')?.value || $('#selTemplates')?.value;
+  if(!val || val.startsWith('tpl:')){
+    return toast('⚠️ النماذج الأساسية الأربعة مدمجة في التطبيق ولا يمكن حذفها، يمكنك حذف القوالب التي قمت بحفظها بنفسك.', 'warn');
+  }
+  const list = loadTemplates();
+  const idx = list.findIndex(t => t.id === val);
+  if(idx === -1) return;
+  if(!confirm(`هل أنت متأكد من حذف قالب "${list[idx].name}"؟`)) return;
+  const removedName = list[idx].name;
+  list.splice(idx, 1);
+  saveTemplates(list);
+  refreshTemplateSelect();
+  toast(`🗑 تم حذف القالب: "${removedName}"`, 'ok');
+}
+
+function syncMiniMeta(el){
+  if(!el || !el.dataset.meta) return;
+  const key = el.dataset.meta;
+  state.meta[key] = el.value;
+  $(`[data-meta="${key}"]`).forEach(inp => {
+    if(inp !== el) inp.value = el.value;
+  });
+  renderPreview();
+  saveLocal();
+}
+
+function syncMiniStyle(el){
+  if(!el || !el.dataset.style) return;
+  const key = el.dataset.style;
+  let val = el.value;
+  if(el.type === 'number') val = Number(val) || 14;
+  state.style[key] = val;
+  $(`[data-style="${key}"]`).forEach(inp => {
+    if(inp !== el) inp.value = el.value;
+  });
+  renderPreview();
+  saveLocal();
+}
+
+window.togglePreviewMiniControls = togglePreviewMiniControls;
+window.toggleMiniSection = toggleMiniSection;
+window.onTemplateChangePreview = onTemplateChangePreview;
+window.saveTemplateFromPreview = saveTemplateFromPreview;
+window.applyTemplateFromPreview = applyTemplateFromPreview;
+window.deleteTemplateFromPreview = deleteTemplateFromPreview;
+window.syncMiniMeta = syncMiniMeta;
+window.syncMiniStyle = syncMiniStyle;
 
 window.initAnalysisTable = initAnalysisTable;
 window.openStudentImportModal = openStudentImportModal;
