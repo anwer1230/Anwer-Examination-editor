@@ -63,15 +63,91 @@ body{
   display:inline-flex;align-items:center;gap:4px;
 }
 
-/* ============ التبويبات ============ */
-.tabs{display:flex;background:#fff;border-bottom:3px solid var(--primary);position:sticky;top:0;z-index:20;}
-.tabs button{
-  flex:1;padding:12px;border:0;background:transparent;font-size:14.5px;
-  font-weight:bold;font-family:inherit;color:#456;cursor:pointer;border-bottom:4px solid transparent;
+/* ============ التبويبات الرئيسية الثلاث (المحرر - المعاينة - التحليل الآلي) ============ */
+.tabs-container {
+  background: #ffffff;
+  border-bottom: 3px solid var(--primary);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 4px 14px rgba(18, 58, 85, 0.08);
 }
-.tabs button.active{color:var(--primary);border-bottom-color:var(--accent);background:#f7fbfe;}
+.tabs {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 8px 12px;
+  gap: 10px;
+}
+.tabs button, .tabs .tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 14px;
+  border: 2px solid #d4e6f1;
+  border-radius: 12px;
+  background: #f8fafc;
+  font-size: 14.5px;
+  font-weight: bold;
+  font-family: inherit;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  line-height: 1.3;
+  box-shadow: 0 2px 6px rgba(18,58,85,0.05);
+}
+.tabs button:hover, .tabs .tab-btn:hover {
+  background: #eaf2f8;
+  color: var(--primary);
+  border-color: #aed6f1;
+}
+.tabs button.active, .tabs .tab-btn.active {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #1f618d, #2980b9) !important;
+  border-color: #1a5276 !important;
+  box-shadow: 0 4px 12px rgba(41, 128, 185, 0.35) !important;
+}
+.tabs .tab-icon {
+  font-size: 21px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.tabs .tab-label {
+  display: inline-block;
+  text-align: center;
+}
+@media (max-width: 768px) {
+  .tabs {
+    padding: 6px 4px;
+    gap: 5px;
+  }
+  .tabs button, .tabs .tab-btn {
+    padding: 8px 4px;
+    font-size: 11.5px;
+    gap: 4px;
+    flex-direction: column;
+    border-radius: 9px;
+  }
+  .tabs .tab-icon {
+    font-size: 18px;
+  }
+}
 
-main{max-width:900px;margin:0 auto;padding:14px;}
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 14px;
+  transition: max-width 0.3s ease;
+}
+main.wide-main {
+  max-width: 1350px !important;
+}
 
 /* ============ عناصر النموذج ============ */
 .card{
@@ -1018,11 +1094,22 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   </div>
 </div>
 
-<!-- التبويبات -->
-<div class="tabs">
-  <button data-tab="edit" class="active">✏️ المحرر</button>
-  <button data-tab="preview">👁️ المعاينة واختيار القالب (4 نماذج)</button>
-  <button data-tab="analysis">📊 التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم</button>
+<!-- شريط التبويبات الرئيسي (المحرر - المعاينة - التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم) -->
+<div class="tabs-container">
+  <div class="tabs" role="tablist">
+    <button type="button" data-tab="edit" class="tab-btn active" role="tab" aria-selected="true" title="محرر الاختبارات والأسئلة">
+      <span class="tab-icon">✏️</span>
+      <span class="tab-label">المحرر</span>
+    </button>
+    <button type="button" data-tab="preview" class="tab-btn" role="tab" aria-selected="false" title="المعاينة واختيار القالب (4 نماذج)">
+      <span class="tab-icon">👁️</span>
+      <span class="tab-label">المعاينة واختيار القالب (4 نماذج)</span>
+    </button>
+    <button type="button" data-tab="analysis" class="tab-btn" role="tab" aria-selected="false" title="التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم">
+      <span class="tab-icon">📊</span>
+      <span class="tab-label">التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم</span>
+    </button>
+  </div>
 </div>
 
 <main>
@@ -2873,13 +2960,26 @@ $('#previewPaper').addEventListener('click', e => {
 /* ============ التبويبات ============ */
 function switchToTab(tabName){
   $$('.tabs button').forEach(b => {
-    b.classList.toggle('active', b.dataset.tab === tabName);
+    const isAct = b.dataset.tab === tabName;
+    b.classList.toggle('active', isAct);
+    b.setAttribute('aria-selected', isAct ? 'true' : 'false');
   });
   $('#tab-edit').hidden = tabName !== 'edit';
   $('#tab-preview').hidden = tabName !== 'preview';
   const anTab = $('#tab-analysis');
   if(anTab) anTab.hidden = tabName !== 'analysis';
   if(tabName === 'preview') renderPreview();
+  if(tabName === 'analysis') {
+    calculateAll();
+  }
+  const mainEl = $('main');
+  if(mainEl){
+    if(tabName === 'analysis'){
+      mainEl.classList.add('wide-main');
+    } else {
+      mainEl.classList.remove('wide-main');
+    }
+  }
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
