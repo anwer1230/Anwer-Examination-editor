@@ -22,7 +22,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="محرر الاختبارات">
 <title>محرر الاختبارات أنور الصبري</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -1215,6 +1215,610 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   border-radius: 6px;
 }
 
+
+/* ========================================================
+   مخطط وتصميم كانفا ستوديو العصري (Canva Studio Design System)
+   ======================================================== */
+body.layout-canva {
+  --canva-bg: #f4f6fb;
+  --canva-card-bg: #ffffff;
+  --canva-ink: #0f172a;
+  --canva-ink-muted: #64748b;
+  --canva-purple: #7d2ae8;
+  --canva-purple-hover: #6d24d0;
+  --canva-purple-dark: #491285;
+  --canva-cyan: #00c4cc;
+  --canva-emerald: #10b981;
+  --canva-amber: #f59e0b;
+  --canva-rose: #f43f5e;
+  --canva-border: #e2e8f0;
+  --canva-border-subtle: #edf2f7;
+  --canva-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+  --canva-shadow-md: 0 4px 20px -2px rgba(15, 23, 42, 0.07), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+  --canva-shadow-lg: 0 16px 40px -8px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.06);
+  --canva-radius: 16px;
+  
+  background-color: var(--canva-bg);
+  color: var(--canva-ink);
+  font-family: 'Cairo', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* شريط التطبيق العلوي بأسلوب ستوديو كانفا */
+body.layout-canva .appbar {
+  background: linear-gradient(135deg, #0e1318 0%, #16182c 25%, #381566 65%, #7d2ae8 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 10px 22px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.28);
+}
+body.layout-canva .brand {
+  gap: 12px;
+}
+body.layout-canva .logo {
+  background: linear-gradient(135deg, #00c4cc 0%, #7d2ae8 100%);
+  color: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(125, 42, 232, 0.4);
+  font-size: 22px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+}
+body.layout-canva .brand h1 {
+  font-size: 16px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: -0.02em;
+}
+body.layout-canva .brand p {
+  font-size: 11px;
+  color: #cbd5e1;
+  opacity: 0.9;
+}
+body.layout-canva .canva-autosave-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(16, 185, 129, 0.22);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+body.layout-canva .btn-layout-toggle {
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+body.layout-canva .btn-layout-toggle:hover {
+  background: rgba(255, 255, 255, 0.26);
+  border-color: #ffffff;
+  transform: translateY(-1px);
+}
+body.layout-canva .contact a {
+  border-radius: 20px;
+  font-weight: 700;
+  padding: 7px 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+body.layout-canva .contact a.wa {
+  background: linear-gradient(135deg, #10b981, #25d366);
+  color: #04361a;
+}
+body.layout-canva .contact-install {
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+/* شريط التبويبات الفاخر بأسلوب ستوديو كانفا */
+body.layout-canva .tabs-container {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(14px);
+  border-bottom: 1.5px solid var(--canva-border);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+body.layout-canva .tabs {
+  padding: 8px 16px;
+  gap: 12px;
+  max-width: 1350px;
+}
+body.layout-canva .tabs button,
+body.layout-canva .tabs .tab-btn {
+  background: #f8fafc;
+  border: 1.5px solid var(--canva-border);
+  border-radius: 14px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #334155;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+body.layout-canva .tabs button:hover,
+body.layout-canva .tabs .tab-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+body.layout-canva .tabs button.active,
+body.layout-canva .tabs .tab-btn.active {
+  background: linear-gradient(135deg, #7d2ae8 0%, #581c87 100%) !important;
+  border-color: #7d2ae8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(125, 42, 232, 0.38) !important;
+}
+body.layout-canva .tabs .tab-icon {
+  font-size: 19px;
+}
+
+/* شريط أدوات كانفا السريع (Canva Studio Quick Dock) */
+.canva-studio-dock {
+  display: none;
+}
+body.layout-canva .canva-studio-dock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #ffffff;
+  border: 1.5px solid var(--canva-border);
+  border-radius: 16px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  box-shadow: var(--canva-shadow-md);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.canva-dock-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.canva-dock-divider {
+  width: 1px;
+  height: 28px;
+  background: #e2e8f0;
+  flex-shrink: 0;
+}
+.canva-dock-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  border: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+  color: #334155;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+}
+.canva-dock-btn:hover {
+  background: #edf2f7;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+.canva-dock-btn.primary {
+  background: linear-gradient(135deg, #7d2ae8, #6d28d9);
+  color: #ffffff;
+  border-color: #7d2ae8;
+  box-shadow: 0 2px 8px rgba(125, 42, 232, 0.25);
+}
+.canva-dock-btn.primary:hover {
+  filter: brightness(1.08);
+}
+.canva-dock-btn.success {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #ffffff;
+  border-color: #059669;
+}
+.canva-dock-btn.accent {
+  background: linear-gradient(135deg, #0891b2, #00c4cc);
+  color: #ffffff;
+  border-color: #0891b2;
+}
+.canva-dock-btn.ghost.warn {
+  color: #b45309;
+  border-color: #fde68a;
+  background: #fffbeb;
+}
+.canva-dock-btn.ghost.warn:hover {
+  background: #fef3c7;
+}
+
+/* بطاقات المحرر بأسلوب كانفا العصري */
+body.layout-canva .card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 16px;
+  border: 1.5px solid var(--canva-border);
+  box-shadow: var(--canva-shadow-sm);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+body.layout-canva .card:hover {
+  box-shadow: var(--canva-shadow-md);
+}
+body.layout-canva .card h2 {
+  font-size: 15.5px;
+  font-weight: 800;
+  color: #1e1b4b;
+  border-right: 4px solid var(--canva-purple);
+  padding-right: 10px;
+}
+body.layout-canva .inp,
+body.layout-canva .sel,
+body.layout-canva textarea.inp {
+  border-radius: 10px;
+  border: 1.5px solid #cbd5e1;
+  background: #f8fafc;
+  color: #0f172a;
+  font-family: inherit;
+  font-size: 13.5px;
+  transition: all 0.2s ease;
+}
+body.layout-canva .inp:focus,
+body.layout-canva .sel:focus,
+body.layout-canva textarea.inp:focus {
+  background: #ffffff;
+  border-color: var(--canva-purple);
+  box-shadow: 0 0 0 3px rgba(125, 42, 232, 0.12);
+  outline: none;
+}
+body.layout-canva .accordion-card {
+  border-radius: 16px;
+  border: 1.5px solid var(--canva-border);
+}
+body.layout-canva .accordion-card.open {
+  border-color: var(--canva-purple);
+  box-shadow: 0 6px 22px rgba(125, 42, 232, 0.12);
+}
+body.layout-canva .acc-icon {
+  background: #f3e8ff;
+  color: var(--canva-purple);
+  border-color: #e9d5ff;
+  border-radius: 12px;
+}
+body.layout-canva .accordion-card.open .acc-icon {
+  background: var(--canva-purple);
+  color: #ffffff;
+  border-color: var(--canva-purple);
+}
+body.layout-canva .qcard {
+  border-radius: 16px;
+  border: 1.5px solid var(--canva-border);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+body.layout-canva .qcard:hover {
+  border-color: #cbd5e1;
+  box-shadow: var(--canva-shadow-md);
+}
+body.layout-canva .qcard.qcard-sub {
+  border: 2px dashed #0284c7;
+  border-inline-start: 6px solid #0284c7;
+  background: #fafcff;
+}
+body.layout-canva .qcard-head {
+  background: linear-gradient(90deg, #f8faff 0%, #ffffff 100%);
+  border-bottom: 1.5px solid #eef2f7;
+  padding: 11px 14px;
+}
+body.layout-canva .qbadge {
+  background: linear-gradient(135deg, #7d2ae8, #6d28d9);
+  color: #ffffff;
+  border-radius: 10px;
+  font-size: 12.5px;
+  font-weight: 800;
+  padding: 4px 12px;
+}
+body.layout-canva .qbadge.sub {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+}
+body.layout-canva .num {
+  background: var(--canva-purple);
+  border-radius: 8px;
+}
+body.layout-canva .btn.primary {
+  background: linear-gradient(135deg, #7d2ae8, #6d28d9);
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(125, 42, 232, 0.25);
+  font-weight: 700;
+}
+body.layout-canva .btn.success {
+  background: linear-gradient(135deg, #059669, #10b981);
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(16, 185, 129, 0.25);
+  font-weight: 700;
+}
+body.layout-canva .btn.warn {
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(217, 119, 6, 0.25);
+  font-weight: 700;
+}
+body.layout-canva .btn.ghost {
+  border-radius: 12px;
+  border: 1.5px solid var(--canva-border);
+  color: #334155;
+}
+body.layout-canva .btn.ghost:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+/* لوحة المعاينة الفنية بأسلوب كانفا (Canva Artboard Preview) */
+.canva-artboard-toolbar {
+  display: none;
+}
+body.layout-canva .canva-artboard-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: #ffffff;
+  border: 1.5px solid var(--canva-border);
+  border-radius: 14px;
+  padding: 10px 16px;
+  margin-bottom: 14px;
+  box-shadow: var(--canva-shadow-sm);
+}
+.canva-artboard-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #475569;
+}
+.canva-artboard-badge {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 3px 8px;
+  color: #0f172a;
+}
+.canva-artboard-sep {
+  color: #cbd5e1;
+}
+.canva-artboard-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.canva-zoom-widget {
+  display: inline-flex;
+  align-items: center;
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 2px 4px;
+}
+.canva-zoom-btn {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  font-weight: 800;
+  color: #475569;
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+.canva-zoom-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+.canva-zoom-val {
+  font-size: 12px;
+  font-weight: 800;
+  color: #0f172a;
+  padding: 0 6px;
+  cursor: pointer;
+  min-width: 44px;
+  text-align: center;
+  font-family: monospace;
+}
+.canva-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  border: 1.5px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.canva-action-btn:hover {
+  background: #f1f5f9;
+  transform: translateY(-1px);
+}
+.canva-action-btn.primary {
+  background: linear-gradient(135deg, #7d2ae8, #6d28d9);
+  color: #ffffff;
+  border-color: #7d2ae8;
+  box-shadow: 0 3px 10px rgba(125, 42, 232, 0.25);
+}
+.canva-action-btn.success {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #ffffff;
+  border-color: #059669;
+  box-shadow: 0 3px 10px rgba(16, 185, 129, 0.25);
+}
+body.layout-canva #previewPaper {
+  background: radial-gradient(#cbd5e1 1.2px, transparent 1.2px) 0 0 / 22px 22px, #f1f4f9;
+  padding: 32px 20px;
+  border-radius: 20px;
+  border: 1.5px solid #e2e8f0;
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+}
+body.layout-canva #previewPaper .paper {
+  box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  border-radius: 2px;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* استوديو تحليل النتائج بأسلوب كانفا (Canva Analytics Studio) */
+.canva-kpi-grid {
+  display: none;
+}
+body.layout-canva .canva-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.canva-kpi-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--canva-border);
+  box-shadow: var(--canva-shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.canva-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--canva-shadow-md);
+}
+.canva-kpi-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.canva-kpi-icon {
+  font-size: 16px;
+}
+.canva-kpi-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+}
+.canva-kpi-value {
+  font-size: 26px;
+  font-weight: 900;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  line-height: 1.1;
+  margin: 4px 0 2px;
+}
+.canva-kpi-sub {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+.canva-kpi-card.kpi-mmtaz { border-top: 4px solid #10b981; }
+.canva-kpi-card.kpi-mmtaz .canva-kpi-value { color: #059669; }
+.canva-kpi-card.kpi-jj { border-top: 4px solid #0284c7; }
+.canva-kpi-card.kpi-jj .canva-kpi-value { color: #0284c7; }
+.canva-kpi-card.kpi-j { border-top: 4px solid #d97706; }
+.canva-kpi-card.kpi-j .canva-kpi-value { color: #d97706; }
+.canva-kpi-card.kpi-mut { border-top: 4px solid #ea580c; }
+.canva-kpi-card.kpi-mut .canva-kpi-value { color: #ea580c; }
+.canva-kpi-card.kpi-daif { border-top: 4px solid #e11d48; }
+.canva-kpi-card.kpi-daif .canva-kpi-value { color: #e11d48; }
+.canva-kpi-card.kpi-rasib { border-top: 4px solid #991b1b; }
+.canva-kpi-card.kpi-rasib .canva-kpi-value { color: #991b1b; }
+
+body.layout-canva #tab-analysis .paper-container {
+  border-radius: 20px;
+  border: 1.5px solid var(--canva-border);
+  box-shadow: var(--canva-shadow-md);
+  padding: 24px;
+}
+body.layout-canva #tab-analysis .table-wrapper {
+  border-radius: 14px;
+  border: 1.5px solid #cbd5e1;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+}
+body.layout-canva #tab-analysis table th {
+  background: #f8fafc;
+  color: #1e293b;
+  font-weight: 800;
+  border-color: #cbd5e1;
+}
+body.layout-canva #tab-analysis table td {
+  border-color: #e2e8f0;
+}
+body.layout-canva #tab-analysis .summary-row.q-totals-row td {
+  background-color: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border-top: 2px solid #3b82f6 !important;
+}
+body.layout-canva #tab-analysis .summary-row.q-percents-row td {
+  background-color: #ecfdf5 !important;
+  color: #047857 !important;
+  border-top: 1.5px solid #6ee7b7 !important;
+}
+body.layout-canva #tab-analysis .summary-row.q-grades-row td {
+  background-color: #fefce8 !important;
+  color: #854d0e !important;
+  border-top: 1.5px solid #fde047 !important;
+  border-bottom: 2px solid #eab308 !important;
+}
+
+/* استثناءات الطباعة لمظهر كانفا */
+@media print {
+  body.layout-canva {
+    background: #ffffff !important;
+  }
+  body.layout-canva .canva-studio-dock,
+  body.layout-canva .canva-artboard-toolbar,
+  body.layout-canva .canva-kpi-grid,
+  body.layout-canva .btn-layout-toggle {
+    display: none !important;
+  }
+  body.layout-canva #previewPaper {
+    background: #ffffff !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+  body.layout-canva #previewPaper .paper {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+
+
+/* إخفاء زر التثبيت من الترويسة نهائياً وجعله عبر بطاقة الإشعار فقط */
+.contact-install, #btnHeaderInstall {
+  display: none !important;
+}
+
 </style>
 </head>
 <body>
@@ -1224,12 +1828,16 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   <div class="brand">
     <div class="logo">✎</div>
     <div>
-      <h1>محرر الاختبارات أنور الصبري <span class="online-dot" id="onlineDot" title="حالة الاتصال"></span></h1>
+      <h1>محرر الاختبارات أنور الصبري <span class="canva-autosave-badge" id="canvaAutosaveBadge">تم الحفظ تلقائياً ✓</span> <span class="online-dot" id="onlineDot" title="حالة الاتصال"></span></h1>
       <p>تصميم وبرمجة: الأستاذ / أنور سيف</p>
     </div>
   </div>
   <div class="contact">
-    <button type="button" id="btnHeaderInstall" class="contact-install" title="تثبيت التطبيق على الهاتف للعمل بدون إنترنت">📱 تثبيت التطبيق</button>
+    <button type="button" id="btnToggleLayoutMode" class="btn-layout-toggle" onclick="toggleAppLayout()" title="التبديل بين تصميم كانفا العصري والتصميم الكلاسيكي">
+      <span class="layout-toggle-icon">🎨</span>
+      <span class="layout-toggle-text" id="layoutToggleText">تصميم كانفا العصري ✨</span>
+    </button>
+    
     <a href="tel:772997043">📞 772997043</a>
     <a class="wa" href="https://wa.me/966510349663" target="_blank" rel="noopener">💬 واتساب</a>
   </div>
@@ -1311,8 +1919,9 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
         </div>
 
         <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-top:1px dashed #c3d4e0;padding-top:12px;">
-          <button class="btn primary" id="btnHeaderImg">🖼️ رفع شعار المدرسة</button>
-          <button class="btn ghost" id="btnRemoveHeaderImg">❌ حذف الشعار</button>
+          <button class="btn primary" id="btnHeaderImg">🖼️ رفع / تغيير الشعار</button>
+          <button type="button" class="btn success" id="btnRestoreDefaultLogo" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;">🔄 استعادة الشعار الافتراضي</button>
+          <button class="btn ghost" id="btnRemoveHeaderImg">❌ إخفاء الشعار</button>
           <button type="button" class="btn ghost" id="btnCloseHeaderBottom" style="margin-right:auto;font-size:12.5px;padding:8px 14px;">▲ طي وإخفاء الإعدادات داخل الأيقونة</button>
         </div>
         <div id="headerImgPreview"></div>
@@ -1608,7 +2217,7 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
           <tfoot>
             <!-- الصف 1: مجموع درجات كل سؤال -->
             <tr class="summary-row q-totals-row" id="row-q-totals">
-              <td colspan="2" class="summary-label" style="background:#e0f2fe; color:#0369a1;">مجموع درجات كل سؤال 👈</td>
+              <td colspan="2" class="summary-label" style="background:#e0f2fe; color:#0369a1;">مجموع الدرجات 👈</td>
               <td id="q-total-0" class="summary-val q-total-val" style="color:#0369a1; font-weight:800;">0</td>
               <td id="q-total-1" class="summary-val q-total-val" style="color:#0369a1; font-weight:800;">0</td>
               <td id="q-total-2" class="summary-val q-total-val" style="color:#0369a1; font-weight:800;">0</td>
@@ -1627,7 +2236,7 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
             </tr>
             <!-- الصف 2: النسبة المئوية لكل سؤال -->
             <tr class="summary-row q-percents-row" id="row-q-percents">
-              <td colspan="2" class="summary-label" style="background:#dcfce7; color:#15803d;">النسبة المئوية لكل سؤال 👈</td>
+              <td colspan="2" class="summary-label" style="background:#dcfce7; color:#15803d;">النسبة المئوية 👈</td>
               <td id="q-percent-0" class="summary-val q-percent-val" style="color:#15803d; font-weight:800;">0%</td>
               <td id="q-percent-1" class="summary-val q-percent-val" style="color:#15803d; font-weight:800;">0%</td>
               <td id="q-percent-2" class="summary-val q-percent-val" style="color:#15803d; font-weight:800;">0%</td>
@@ -1646,7 +2255,7 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
             </tr>
             <!-- الصف 3: التقدير ومستوى السؤال -->
             <tr class="summary-row q-grades-row" id="row-q-grades">
-              <td colspan="2" class="summary-label" style="background:#fef9c3; color:#854d0e;">التقدير ومستوى السؤال 👈</td>
+              <td colspan="2" class="summary-label" style="background:#fef9c3; color:#854d0e;">التقدير 👈</td>
               <td id="q-grade-0" class="summary-val q-grade-val" style="font-weight:800;">-</td>
               <td id="q-grade-1" class="summary-val q-grade-val" style="font-weight:800;">-</td>
               <td id="q-grade-2" class="summary-val q-grade-val" style="font-weight:800;">-</td>
@@ -1875,7 +2484,9 @@ function defaultStyle(){
   };
 }
 
+const DEFAULT_LOGO = "data:image/jpeg;base64,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";
 function defaultState(){
+
   return {
     paperTemplate: 'academic',
     meta:{
@@ -1891,7 +2502,7 @@ function defaultState(){
       studentLabel:'اسم الطالب',
       teacher:'أنور سيف',
       footerLeft:'Good Luck',
-      logoImage:''
+      logoImage: DEFAULT_LOGO
     },
     style: defaultStyle(),
     questions:[
@@ -1937,7 +2548,7 @@ function makeQuestion(type){
 let state = loadState() || defaultState();
 if(!state.style) state.style = defaultStyle();
 if(!state.style.direction) state.style.direction = 'rtl';
-if(state.meta.logoImage == null) state.meta.logoImage = '';
+if(!state.meta.logoImage) state.meta.logoImage = DEFAULT_LOGO;
 if(!state.paperTemplate) state.paperTemplate = 'academic';
 
 function saveLocal(){
@@ -2154,7 +2765,7 @@ function renderAcademicTemplate(mode){
 
   let headerImgHtml = '';
   if(m.logoImage){
-    headerImgHtml = `<img src="${m.logoImage}" class="header-logo" style="max-height:60px;margin-top:6px;display:block;">`;
+    headerImgHtml = `<img src="${m.logoImage}" class="header-logo" data-img="header-logo" title="اضغط لتعديل أو تغيير الشعار" style="max-height:60px;margin-top:6px;display:block;cursor:pointer;">`;
   } else if(isPreview){
     headerImgHtml = `<div class="img-placeholder header-img-slot" data-img="header-logo" style="margin-top:6px;">🖼️ شعار</div>`;
   }
@@ -2295,7 +2906,7 @@ function renderMinimalTemplate(mode){
 
   let headerImgHtml = '';
   if(m.logoImage){
-    headerImgHtml = `<img src="${m.logoImage}" class="header-logo" style="max-height:55px;margin-top:6px;display:block;">`;
+    headerImgHtml = `<img src="${m.logoImage}" class="header-logo" data-img="header-logo" title="اضغط لتعديل أو تغيير الشعار" style="max-height:55px;margin-top:6px;display:block;cursor:pointer;">`;
   } else if(isPreview){
     headerImgHtml = `<div class="img-placeholder header-img-slot" data-img="header-logo" style="margin-top:6px;">🖼️ شعار</div>`;
   }
@@ -2434,7 +3045,7 @@ function renderModernTemplate(mode){
 
   let headerImgHtml = '';
   if(m.logoImage){
-    headerImgHtml = `<img src="${m.logoImage}" class="header-logo" style="max-height:60px;margin-top:6px;display:block;">`;
+    headerImgHtml = `<img src="${m.logoImage}" class="header-logo" data-img="header-logo" title="اضغط لتعديل أو تغيير الشعار" style="max-height:60px;margin-top:6px;display:block;cursor:pointer;">`;
   } else if(isPreview){
     headerImgHtml = `<div class="img-placeholder header-img-slot" data-img="header-logo" style="margin-top:6px;">🖼️ شعار</div>`;
   }
@@ -2523,7 +3134,7 @@ function renderCompactTemplate(mode){
 
   let headerImgHtml = '';
   if(m.logoImage){
-    headerImgHtml = `<img src="${m.logoImage}" class="header-logo" style="max-height:48px;margin-top:4px;display:block;">`;
+    headerImgHtml = `<img src="${m.logoImage}" class="header-logo" data-img="header-logo" title="اضغط لتعديل أو تغيير الشعار" style="max-height:48px;margin-top:4px;display:block;cursor:pointer;">`;
   } else if(isPreview){
     headerImgHtml = `<div class="img-placeholder header-img-slot" data-img="header-logo" style="margin-top:4px;min-height:36px;padding:6px;font-size:11px;">🖼️ شعار</div>`;
   }
@@ -3268,6 +3879,13 @@ $('#btnHeaderImg').addEventListener('click', ()=>{
     toast('✅ تم رفع الشعار', 'ok');
   });
 });
+$('#btnRestoreDefaultLogo')?.addEventListener('click', ()=>{
+  state.meta.logoImage = DEFAULT_LOGO;
+  saveLocal();
+  renderEditor();
+  renderPreview();
+  toast('✅ تم استعادة الشعار الافتراضي بنجاح', 'ok');
+});
 $('#btnRemoveHeaderImg').addEventListener('click', ()=>{
   if(!state.meta.logoImage) return toast('لا يوجد شعار', 'err');
   if(!confirm('حذف الشعار؟')) return;
@@ -3623,7 +4241,7 @@ window.addEventListener('beforeinstallprompt', e => {
   deferredPrompt = e;
   if(!isAppStandalone()){
     pwaNotify?.classList.add('show');
-    if(btnHeaderInstall) btnHeaderInstall.style.display = 'inline-flex';
+    /* hidden from header */
   }
 });
 
@@ -3833,7 +4451,7 @@ function renderAnalysisFooter(count = numQuestions){
   tfoot.innerHTML = `
     <!-- الصف 1: مجموع درجات كل سؤال -->
     <tr class="summary-row q-totals-row" id="row-q-totals">
-      <td colspan="2" class="summary-label" style="background:#e0f2fe; color:#0369a1;">مجموع درجات كل سؤال 👈</td>
+      <td colspan="2" class="summary-label" style="background:#e0f2fe; color:#0369a1;">مجموع الدرجات 👈</td>
       ${totalsHtml}
       <td id="grand-total" class="summary-val" style="color:#0369a1; font-size:15px; background:#bae6fd;" title="المجموع الكلي لدرجات جميع الطلاب">0</td>
       <td class="summary-val" style="color:#94a3b8;">-</td>
@@ -3843,7 +4461,7 @@ function renderAnalysisFooter(count = numQuestions){
     </tr>
     <!-- الصف 2: النسبة المئوية لكل سؤال -->
     <tr class="summary-row q-percents-row" id="row-q-percents">
-      <td colspan="2" class="summary-label" style="background:#dcfce7; color:#15803d;">النسبة المئوية لكل سؤال 👈</td>
+      <td colspan="2" class="summary-label" style="background:#dcfce7; color:#15803d;">النسبة المئوية 👈</td>
       ${percentsHtml}
       <td class="summary-label" style="background:#f0fdf4; color:#166534; font-size:11.5px;">النسبة العامة 👈</td>
       <td id="grand-percent" class="summary-val" style="color:#15803d; font-size:14px; background:#bbf7d0;" title="النسبة المئوية العامة لنتيجة الاختبار">0%</td>
@@ -3853,7 +4471,7 @@ function renderAnalysisFooter(count = numQuestions){
     </tr>
     <!-- الصف 3: التقدير ومستوى السؤال -->
     <tr class="summary-row q-grades-row" id="row-q-grades">
-      <td colspan="2" class="summary-label" style="background:#fef9c3; color:#854d0e;">التقدير ومستوى السؤال 👈</td>
+      <td colspan="2" class="summary-label" style="background:#fef9c3; color:#854d0e;">التقدير 👈</td>
       ${gradesHtml}
       <td class="summary-label" style="background:#fefce8; color:#854d0e; font-size:11.5px;">التقدير العام 👈</td>
       <td class="summary-val" style="color:#94a3b8;">-</td>
@@ -3963,6 +4581,7 @@ function calculateAll(){
   let countJayid = 0;
   let countMutawassit = 0;
   let countDaif = 0;
+  let countRasib = 0;
 
   let lowAchieversData = [];
 
@@ -4033,9 +4652,13 @@ function calculateAll(){
       } else if (percentage >= 50) { 
         grade = "متوسط"; 
         countMutawassit++; 
-      } else { 
+      } else if (percentage >= 40) { 
         grade = "ضعيف"; 
         countDaif++; 
+        lowAchieversData.push({ id, name: studentName });
+      } else {
+        grade = "راسب";
+        countRasib++;
         lowAchieversData.push({ id, name: studentName });
       }
     }
@@ -4077,8 +4700,8 @@ function calculateAll(){
         qGradeEl.innerText = '-';
         qGradeEl.style.color = '#64748b';
       } else {
-        let qGrade = 'ضعيف';
-        let qColor = '#dc2626';
+        let qGrade = 'راسب';
+        let qColor = '#991b1b';
         if (qPct >= 90) {
           qGrade = 'ممتاز';
           qColor = '#15803d';
@@ -4091,6 +4714,12 @@ function calculateAll(){
         } else if (qPct >= 50) {
           qGrade = 'متوسط';
           qColor = '#c2410c';
+        } else if (qPct >= 40) {
+          qGrade = 'ضعيف';
+          qColor = '#dc2626';
+        } else {
+          qGrade = 'راسب';
+          qColor = '#991b1b';
         }
         qGradeEl.innerText = qGrade;
         qGradeEl.style.color = qColor;
@@ -4125,9 +4754,12 @@ function calculateAll(){
     } else if (overallPercent >= 50) {
       overallGrade = "متوسط";
       gColor = '#c2410c';
-    } else {
+    } else if (overallPercent >= 40) {
       overallGrade = "ضعيف";
       gColor = '#dc2626';
+    } else {
+      overallGrade = "راسب";
+      gColor = '#991b1b';
     }
 
     if(grandGradeEl) {
@@ -4438,7 +5070,7 @@ function generateAnalysisReportHTML(){
         <tfoot>
           <!-- الصف 1: مجموع درجات كل سؤال -->
           <tr style="background:#f0f9ff;font-weight:bold;">
-            <td colspan="2" style="border:1px solid #000;padding:5px 6px;text-align:center;color:#0369a1;font-size:12px;background:#e0f2fe;">مجموع درجات كل سؤال 👈</td>
+            <td colspan="2" style="border:1px solid #000;padding:5px 6px;text-align:center;color:#0369a1;font-size:12px;background:#e0f2fe;">مجموع الدرجات 👈</td>
             ${qTotalsCells}
             <td style="border:1px solid #000;padding:5px 2px;text-align:center;color:#0369a1;font-size:13px;font-weight:bold;background:#bae6fd;">${esc(grandTotal)}</td>
             <td style="border:1px solid #000;padding:5px 2px;text-align:center;color:#94a3b8;">-</td>
@@ -4447,7 +5079,7 @@ function generateAnalysisReportHTML(){
           </tr>
           <!-- الصف 2: النسبة المئوية لكل سؤال -->
           <tr style="background:#f0fdf4;font-weight:bold;">
-            <td colspan="2" style="border:1px solid #000;padding:5px 6px;text-align:center;color:#15803d;font-size:12px;background:#dcfce7;">النسبة المئوية لكل سؤال 👈</td>
+            <td colspan="2" style="border:1px solid #000;padding:5px 6px;text-align:center;color:#15803d;font-size:12px;background:#dcfce7;">النسبة المئوية 👈</td>
             ${qPercentsCells}
             <td style="border:1px solid #000;padding:5px 2px;text-align:center;color:#166534;font-size:11px;background:#dcfce7;">النسبة العامة 👈</td>
             <td style="border:1px solid #000;padding:5px 2px;text-align:center;color:#15803d;font-size:12.5px;font-weight:bold;background:#bbf7d0;">${esc(grandPercent)}</td>
@@ -4456,7 +5088,7 @@ function generateAnalysisReportHTML(){
           </tr>
           <!-- الصف 3: التقدير ومستوى السؤال -->
           <tr style="background:#fefce8;font-weight:bold;">
-            <td colspan="2" style="border:1px solid #000;padding:5px 6px;text-align:center;color:#854d0e;font-size:12px;background:#fef9c3;">التقدير ومستوى السؤال 👈</td>
+            <td colspan="2" style="border:1px solid #000;padding:5px 6px;text-align:center;color:#854d0e;font-size:12px;background:#fef9c3;">التقدير 👈</td>
             ${qGradesCells}
             <td style="border:1px solid #000;padding:5px 2px;text-align:center;color:#854d0e;font-size:11px;background:#fef9c3;">التقدير العام 👈</td>
             <td style="border:1px solid #000;padding:5px 2px;text-align:center;color:#94a3b8;">-</td>
@@ -5228,7 +5860,70 @@ window.toggleAnalysisSettings = toggleAnalysisSettings;
 window.switchToAnalysisTab = switchToAnalysisTab;
 
 /* ============ التشغيل ============ */
+
+/* ============ تحكم مظهر وتصميم كانفا ستوديو العصري ============ */
+function initClassicLayout(){
+  document.body.classList.remove('layout-canva');
+  localStorage.setItem('app_layout_mode', 'classic');
+}
+
+function toggleAppLayout(mode){
+  const isCurrentlyCanva = document.body.classList.contains('layout-canva');
+  const targetMode = mode || (isCurrentlyCanva ? 'classic' : 'canva');
+  if(targetMode === 'canva'){
+    document.body.classList.add('layout-canva');
+    localStorage.setItem('app_layout_mode', 'canva');
+    if(typeof toast === 'function') toast('✨ تم تفعيل تصميم كانفا العصري', 'ok');
+  } else {
+    document.body.classList.remove('layout-canva');
+    localStorage.setItem('app_layout_mode', 'classic');
+    if(typeof toast === 'function') toast('🏛️ تم تفعيل المظهر الكلاسيكي', 'ok');
+  }
+  updateLayoutToggleBtn();
+}
+
+function updateLayoutToggleBtn(){
+  const isCanva = document.body.classList.contains('layout-canva');
+  const txt = document.getElementById('layoutToggleText');
+  if(txt){
+    txt.textContent = isCanva ? 'تصميم كانفا العصري ✨' : 'المظهر الكلاسيكي 🏛️';
+  }
+}
+
+let currentPreviewZoom = 1;
+function setPreviewZoom(scale){
+  currentPreviewZoom = Math.max(0.6, Math.min(1.4, Math.round(scale * 10) / 10));
+  const paper = document.querySelector('#previewPaper .paper');
+  if(paper){
+    paper.style.transform = `scale(${currentPreviewZoom})`;
+    paper.style.transformOrigin = 'top center';
+    paper.style.transition = 'transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)';
+  }
+  const zoomLabel = document.getElementById('canvaZoomLevel');
+  if(zoomLabel) zoomLabel.textContent = `${Math.round(currentPreviewZoom * 100)}%`;
+}
+function zoomInPreview(){ setPreviewZoom(currentPreviewZoom + 0.1); }
+function zoomOutPreview(){ setPreviewZoom(currentPreviewZoom - 0.1); }
+function resetPreviewZoom(){ setPreviewZoom(1.0); }
+
+function scrollToElement(id, openAccordion){
+  const el = document.getElementById(id);
+  if(!el) return;
+  if(openAccordion){
+    if(id === 'headerCard' && typeof toggleHeaderSection === 'function') toggleHeaderSection(true);
+    if(id === 'styleCard' && typeof toggleStyleSection === 'function') toggleStyleSection(true);
+  }
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+window.toggleAppLayout = toggleAppLayout;
+window.zoomInPreview = zoomInPreview;
+window.zoomOutPreview = zoomOutPreview;
+window.resetPreviewZoom = resetPreviewZoom;
+window.scrollToElement = scrollToElement;
+
 function init(){
+  initClassicLayout();
   bindMetaValues();
   bindStyleValues();
   refreshTemplateSelect();
