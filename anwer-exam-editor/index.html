@@ -1306,7 +1306,10 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
           <span>🧹</span> تفريغ الجدول
         </button>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <button type="button" class="btn success" id="btnExportAnalysisPdf" onclick="exportAnalysisToPdf()" style="background:linear-gradient(135deg,#1e8449,#27ae60);color:#fff;font-size:15px;padding:10px 18px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(30,132,73,0.3);border:none;cursor:pointer;">
+          <span>💾</span> <b>تصدير كشف التحليل PDF</b>
+        </button>
         <button type="button" class="btn primary" onclick="printAnalysisReport()" style="background:#2980b9;font-size:15px;padding:10px 20px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(41,128,185,0.3);">
           <span>🖨️</span> <b>طباعة كشف التحليل</b>
         </button>
@@ -3680,6 +3683,123 @@ function printAnalysisReport(){
   }, 1000);
 }
 
+/* تصدير كشف التحليل الآلي كملف PDF عالي الدقة */
+async function exportAnalysisToPdf(){
+  if(!window.html2canvas || !window.jspdf){
+    toast('مكتبات PDF لم تُحمّل بعد. تأكد من اتصال الإنترنت في أول فتح.', 'err');
+    return;
+  }
+  const container = document.querySelector('#tab-analysis .paper-container');
+  if(!container){
+    toast('لم يتم العثور على جدول كشف التحليل', 'err');
+    return;
+  }
+
+  calculateAll();
+  showBusy('جارٍ إنشاء وتصدير كشف التحليل كملف PDF عالي الجودة...');
+
+  try {
+    const sub = ($('#an-subject')?.value || 'تحليل_النتائج').trim();
+    const cls = ($('#an-class')?.value || '').trim();
+    const mth = ($('#an-month')?.value || '').trim();
+    const fileName = `كشف_تحليل_نتائج_${sub}${cls ? '_' + cls : ''}${mth ? '_' + mth : ''}`.replace(/[\\/:*?"<>|\s]+/g, '_');
+
+    const canvas = await html2canvas(container, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      logging: false,
+      windowWidth: 1300,
+      onclone: (clonedDoc) => {
+        const clonedCont = clonedDoc.querySelector('#tab-analysis .paper-container');
+        if(!clonedCont) return;
+
+        // إخفاء الأزرار غير المرغوب في طباعتها
+        clonedCont.querySelectorAll('.analysis-hide-print').forEach(el => el.style.display = 'none');
+
+        // تحويل كافة حقول الإدخال إلى نصوص واضحة ومطبوعة
+        clonedCont.querySelectorAll('input').forEach(inp => {
+          const val = inp.value || '';
+          const span = clonedDoc.createElement('span');
+          span.textContent = val;
+          span.style.fontFamily = "'Cairo', Tahoma, sans-serif";
+          span.style.fontSize = window.getComputedStyle(inp).fontSize || '13.5px';
+          span.style.fontWeight = 'bold';
+          span.style.color = '#000000';
+          span.style.display = 'inline-block';
+          span.style.textAlign = 'center';
+          span.style.width = '100%';
+          inp.parentNode.replaceChild(span, inp);
+        });
+
+        // تحويل مربعات الملاحظات متعددة الأسطر إلى نصوص بدون أشرطة تمرير
+        clonedCont.querySelectorAll('textarea').forEach(ta => {
+          const val = ta.value || '';
+          const span = clonedDoc.createElement('span');
+          span.textContent = val;
+          span.style.fontFamily = "'Cairo', Tahoma, sans-serif";
+          span.style.fontSize = '12px';
+          span.style.whiteSpace = 'pre-wrap';
+          span.style.display = 'block';
+          span.style.textAlign = 'right';
+          span.style.lineHeight = '1.4';
+          span.style.color = '#000000';
+          span.style.padding = '2px 4px';
+          ta.parentNode.replaceChild(span, ta);
+        });
+
+        clonedCont.style.width = '1250px';
+        clonedCont.style.maxWidth = '1250px';
+        clonedCont.style.boxShadow = 'none';
+        clonedCont.style.borderRadius = '0';
+        clonedCont.style.background = '#ffffff';
+
+        clonedCont.querySelectorAll('th, td').forEach(td => {
+          td.style.border = '1px solid #000000';
+        });
+      }
+    });
+
+    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+    const { jsPDF } = window.jspdf;
+
+    // A4 بنمط أفقي (Landscape: 297mm x 210mm) لملاءمة كامل الأعمدة الـ 16
+    const pdf = new jsPDF('l', 'mm', 'a4');
+    const pageW = 297;
+    const pageH = 210;
+    const margin = 6;
+    const printableW = pageW - (margin * 2); // 285mm
+    const printableH = pageH - (margin * 2); // 198mm
+
+    const imgW = printableW;
+    const imgH = (canvas.height * imgW) / canvas.width;
+
+    let heightLeft = imgH;
+    let position = margin;
+
+    // الصفحة الأولى
+    pdf.addImage(imgData, 'JPEG', margin, position, imgW, imgH);
+    heightLeft -= printableH;
+
+    // صفحات إضافية في حال كان الجدول طويلاً
+    while (heightLeft > 5) {
+      position = position - printableH;
+      pdf.addPage('a4', 'l');
+      pdf.addImage(imgData, 'JPEG', margin, position, imgW, imgH);
+      heightLeft -= printableH;
+    }
+
+    const blob = pdf.output('blob');
+    downloadBlob(blob, fileName + '.pdf');
+    toast(`✅ تم تصدير كشف التحليل كملف PDF بنجاح: ${fileName}.pdf`, 'ok');
+  } catch(err) {
+    console.error(err);
+    toast('تعذر تصدير كشف التحليل PDF: ' + err.message, 'err');
+  } finally {
+    hideBusy();
+  }
+}
+
 /* ربط أحداث الإدخال والحذف التلقائي لكشف التحليل */
 document.addEventListener('input', e => {
   if(e.target && e.target.closest('#tab-analysis')){
@@ -3693,6 +3813,9 @@ document.addEventListener('input', e => {
 document.addEventListener('click', e => {
   if(e.target.closest('.add-row-btn, #btnAddStudent')){
     addStudentRow();
+  }
+  if(e.target.closest('#btnExportAnalysisPdf')){
+    exportAnalysisToPdf();
   }
   const delBtn = e.target.closest('#tableBody .action-btn');
   if(delBtn){
@@ -3716,6 +3839,7 @@ window.loadAnalysisLocal = loadAnalysisLocal;
 window.syncAnalysisHeaderFromMeta = syncAnalysisHeaderFromMeta;
 window.clearAnalysisData = clearAnalysisData;
 window.printAnalysisReport = printAnalysisReport;
+window.exportAnalysisToPdf = exportAnalysisToPdf;
 window.switchToAnalysisTab = switchToAnalysisTab;
 
 /* ============ التشغيل ============ */
