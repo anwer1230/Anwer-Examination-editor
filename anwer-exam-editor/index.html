@@ -1086,9 +1086,9 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
     </div>
   </div>
   <div class="contact">
-    <button id="btnForceRefresh" class="contact-install" style="background:linear-gradient(135deg,#e67e22,#d35400);color:#fff;" title="تحديث لآخر نسخة وتفريغ الذاكرة المؤقتة">🔄 تحديث لآخر نسخة</button>
-    <button id="btnHeaderAnalysis" class="contact-install" style="background:linear-gradient(135deg,#2980b9,#1f618d);color:#fff;" title="التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم">📊 تحليل درجات الطلاب</button>
-    <button id="btnHeaderInstall" class="contact-install" title="تثبيت التطبيق على الهاتف للعمل بدون إنترنت">📱 تثبيت التطبيق</button>
+    <button type="button" id="btnForceRefresh" class="contact-install" style="background:linear-gradient(135deg,#e67e22,#d35400);color:#fff;" title="تحديث لآخر نسخة وتفريغ الذاكرة المؤقتة">🔄 تحديث لآخر نسخة</button>
+    <button type="button" id="btnHeaderAnalysis" class="contact-install" style="background:linear-gradient(135deg,#2980b9,#1f618d);color:#fff;" title="التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم">📊 تحليل درجات الطلاب</button>
+    <button type="button" id="btnHeaderInstall" class="contact-install" title="تثبيت التطبيق على الهاتف للعمل بدون إنترنت">📱 تثبيت التطبيق</button>
     <a href="tel:772997043">📞 772997043</a>
     <a class="wa" href="https://wa.me/966510349663" target="_blank" rel="noopener">💬 واتساب</a>
   </div>
@@ -1420,8 +1420,8 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
     </div>
   </div>
   <div class="pwa-notify-actions">
-    <button class="btn-install-pwa" id="btnInstallPwa">⬇️ تثبيت التطبيق الآن</button>
-    <button class="btn-dismiss-pwa" id="btnDismissPwa">لاحقاً</button>
+    <button type="button" class="btn-install-pwa" id="btnInstallPwa">⬇️ تثبيت التطبيق الآن</button>
+    <button type="button" class="btn-dismiss-pwa" id="btnDismissPwa">لاحقاً</button>
   </div>
 </div>
 
@@ -2959,7 +2959,11 @@ $('#previewPaper').addEventListener('click', e => {
 
 /* ============ التبويبات ============ */
 function switchToTab(tabName){
-  $$('.tabs button').forEach(b => {
+  if(!tabName) tabName = "edit";
+  try {
+    sessionStorage.setItem("anwer_active_tab", tabName);
+  } catch(e){}
+  $('.tabs button').forEach(b => {
     const isAct = b.dataset.tab === tabName;
     b.classList.toggle('active', isAct);
     b.setAttribute('aria-selected', isAct ? 'true' : 'false');
@@ -3012,20 +3016,37 @@ function switchToAnalysisTab(){
   switchToTab('analysis');
 }
 
-$$('.tabs button').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
+$('.tabs button').forEach(btn=>{
+  btn.addEventListener('click', (e)=>{
+    e.preventDefault();
     switchToTab(btn.dataset.tab);
   });
 });
 
 document.addEventListener('click', e => {
-  if(e.target.closest('.go-preview-btn')){
+  const prevBtn = e.target.closest('.go-preview-btn');
+  if(prevBtn){
+    e.preventDefault();
+    e.stopPropagation();
     switchToPreviewTab();
+    return;
   }
-  if(e.target.closest('.go-analysis-btn, #btnHeaderAnalysis')){
+  const anBtn = e.target.closest('.go-analysis-btn, #btnHeaderAnalysis');
+  if(anBtn){
+    e.preventDefault();
+    e.stopPropagation();
     switchToAnalysisTab();
+    return;
   }
 });
+
+// استعادة آخر تبويب كان نشطاً
+try {
+  const savedTab = sessionStorage.getItem("anwer_active_tab");
+  if(savedTab && ["edit", "preview", "analysis"].includes(savedTab)){
+    switchToTab(savedTab);
+  }
+} catch(e){}
 
 /* ============ اختيار قالب الورقة ============ */
 document.addEventListener('click', e => {
@@ -3220,7 +3241,10 @@ window.addEventListener('beforeinstallprompt', e => {
   }
 });
 
-async function triggerInstall(sourceBtn){
+async function triggerInstall(sourceBtn, event){
+  if(event){
+    try { event.preventDefault(); event.stopPropagation(); } catch(e){}
+  }
   if(isAppStandalone()){
     toast('✅ التطبيق مثبت بالفعل في هاتفك ويعمل كتطبيق مستقل', 'ok');
     return;
@@ -3244,19 +3268,17 @@ async function triggerInstall(sourceBtn){
       await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if(outcome === 'accepted'){
-        toast('🎉 جارٍ التثبيت الفعلي... التطبيق يُثبّت الآن على هاتفك!', 'ok');
+        toast('🎉 تم قبول التثبيت بنجاح! يتم الآن تثبيت التطبيق على جهازك', 'ok');
         pwaNotify.classList.remove('show');
         if(btnHeaderInstall) btnHeaderInstall.style.display = 'none';
         deferredPrompt = null;
       } else {
-        toast('تم تأجيل التثبيت', 'err');
-        if(sourceBtn){
-          sourceBtn.disabled = false;
-          sourceBtn.innerHTML = originalHtml;
-        }
+        toast('تم تأجيل التثبيت', 'warn');
       }
     } catch(err){
       console.error('Install error:', err);
+      toast('يمكنك التثبيت من قائمة المتصفح (⋮) &gt; تثبيت التطبيق', 'warn');
+    } finally {
       if(sourceBtn){
         sourceBtn.disabled = false;
         sourceBtn.innerHTML = originalHtml;
@@ -3268,23 +3290,25 @@ async function triggerInstall(sourceBtn){
       sourceBtn.disabled = false;
       sourceBtn.innerHTML = originalHtml;
     }
-    toast('📱 للتثبيت اليدوي: اضغط زر الخيارات في متصفحك (⋮) ثم اختر "تثبيت التطبيق" أو "إضافة إلى الشاشة الرئيسية"', 'ok');
+    toast('📱 للتثبيت: اضغط زر الخيارات في متصفحك (⋮) ثم اختر "تثبيت التطبيق" أو "إضافة إلى الشاشة الرئيسية"', 'ok');
   }
 }
 
 if(btnInstallPwa){
-  btnInstallPwa.addEventListener('click', () => triggerInstall(btnInstallPwa));
+  btnInstallPwa.addEventListener('click', (e) => triggerInstall(btnInstallPwa, e));
 }
 if(btnHeaderInstall){
-  btnHeaderInstall.addEventListener('click', () => triggerInstall(btnHeaderInstall));
+  btnHeaderInstall.addEventListener('click', (e) => triggerInstall(btnHeaderInstall, e));
 }
 
-$('#btnDismissPwa').addEventListener('click', ()=>{
+$('#btnDismissPwa')?.addEventListener('click', (e)=>{
+  e.preventDefault();
   pwaNotify.classList.remove('show');
   sessionStorage.setItem('dismissed_install_pwa', '1');
 });
 
-$('#closeIosModal').addEventListener('click', ()=>{
+$('#closeIosModal')?.addEventListener('click', (e)=>{
+  e.preventDefault();
   $('#iosInstallModal').hidden = true;
 });
 
@@ -3294,8 +3318,9 @@ window.addEventListener('appinstalled', ()=>{
   toast('📱 تم تثبيت التطبيق بنجاح في جهازك ويعمل الآن بدون إنترنت!', 'ok');
 });
 
-// زر إجبار التحديث الفوري ومسح الذاكرة المخزنة
-$('#btnForceRefresh')?.addEventListener('click', async () => {
+// زر إجبار التحديث الفوري ومسح الذاكرة المخزنة يدوياً فقط عند طلب المستخدم
+$('#btnForceRefresh')?.addEventListener('click', async (e) => {
+  e.preventDefault();
   try {
     toast('جارٍ تفريغ الذاكرة المؤقتة وتحديث التطبيق...', 'warn');
     if('caches' in window){
@@ -3310,31 +3335,24 @@ $('#btnForceRefresh')?.addEventListener('click', async () => {
   window.location.href = window.location.origin + window.location.pathname + '?reload=' + Date.now();
 });
 
-// تسجيل Service Worker مع إجبار التحقق من التحديث الفوري
+// تسجيل Service Worker بهدوء دون إجبار الصفحة على إعادة التحميل المفاجئ
 if('serviceWorker' in navigator && location.protocol !== 'file:'){
   window.addEventListener('load', ()=>{
-    navigator.serviceWorker.register('sw.js?v=' + Date.now()).then(reg => {
-      reg.update();
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      // فحص التحديثات في الخلفية دون قطع جلسة المستخدم
       reg.addEventListener('updatefound', () => {
         const newWorker = reg.installing;
         if(newWorker){
           newWorker.addEventListener('statechange', () => {
-            if(newWorker.state === 'activated' && navigator.serviceWorker.controller){
-              window.location.reload();
+            if(newWorker.state === 'installed' && navigator.serviceWorker.controller){
+              console.log('نسخة جديدة من التطبيق متوفرة في الخلفية');
             }
           });
         }
       });
     }).catch(err => {
-      console.log('SW registration failed:', err);
+      console.log('SW note:', err);
     });
-  });
-  let refreshing = false;
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if(!refreshing){
-      refreshing = true;
-      window.location.reload();
-    }
   });
 }
 
