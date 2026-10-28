@@ -3199,7 +3199,7 @@ function switchToTab(tabName){
     sessionStorage.setItem("anwer_active_tab", tabName);
   } catch(e){}
   
-  $('.tabs button, .tabs .tab-btn').forEach(b => {
+  $$('.tabs button, .tabs .tab-btn').forEach(b => {
     const isAct = b.dataset.tab === tabName;
     b.classList.toggle('active', isAct);
     b.setAttribute('aria-selected', isAct ? 'true' : 'false');
@@ -4563,7 +4563,7 @@ function onTemplateChangePreview(e){
   } else {
     applyCustomTemplateById(val, false);
   }
-  $('#selTemplates, #selTemplatesPreview').forEach(s => s.value = val);
+  $$('#selTemplates, #selTemplatesPreview').forEach(s => s.value = val);
 }
 
 function saveTemplateFromPreview(){
@@ -4582,7 +4582,7 @@ function saveTemplateFromPreview(){
   list.push(newTpl);
   saveTemplates(list);
   refreshTemplateSelect();
-  $('#selTemplates, #selTemplatesPreview').forEach(s => s.value = newTpl.id);
+  $$('#selTemplates, #selTemplatesPreview').forEach(s => s.value = newTpl.id);
   toast(`✅ تم حفظ القالب بنجاح: "${newTpl.name}"`, 'ok');
 }
 
@@ -4616,7 +4616,7 @@ function syncMiniMeta(el){
   if(!el || !el.dataset.meta) return;
   const key = el.dataset.meta;
   state.meta[key] = el.value;
-  $(`[data-meta="${key}"]`).forEach(inp => {
+  $$(`[data-meta="${key}"]`).forEach(inp => {
     if(inp !== el) inp.value = el.value;
   });
   renderPreview();
@@ -4629,7 +4629,7 @@ function syncMiniStyle(el){
   let val = el.value;
   if(el.type === 'number') val = Number(val) || 14;
   state.style[key] = val;
-  $(`[data-style="${key}"]`).forEach(inp => {
+  $$(`[data-style="${key}"]`).forEach(inp => {
     if(inp !== el) inp.value = el.value;
   });
   renderPreview();
