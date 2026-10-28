@@ -929,55 +929,119 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 }
 #tab-analysis .table-wrapper {
   overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
   margin-bottom: 20px;
+  border-radius: 8px;
+  border: 1.5px solid #2980b9;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 #tab-analysis table {
   width: 100%;
   border-collapse: collapse;
   background-color: white;
-  margin-bottom: 20px;
+  margin-bottom: 0;
+}
+#tab-analysis #mainTable {
+  min-width: 980px;
+  table-layout: auto;
 }
 #tab-analysis th, #tab-analysis td {
   border: 1.5px solid #333;
-  padding: 5px;
+  padding: 4px 3px;
   text-align: center;
   vertical-align: middle;
-  font-size: 14px;
+  font-size: 13.5px;
+  box-sizing: border-box;
 }
 #tab-analysis th {
   font-weight: bold;
   background-color: #f0f0f0;
 }
-#tab-analysis .col-serial { width: 40px; }
-#tab-analysis .col-name { width: 200px; }
-#tab-analysis .col-q { width: 40px; }
-#tab-analysis .col-total { width: 60px; }
-#tab-analysis .col-percent { width: 60px; }
-#tab-analysis .col-grade { width: 80px; }
-#tab-analysis .col-notes { width: 150px; }
+#tab-analysis .col-serial { width: 38px; min-width: 38px; text-align: center; font-weight: bold; }
+#tab-analysis .col-name { width: 220px; min-width: 200px; text-align: right; }
+#tab-analysis .col-q { width: 55px; min-width: 50px; text-align: center; padding: 2px !important; }
+#tab-analysis .col-total { width: 68px; min-width: 65px; text-align: center; font-weight: bold; color: #1a5276; }
+#tab-analysis .col-percent { width: 65px; min-width: 60px; text-align: center; font-weight: bold; }
+#tab-analysis .col-grade { width: 85px; min-width: 80px; text-align: center; font-weight: bold; }
+#tab-analysis .col-notes { width: 170px; min-width: 140px; text-align: right; }
+#tab-analysis .delete-col { width: 36px; min-width: 36px; text-align: center; }
+
+#tab-analysis input[type=number]::-webkit-inner-spin-button,
+#tab-analysis input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+#tab-analysis input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
 
 #tab-analysis .name-input {
   width: 100%;
-  border: none;
+  min-width: 180px;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: 4px;
   outline: none;
   font-family: 'Cairo', Tahoma, sans-serif;
-  font-size: 14px;
-  text-align: center;
+  font-size: 14.5px;
+  font-weight: 700;
+  text-align: right;
+  padding: 6px 8px;
+  color: #12222e;
   background: transparent;
+  transition: all 0.2s;
 }
-#tab-analysis .grade-input, #tab-analysis .max-grade-input {
+#tab-analysis .name-input:focus {
+  background: #f0f7fc;
+  border-color: #2980b9;
+}
+
+#tab-analysis .grade-input {
   width: 100%;
-  border: none;
+  min-width: 44px;
+  height: 36px;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: 4px;
   outline: none;
   font-family: 'Cairo', Tahoma, sans-serif;
-  font-size: 14px;
+  font-size: 15.5px;
+  font-weight: 800;
+  text-align: center;
+  padding: 4px 1px;
+  color: #123a55;
+  background: transparent;
+  transition: all 0.2s;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+#tab-analysis .grade-input:focus {
+  background: #fff9e6;
+  border-color: #f39c12;
+}
+
+#tab-analysis .max-grade-input {
+  width: 100%;
+  min-width: 44px;
+  height: 34px;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 2px solid #e67e22;
+  outline: none;
+  font-family: 'Cairo', Tahoma, sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: #d35400;
   text-align: center;
   background: transparent;
-}
-#tab-analysis .max-grade-input {
-  font-weight: bold;
-  color: #d35400;
-  border-bottom: 1px solid #ccc;
+  padding: 2px;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 #tab-analysis .notes-input {
   width: 100%;
@@ -1505,6 +1569,11 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
       </div>
 
       <button type="button" class="add-row-btn analysis-hide-print" onclick="addStudentRow()">+ إضافة طالب</button>
+
+      <div class="analysis-hide-print" style="display:flex;align-items:center;justify-content:space-between;margin:8px 0 6px;font-size:12px;color:#5b7285;background:#eef6fb;padding:6px 12px;border-radius:6px;border:1px dashed #b9d5e8;gap:6px;flex-wrap:wrap;">
+        <span>↔️ <b>ملاحظة:</b> يمكنك سحب الجدول أفقياً يميناً ويساراً للتنقل بين الأسئلة والدرجات والملاحظات</span>
+        <span style="font-weight:bold;color:#2980b9;">عرض مرئي واضح</span>
+      </div>
 
       <!-- Main Table -->
       <div class="table-wrapper">
@@ -3728,20 +3797,20 @@ function addStudentRow(studentData){
   const grades = studentData && Array.isArray(studentData.grades) ? studentData.grades : [];
 
   let html = `
-    <td>${currentId}</td>
-    <td><input type="text" class="name-input" placeholder="اسم الطالب..." value="${esc(defaultName)}" oninput="calculateAll(); saveAnalysisLocal();"></td>
+    <td class="col-serial">${currentId}</td>
+    <td class="col-name"><input type="text" class="name-input" placeholder="اسم الطالب..." value="${esc(defaultName)}" oninput="calculateAll(); saveAnalysisLocal();"></td>
   `;
 
   for (let i = 0; i < numQuestions; i++) {
     const gVal = grades[i] != null ? grades[i] : '';
-    html += `<td><input type="number" min="0" class="grade-input" value="${gVal}" oninput="calculateAll(); saveAnalysisLocal();"></td>`;
+    html += `<td class="col-q"><input type="number" min="0" class="grade-input" value="${gVal}" oninput="calculateAll(); saveAnalysisLocal();"></td>`;
   }
 
   html += `
-    <td class="total-cell" id="total-${currentId}">0</td>
-    <td class="percent-cell" id="percent-${currentId}">0%</td>
-    <td class="grade-cell" id="grade-${currentId}">-</td>
-    <td><textarea class="notes-input" placeholder="ملاحظات..." oninput="saveAnalysisLocal();">${esc(defaultNotes)}</textarea></td>
+    <td class="total-cell col-total" id="total-${currentId}">0</td>
+    <td class="percent-cell col-percent" id="percent-${currentId}">0%</td>
+    <td class="grade-cell col-grade" id="grade-${currentId}">-</td>
+    <td class="col-notes"><textarea class="notes-input" placeholder="ملاحظات..." oninput="saveAnalysisLocal();">${esc(defaultNotes)}</textarea></td>
     <td class="delete-col analysis-hide-print"><button type="button" class="action-btn" onclick="deleteRow(${currentId})" title="حذف الطالب">✖</button></td>
   `;
 
@@ -4769,7 +4838,7 @@ function syncQuestionsFromExam(){
     let cellsHtml = '';
     for(let i = 0; i < numQuestions; i++){
       const val = oldGrades[i] != null ? oldGrades[i] : '';
-      cellsHtml += `<td><input type="number" min="0" class="grade-input" value="${val}" oninput="calculateAll(); saveAnalysisLocal();"></td>`;
+      cellsHtml += `<td class="col-q"><input type="number" min="0" class="grade-input" value="${val}" oninput="calculateAll(); saveAnalysisLocal();"></td>`;
     }
 
     const totalCell = document.getElementById(`total-${id}`);
