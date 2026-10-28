@@ -24,6 +24,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 :root{
   --primary:#1a5276; --primary2:#2874a6; --accent:#f1c40f;
@@ -1299,8 +1300,17 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
         <button type="button" class="btn success" onclick="addStudentRow()" style="background:linear-gradient(135deg,#1e8449,#25d366);color:#fff;display:inline-flex;align-items:center;gap:6px;">
           <span>➕</span> <b>إضافة طالب</b>
         </button>
-        <button type="button" class="btn primary" onclick="syncAnalysisHeaderFromMeta()" style="background:linear-gradient(135deg,#2980b9,#3498db);display:inline-flex;align-items:center;gap:6px;">
-          <span>🔄</span> <b>مزامنة المادة والصف من الترويسة</b>
+        <button type="button" class="btn" onclick="openStudentImportModal()" style="background:linear-gradient(135deg,#8e44ad,#9b59b6);color:#fff;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(142,68,173,0.3);cursor:pointer;" title="لصق أسماء الطلاب كدفعة واحدة وترتيبهم أبجدياً أو استيرادهم من ملف (PDF / CSV / VC)">
+          <span>📋</span> <b>لصق واستيراد أسماء الطلاب</b>
+        </button>
+        <button type="button" class="btn" onclick="sortCurrentStudentsAlphabetically()" style="background:linear-gradient(135deg,#16a085,#1abc9c);color:#fff;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(22,160,133,0.3);cursor:pointer;" title="ترتيب جميع الطلاب الحاليين في الكشف أبجدياً مع الحفاظ على درجاتهم">
+          <span>🔤</span> <b>ترتيب أبجدي للكشف</b>
+        </button>
+        <button type="button" class="btn warning" onclick="syncQuestionsFromExam()" style="background:linear-gradient(135deg,#d35400,#e67e22);color:#fff;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(211,84,0,0.3);cursor:pointer;" title="مزامنة درجات الأسئلة الرئيسية وعدد الأعمدة تلقائياً من محرر الامتحان">
+          <span>🎯</span> <b>مزامنة درجات الأسئلة من الامتحان</b>
+        </button>
+        <button type="button" class="btn primary" onclick="syncAnalysisHeaderFromMeta()" style="background:linear-gradient(135deg,#2980b9,#3498db);display:inline-flex;align-items:center;gap:6px;" title="مزامنة عنوان المادة والصف والفصل من ترويسة الاختبار">
+          <span>🔄</span> <b>مزامنة المادة والصف</b>
         </button>
         <button type="button" class="btn ghost danger" onclick="clearAnalysisData()" style="color:var(--danger);border-color:#e8b5ae;">
           <span>🧹</span> تفريغ الجدول
@@ -1457,6 +1467,84 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
       <button id="mSave" class="btn primary">💾 حفظ في الجهاز</button>
       <button id="mShare" class="btn success">📤 مشاركة</button>
       <button id="mCancel" class="btn ghost">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- نافذة لصق واستيراد أسماء الطلاب وترتيبهم أبجدياً -->
+<div class="modal" id="studentImportModal" hidden style="position:fixed;inset:0;background:rgba(8,25,38,0.72);backdrop-filter:blur(5px);z-index:99999;display:none;align-items:center;justify-content:center;padding:16px;">
+  <div class="modal-box" style="background:#fff;border-radius:18px;max-width:680px;width:100%;box-shadow:0 20px 45px rgba(0,0,0,0.35);overflow:hidden;border:2px solid #2980b9;display:flex;flex-direction:column;max-height:92vh;padding:0;">
+    <!-- Modal Header -->
+    <div style="background:linear-gradient(135deg,#1f618d,#2980b9);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:24px;">📋</span>
+        <div>
+          <h3 style="margin:0;font-size:17px;font-weight:bold;color:#fff;">لصق واستيراد أسماء الطلاب وترتيبهم أبجدياً</h3>
+          <p style="margin:2px 0 0;font-size:12px;color:#d4e6f1;">لصق جماعي فوري أو استخراج ذكي من ملفات (PDF / CSV / TXT / VC)</p>
+        </div>
+      </div>
+      <button type="button" onclick="closeStudentImportModal()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;font-size:18px;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">✖</button>
+    </div>
+
+    <!-- Modal Body -->
+    <div style="padding:18px 20px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:14px;">
+      <!-- Upload File Option -->
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;background:#f4f9fd;padding:12px 14px;border-radius:12px;border:1.5px dashed #2980b9;">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <label for="studentFileInput" style="background:linear-gradient(135deg,#8e44ad,#9b59b6);color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:bold;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 6px rgba(142,68,173,0.3);">
+            <span>📁</span> رفع ملف (PDF / CSV / TXT / VC)
+          </label>
+          <input type="file" id="studentFileInput" accept=".pdf, .csv, .txt, .tsv, .vcf, .vc" style="display:none;" onchange="handleStudentFileUpload(event)">
+          <span id="fileUploadStatus" style="font-size:12.5px;color:#566573;">يمكنك أيضاً رفع ملف مباشرة لاستخراج الأسماء</span>
+        </div>
+        <button type="button" onclick="pasteSampleStudents()" style="background:#fff;border:1px solid #ccd1d9;color:#2c3e50;font-size:12px;padding:6px 12px;border-radius:8px;cursor:pointer;">
+          نموذج أسماء تجريبي
+        </button>
+      </div>
+
+      <!-- Paste Textarea -->
+      <div>
+        <label style="display:block;font-size:13px;font-weight:bold;color:#1a5276;margin-bottom:6px;">
+          الصق أسماء الطلاب هنا (كل اسم في سطر أو مفصولة بفواصل):
+        </label>
+        <textarea id="bulkStudentsText" oninput="updateNamesCounter()" style="width:100%;height:175px;border:1.5px solid #bdc3c7;border-radius:10px;padding:12px;font-family:inherit;font-size:13.5px;line-height:1.7;box-sizing:border-box;resize:vertical;" placeholder="الصق قائمة الأسماء هنا مباشرة...
+مثال:
+محمد أحمد سالم
+علي حسن إبراهيم
+خالد عبد الله صالح
+(يقبل أيضاً الأسماء المسبوقة بأرقام مثل 1- أو 1. أو شرطات أو فواصل وسيتم تنظيفها وترتيبها تلقائياً)"></textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:12px;color:#7f8c8d;">
+          <span id="namesCounterPreview" style="font-weight:bold;color:#2980b9;">عدد الأسماء المكتشفة: 0</span>
+          <span>يتم تنظيف الترقيم والرموز الزائدة تلقائياً</span>
+        </div>
+      </div>
+
+      <!-- Options -->
+      <div style="background:#fdfefe;border:1px solid #e5e8e8;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;">
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#2c3e50;cursor:pointer;">
+          <input type="checkbox" id="chkAutoSortAlphabetical" checked style="width:17px;height:17px;cursor:pointer;">
+          <b style="color:#1e8449;">ترتيب الأسماء أبجدياً تلقائياً (أ، ب، ت، ث... ي)</b>
+        </label>
+        <div style="display:flex;gap:18px;margin-top:4px;font-size:13px;color:#34495e;">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+            <input type="radio" name="importMode" value="append" checked style="cursor:pointer;">
+            إضافة للطلاب الحاليين في الجدول
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+            <input type="radio" name="importMode" value="replace" style="cursor:pointer;">
+            استبدال القائمة الحالية بالكامل
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div style="background:#f8f9f9;padding:14px 20px;border-top:1px solid #e5e8e8;display:flex;justify-content:space-between;align-items:center;">
+      <button type="button" onclick="closeStudentImportModal()" style="background:#e0e0e0;border:none;padding:9px 18px;border-radius:8px;font-size:13px;cursor:pointer;color:#333;">إلغاء</button>
+      <button type="button" onclick="confirmImportStudents()" style="background:linear-gradient(135deg,#1e8449,#27ae60);color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer;box-shadow:0 4px 10px rgba(30,132,73,0.3);display:inline-flex;align-items:center;gap:8px;">
+        <span>✅</span> إدراج وترتيب في الكشف
+      </button>
     </div>
   </div>
 </div>
@@ -3371,9 +3459,10 @@ updateOnline();
    ======================================================== */
 const LS_ANALYSIS_KEY = 'anwer_exam_analysis_v2';
 let studentIdCounter = 1;
-const numQuestions = 10;
+let numQuestions = 10;
 
-function initAnalysisTable(force = false){
+function initAnalysisTable(force = false, count = numQuestions){
+  if(count && count > 0) numQuestions = count;
   const qHeader = document.getElementById('questions-header');
   const maxHeader = document.getElementById('max-grades-row');
   if(!qHeader || !maxHeader) return;
@@ -3390,6 +3479,16 @@ function initAnalysisTable(force = false){
     maxHtml += `<td class="col-q"><input type="number" min="0" class="max-grade-input" value="10" oninput="calculateAll(); saveAnalysisLocal();"></td>`;
   }
   maxHeader.innerHTML = `<td colspan="2" style="background-color: #f9f9f9; font-size:12px; font-weight:bold;">الدرجة القصوى لكل سؤال 👇</td>` + maxHtml;
+
+  const mainThCol = document.querySelector('#mainTable thead tr:first-child th[colspan]');
+  if(mainThCol){
+    mainThCol.setAttribute('colspan', numQuestions);
+    mainThCol.textContent = `الأسئلة (${numQuestions}) + الدرجة`;
+  }
+  const footerTd = document.querySelector('#mainTable tfoot tr td:first-child');
+  if(footerTd){
+    footerTd.setAttribute('colspan', numQuestions + 2);
+  }
 }
 
 function addStudentRow(studentData){
@@ -3603,6 +3702,7 @@ function saveAnalysisLocal(){
       subject: $('#an-subject')?.value || '',
       className: $('#an-class')?.value || '',
       month: $('#an-month')?.value || '',
+      numQuestions: numQuestions,
       maxGrades: Array.from(document.querySelectorAll('.max-grade-input')).map(inp => inp.value),
       students: Array.from(document.querySelectorAll('#tableBody tr')).map(row => {
         const id = row.id.split('-')[1];
@@ -3639,6 +3739,13 @@ function loadAnalysisLocal(){
     if(data.className && $('#an-class')) $('#an-class').value = data.className;
     if(data.month && $('#an-month')) $('#an-month').value = data.month;
 
+    if(data.numQuestions && data.numQuestions > 0){
+      numQuestions = data.numQuestions;
+      initAnalysisTable(true, numQuestions);
+    } else if(Array.isArray(data.maxGrades) && data.maxGrades.length > 0){
+      numQuestions = data.maxGrades.length;
+      initAnalysisTable(true, numQuestions);
+    }
     if(Array.isArray(data.maxGrades)){
       const maxInputs = document.querySelectorAll('.max-grade-input');
       data.maxGrades.forEach((val, idx) => {
@@ -3848,7 +3955,428 @@ document.addEventListener('click', e => {
 });
 
 /* تصدير كافة دوال التحليل على كائن window لضمان الوصول المباشر */
+
+/* ========================================================
+   وظائف استيراد ولصق وترتيب أسماء الطلاب ومزامنة درجات الامتحان
+   ======================================================== */
+
+// فتح وإغلاق نافذة استيراد ولصق الأسماء
+function openStudentImportModal(){
+  const modal = document.getElementById('studentImportModal');
+  if(modal){
+    modal.hidden = false;
+    modal.style.display = 'flex';
+    const textarea = document.getElementById('bulkStudentsText');
+    if(textarea) {
+      setTimeout(() => textarea.focus(), 80);
+      updateNamesCounter();
+    }
+  }
+}
+
+function closeStudentImportModal(){
+  const modal = document.getElementById('studentImportModal');
+  if(modal){
+    modal.hidden = true;
+    modal.style.display = 'none';
+  }
+  const fileInput = document.getElementById('studentFileInput');
+  if(fileInput) fileInput.value = '';
+  const statusEl = document.getElementById('fileUploadStatus');
+  if(statusEl) statusEl.textContent = 'يمكنك أيضاً رفع ملف مباشرة لاستخراج الأسماء';
+}
+
+function updateNamesCounter(){
+  const textarea = document.getElementById('bulkStudentsText');
+  const counterEl = document.getElementById('namesCounterPreview');
+  if(!textarea || !counterEl) return;
+  const names = parseRawNamesText(textarea.value);
+  counterEl.textContent = `عدد الأسماء المكتشفة: ${names.length} ${names.length === 1 ? 'طالب' : 'طلاب'}`;
+}
+
+function pasteSampleStudents(){
+  const textarea = document.getElementById('bulkStudentsText');
+  if(!textarea) return;
+  textarea.value = `أحمد عبد الله سالم
+إبراهيم محمد علي
+بدر ناصر العتيبي
+خالد حسن إدريس
+سامي فؤاد المنصوري
+يوسف إبراهيم قاسم
+صالح عبد الرحمن`;
+  updateNamesCounter();
+  toast('تم إدراج نموذج أسماء تجريبي للتجربة', 'ok');
+}
+
+// تنظيف اسم الطالب الفردي
+function cleanStudentName(raw){
+  if(!raw) return '';
+  let str = String(raw).trim();
+  str = str.replace(/^[\s\d٠-٩\-.)(*#•–—/:\\]+/, '').trim();
+  str = str.replace(/[\s\d٠-٩\-.)(*#•–—/:\\]+$/, '').trim();
+  str = str.replace(/\s+/g, ' ');
+  return str;
+}
+
+// فرز الأسماء العربية وفق الترتيب الأبجدي الدقيق
+function sortArabicNames(namesArray){
+  return [...namesArray].sort((a, b) => {
+    const normA = a.replace(/[\u064B-\u065F\u0670]/g, '')
+                   .replace(/[إأآٱ]/g, 'ا')
+                   .replace(/ة/g, 'ه')
+                   .replace(/ى/g, 'ي')
+                   .trim();
+    const normB = b.replace(/[\u064B-\u065F\u0670]/g, '')
+                   .replace(/[إأآٱ]/g, 'ا')
+                   .replace(/ة/g, 'ه')
+                   .replace(/ى/g, 'ي')
+                   .trim();
+    return normA.localeCompare(normB, 'ar-SA', { numeric: true, sensitivity: 'base' });
+  });
+}
+
+// استخراج الأسماء من النصوص الخام
+function parseRawNamesText(rawText){
+  if(!rawText) return [];
+  const lines = rawText.split(/[\r\n;,]+/);
+  const names = [];
+  const blacklist = [
+    'كشف', 'اسماء', 'أسماء', 'الطلاب', 'الطالبات', 'درجات', 'الدرجة', 'المادة',
+    'الصف', 'الشهر', 'العام', 'الدراسي', 'الفصل', 'ملاحظات', 'الرقم', 'التاريخ',
+    'اسم الطالب', 'اسم الطالبة', 'م', 'المجموع', 'النسبة', 'التقدير', 'page', 'student', 'name'
+  ];
+  
+  lines.forEach(line => {
+    const cleaned = cleanStudentName(line);
+    if(cleaned.length >= 2 && !/^\d+$/.test(cleaned)){
+      const isHeader = blacklist.some(w => cleaned === w || cleaned.toLowerCase() === w.toLowerCase());
+      if(!isHeader){
+        names.push(cleaned);
+      }
+    }
+  });
+  return names;
+}
+
+// قراءة ملفات CSV
+function parseCsvNames(text){
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  if(lines.length === 0) return [];
+  const rows = lines.map(l => l.split(/[,;\t]/).map(c => c.replace(/^[\"']|[\"']$/g, '').trim()));
+  let nameColIdx = 0;
+  if(rows.length > 1){
+    const header = rows[0];
+    const foundHeaderIdx = header.findIndex(h => /اسم|طالب|name|student/i.test(h));
+    if(foundHeaderIdx !== -1){
+      nameColIdx = foundHeaderIdx;
+      return rows.slice(1).map(r => cleanStudentName(r[nameColIdx])).filter(Boolean);
+    }
+    let maxArabicCount = -1;
+    for(let col = 0; col < (rows[0]?.length || 1); col++){
+      let count = 0;
+      for(let row = 0; row < rows.length; row++){
+        if(/[\u0600-\u06FF]{3,}/.test(rows[row][col] || '')) count++;
+      }
+      if(count > maxArabicCount){
+        maxArabicCount = count;
+        nameColIdx = col;
+      }
+    }
+  }
+  return rows.map(r => cleanStudentName(r[nameColIdx])).filter(Boolean);
+}
+
+// قراءة ملفات VCF / VC
+function parseVcfNames(text){
+  const lines = text.split(/\r?\n/);
+  const names = [];
+  lines.forEach(l => {
+    if(/^FN[;:]/i.test(l)){
+      const val = cleanStudentName(l.replace(/^FN[^:]*:/i, ''));
+      if(val) names.push(val);
+    } else if(/^N[;:]/i.test(l) && names.length === 0){
+      const val = cleanStudentName(l.replace(/^N[^:]*:/i, '').replace(/;/g, ' '));
+      if(val) names.push(val);
+    }
+  });
+  return names;
+}
+
+// استخراج النص من ملف PDF باستخدام pdf.js
+async function extractTextFromPdf(file){
+  try {
+    if(window.pdfjsLib){
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      let text = '';
+      for(let i = 1; i <= pdf.numPages; i++){
+        const page = await pdf.getPage(i);
+        const tokenizedText = await page.getTextContent();
+        const pageStrings = tokenizedText.items.map(token => token.str);
+        text += pageStrings.join('\n') + '\n';
+      }
+      return text;
+    }
+  } catch(e) {
+    console.warn('PDF.js warning:', e);
+  }
+  const raw = await file.text();
+  const arabicMatches = raw.match(/[\u0600-\u06FF\s]{4,}/g);
+  return arabicMatches ? arabicMatches.join('\n') : '';
+}
+
+// معالجة رفع الملف (PDF / CSV / TXT / VC)
+async function handleStudentFileUpload(event){
+  const file = event.target.files?.[0];
+  if(!file) return;
+  const statusEl = document.getElementById('fileUploadStatus');
+  const textarea = document.getElementById('bulkStudentsText');
+  if(statusEl) statusEl.textContent = `⏳ جارٍ استخراج الأسماء من: ${file.name}...`;
+
+  const fileName = file.name.toLowerCase();
+  try {
+    let names = [];
+    if(fileName.endsWith('.pdf')){
+      const extractedText = await extractTextFromPdf(file);
+      names = parseRawNamesText(extractedText);
+    } else if(fileName.endsWith('.vcf') || fileName.endsWith('.vc')){
+      const text = await file.text();
+      names = parseVcfNames(text);
+    } else if(fileName.endsWith('.csv') || fileName.endsWith('.tsv')){
+      const text = await file.text();
+      names = parseCsvNames(text);
+    } else {
+      const text = await file.text();
+      names = parseRawNamesText(text);
+    }
+
+    if(names.length > 0){
+      if(textarea){
+        textarea.value = names.join('\n');
+        updateNamesCounter();
+      }
+      if(statusEl) statusEl.textContent = `✅ تم استخراج ${names.length} اسماً من ملف: ${file.name}`;
+      toast(`✅ تم استخراج ${names.length} طالباً بنجاح من الملف!`, 'ok');
+    } else {
+      if(statusEl) statusEl.textContent = `⚠️ لم يتم العثور على أسماء واضحة في: ${file.name}`;
+      toast('لم يتم العثور على أسماء واضحة في الملف. يمكنك لصقها يدوياً.', 'warn');
+    }
+  } catch(err){
+    console.error('File import error:', err);
+    if(statusEl) statusEl.textContent = `❌ تعذر استخراج الأسماء من: ${file.name}`;
+    toast('تعذر قراءة الملف. جرب ملفاً آخر أو الصق الأسماء مباشرة في الحقل.', 'err');
+  }
+}
+
+// تأكيد إدراج الأسماء وترتيبهم
+function confirmImportStudents(){
+  const textarea = document.getElementById('bulkStudentsText');
+  if(!textarea) return;
+  let names = parseRawNamesText(textarea.value);
+  if(names.length === 0){
+    toast('⚠️ يرجى لصق أسماء الطلاب أو رفع ملف أولاً!', 'warn');
+    return;
+  }
+
+  const autoSort = document.getElementById('chkAutoSortAlphabetical')?.checked !== false;
+  if(autoSort){
+    names = sortArabicNames(names);
+  }
+
+  const importMode = document.querySelector('input[name="importMode"]:checked')?.value || 'append';
+  const tbody = document.getElementById('tableBody');
+  if(!tbody) return;
+
+  if(importMode === 'replace'){
+    tbody.innerHTML = '';
+    studentIdCounter = 1;
+    names.forEach(name => {
+      addStudentRow({ name, grades: [], notes: '' });
+    });
+  } else {
+    names.forEach(name => {
+      addStudentRow({ name, grades: [], notes: '' });
+    });
+    if(autoSort){
+      sortCurrentStudentsAlphabetically(true);
+    }
+  }
+
+  renumberStudentRows();
+  calculateAll();
+  saveAnalysisLocal();
+  closeStudentImportModal();
+  toast(`🎉 تم إدراج ${names.length} طالباً وترتيبهم بنجاح في كشف التحليل!`, 'ok');
+}
+
+// فرز أبجدي لجميع طلاب الكشف الحاليين مع الحفاظ على درجاتهم
+function sortCurrentStudentsAlphabetically(silent = false){
+  const rows = Array.from(document.querySelectorAll('#tableBody tr'));
+  if(rows.length === 0){
+    if(!silent) toast('الكشف فارغ حالياً!', 'warn');
+    return;
+  }
+
+  const students = rows.map(row => {
+    const nameInput = row.querySelector('.name-input');
+    const name = nameInput ? nameInput.value.trim() : '';
+    const gradeInputs = Array.from(row.querySelectorAll('.grade-input'));
+    const grades = gradeInputs.map(inp => inp.value);
+    const notesInput = row.querySelector('.notes-input');
+    const notes = notesInput ? notesInput.value : '';
+    return { name, grades, notes };
+  });
+
+  students.sort((a, b) => {
+    if(!a.name) return 1;
+    if(!b.name) return -1;
+    const normA = a.name.replace(/[\u064B-\u065F\u0670]/g, '').replace(/[إأآٱ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').trim();
+    const normB = b.name.replace(/[\u064B-\u065F\u0670]/g, '').replace(/[إأآٱ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').trim();
+    return normA.localeCompare(normB, 'ar-SA', { numeric: true, sensitivity: 'base' });
+  });
+
+  const tbody = document.getElementById('tableBody');
+  if(!tbody) return;
+  tbody.innerHTML = '';
+  studentIdCounter = 1;
+
+  students.forEach(st => {
+    addStudentRow(st);
+  });
+
+  renumberStudentRows();
+  calculateAll();
+  saveAnalysisLocal();
+
+  if(!silent){
+    toast('✅ تم إعادة ترتيب جميع الطلاب في الكشف أبجدياً بنجاح مع الحفاظ على درجاتهم!', 'ok');
+  }
+}
+
+// مزامنة درجات وعدد الأسئلة الرئيسية من الامتحان
+function syncQuestionsFromExam(){
+  if(!state || !Array.isArray(state.questions) || state.questions.length === 0){
+    toast('⚠️ لا توجد أسئلة مضافة في محرر الامتحان حالياً!', 'warn');
+    return;
+  }
+
+  let mainQuestions = [];
+  let currentMain = null;
+  let mainIndex = 0;
+
+  state.questions.forEach((q) => {
+    if(!q.isSub){
+      mainIndex++;
+      currentMain = {
+        number: mainIndex,
+        title: q.title ? q.title.replace(/^Q\d+:?\s*/i, '').replace(/^س\d+:?\s*/i, '').trim() : `السؤال ${mainIndex}`,
+        marks: Number(q.marks) || 0,
+        subCount: 0
+      };
+      mainQuestions.push(currentMain);
+    } else {
+      if(!currentMain){
+        mainIndex++;
+        currentMain = {
+          number: mainIndex,
+          title: `السؤال ${mainIndex}`,
+          marks: 0,
+          subCount: 0
+        };
+        mainQuestions.push(currentMain);
+      }
+      currentMain.marks += (Number(q.marks) || 0);
+      currentMain.subCount++;
+    }
+  });
+
+  if(mainQuestions.length === 0){
+    toast('⚠️ لم يتم العثور على أسئلة رئيسية في الامتحان', 'warn');
+    return;
+  }
+
+  const newNumQuestions = Math.min(Math.max(mainQuestions.length, 1), 20);
+  numQuestions = newNumQuestions;
+
+  const qHeader = document.getElementById('questions-header');
+  const maxHeader = document.getElementById('max-grades-row');
+  if(!qHeader || !maxHeader) return;
+
+  let qHtml = '';
+  for(let i = 1; i <= numQuestions; i++){
+    const mq = mainQuestions[i - 1];
+    const lbl = mq ? (mq.subCount > 0 ? `س${i} (${mq.subCount + 1})` : `س${i}`) : `${i}`;
+    const tip = mq ? `${mq.title} (${mq.marks} درجات)` : `سؤال ${i}`;
+    qHtml += `<th class="col-q" title="${esc(tip)}">${lbl}</th>`;
+  }
+  qHeader.innerHTML = qHtml;
+
+  let maxHtml = '';
+  for(let i = 1; i <= numQuestions; i++){
+    const mq = mainQuestions[i - 1];
+    const markVal = (mq && mq.marks > 0) ? mq.marks : 10;
+    maxHtml += `<td class="col-q"><input type="number" min="0" class="max-grade-input" value="${markVal}" oninput="calculateAll(); saveAnalysisLocal();" title="الدرجة القصوى للسؤال ${i}"></td>`;
+  }
+  maxHeader.innerHTML = `<td colspan="2" style="background-color: #f9f9f9; font-size:12px; font-weight:bold;">الدرجة القصوى لكل سؤال 👇</td>` + maxHtml;
+
+  const mainThCol = document.querySelector('#mainTable thead tr:first-child th[colspan]');
+  if(mainThCol){
+    mainThCol.setAttribute('colspan', numQuestions);
+    mainThCol.textContent = `الأسئلة (${numQuestions}) + الدرجة`;
+  }
+
+  const footerTd = document.querySelector('#mainTable tfoot tr td:first-child');
+  if(footerTd){
+    footerTd.setAttribute('colspan', numQuestions + 2);
+  }
+
+  // تحديث صفوف الطلاب الموجودين لتتطابق مع الأعمدة الجديدة
+  const studentRows = document.querySelectorAll('#tableBody tr');
+  studentRows.forEach(row => {
+    const id = row.id.split('-')[1];
+    const currentGradeInputs = Array.from(row.querySelectorAll('.grade-input'));
+    const oldGrades = currentGradeInputs.map(inp => inp.value);
+
+    let cellsHtml = '';
+    for(let i = 0; i < numQuestions; i++){
+      const val = oldGrades[i] != null ? oldGrades[i] : '';
+      cellsHtml += `<td><input type="number" min="0" class="grade-input" value="${val}" oninput="calculateAll(); saveAnalysisLocal();"></td>`;
+    }
+
+    const totalCell = document.getElementById(`total-${id}`);
+    currentGradeInputs.forEach(inp => {
+      inp.closest('td')?.remove();
+    });
+
+    const tempDiv = document.createElement('tbody');
+    tempDiv.innerHTML = `<tr>${cellsHtml}</tr>`;
+    const newTds = Array.from(tempDiv.firstChild.children);
+    newTds.forEach(td => {
+      row.insertBefore(td, totalCell);
+    });
+  });
+
+  if(typeof syncAnalysisHeaderFromMeta === 'function'){
+    syncAnalysisHeaderFromMeta();
+  }
+
+  calculateAll();
+  saveAnalysisLocal();
+
+  const totalExamMarks = mainQuestions.reduce((sum, mq) => sum + mq.marks, 0);
+  toast(`🎉 تمت مزامنة ${mainQuestions.length} أسئلة رئيسية بنجاح! إجمالي درجات الامتحان: ${totalExamMarks} درجة`, 'ok');
+}
+
 window.initAnalysisTable = initAnalysisTable;
+window.openStudentImportModal = openStudentImportModal;
+window.closeStudentImportModal = closeStudentImportModal;
+window.confirmImportStudents = confirmImportStudents;
+window.sortCurrentStudentsAlphabetically = sortCurrentStudentsAlphabetically;
+window.syncQuestionsFromExam = syncQuestionsFromExam;
+window.handleStudentFileUpload = handleStudentFileUpload;
+window.pasteSampleStudents = pasteSampleStudents;
+window.updateNamesCounter = updateNamesCounter;
 window.addStudentRow = addStudentRow;
 window.deleteRow = deleteRow;
 window.calculateAll = calculateAll;
