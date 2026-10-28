@@ -3051,7 +3051,7 @@ function switchToTab(tabName){
   try {
     sessionStorage.setItem("anwer_active_tab", tabName);
   } catch(e){}
-  $('.tabs button').forEach(b => {
+  $$('.tabs button').forEach(b => {
     const isAct = b.dataset.tab === tabName;
     b.classList.toggle('active', isAct);
     b.setAttribute('aria-selected', isAct ? 'true' : 'false');
@@ -3104,7 +3104,7 @@ function switchToAnalysisTab(){
   switchToTab('analysis');
 }
 
-$('.tabs button').forEach(btn=>{
+$$('.tabs button').forEach(btn=>{
   btn.addEventListener('click', (e)=>{
     e.preventDefault();
     switchToTab(btn.dataset.tab);
