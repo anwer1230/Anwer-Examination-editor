@@ -1086,6 +1086,7 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
     </div>
   </div>
   <div class="contact">
+    <button id="btnForceRefresh" class="contact-install" style="background:linear-gradient(135deg,#e67e22,#d35400);color:#fff;" title="تحديث لآخر نسخة وتفريغ الذاكرة المؤقتة">🔄 تحديث لآخر نسخة</button>
     <button id="btnHeaderAnalysis" class="contact-install" style="background:linear-gradient(135deg,#2980b9,#1f618d);color:#fff;" title="التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم">📊 تحليل درجات الطلاب</button>
     <button id="btnHeaderInstall" class="contact-install" title="تثبيت التطبيق على الهاتف للعمل بدون إنترنت">📱 تثبيت التطبيق</button>
     <a href="tel:772997043">📞 772997043</a>
@@ -1129,12 +1130,17 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 
     <!-- قوالب الترويسة والتنسيق -->
     <div class="card">
-      <h2>📋 قوالب الترويسة والألوان (Templates)</h2>
-      <p class="hint" style="margin-top:0;">احفظ إعدادات المدرسة والترويسة والألوان كقالب للرجوع إليها مستقبلاً وتطبيقها بضغطة زر عند إنشاء أي اختبار جديد.</p>
+      <h2>📋 قوالب الترويسة والألوان ونماذج ورقة الاختبار (Templates)</h2>
+      <p class="hint" style="margin-top:0;">اختر من القائمة المنسدلة أي قالب لتطبيقه فوراً على ورقة الاختبار، أو احفظ إعداداتك كقالب جديد.</p>
       <div class="toolbar" style="align-items:center;">
         <button id="btnSaveTemplate" class="btn success">💾 حفظ الإعدادات الحالية كقالب</button>
-        <select id="selTemplates" class="sel" style="max-width:270px;">
-          <option value="">-- اختر قالباً محفوظاً --</option>
+        <select id="selTemplates" class="sel" style="min-width:270px;max-width:340px;font-weight:bold;color:#1a5276;">
+          <optgroup label="📋 نماذج ورقة الاختبار (اختر لتطبيق القالب فوراً):">
+            <option value="tpl:academic" selected>🎓 القالب 1: الأكاديمي الرسمي (Formal)</option>
+            <option value="tpl:minimal">📄 القالب 2: القياسي المبسط (Minimal)</option>
+            <option value="tpl:modern">🎨 القالب 3: الأزرق العصري (Modern)</option>
+            <option value="tpl:compact">⚡ القالب 4: المضغوط الاقتصادي (Compact A4)</option>
+          </optgroup>
         </select>
         <button id="btnApplyTemplate" class="btn primary">📥 تطبيق القالب</button>
         <button id="btnDeleteTemplate" class="btn ghost danger" style="color:var(--danger);border-color:#e8b5ae;">🗑 حذف القالب</button>
@@ -3285,14 +3291,47 @@ window.addEventListener('appinstalled', ()=>{
   toast('📱 تم تثبيت التطبيق بنجاح في جهازك ويعمل الآن بدون إنترنت!', 'ok');
 });
 
+// زر إجبار التحديث الفوري ومسح الذاكرة المخزنة
+$('#btnForceRefresh')?.addEventListener('click', async () => {
+  try {
+    toast('جارٍ تفريغ الذاكرة المؤقتة وتحديث التطبيق...', 'warn');
+    if('caches' in window){
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k)));
+    }
+    if('serviceWorker' in navigator){
+      const regs = await navigator.serviceWorker.getRegistrations();
+      for(let r of regs) await r.unregister();
+    }
+  } catch(e){ console.warn(e); }
+  window.location.href = window.location.origin + window.location.pathname + '?reload=' + Date.now();
+});
+
 // تسجيل Service Worker مع إجبار التحقق من التحديث الفوري
 if('serviceWorker' in navigator && location.protocol !== 'file:'){
   window.addEventListener('load', ()=>{
-    navigator.serviceWorker.register('sw.js').then(reg => {
+    navigator.serviceWorker.register('sw.js?v=' + Date.now()).then(reg => {
       reg.update();
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        if(newWorker){
+          newWorker.addEventListener('statechange', () => {
+            if(newWorker.state === 'activated' && navigator.serviceWorker.controller){
+              window.location.reload();
+            }
+          });
+        }
+      });
     }).catch(err => {
       console.log('SW registration failed:', err);
     });
+  });
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if(!refreshing){
+      refreshing = true;
+      window.location.reload();
+    }
   });
 }
 

@@ -63,15 +63,91 @@ body{
   display:inline-flex;align-items:center;gap:4px;
 }
 
-/* ============ التبويبات ============ */
-.tabs{display:flex;background:#fff;border-bottom:3px solid var(--primary);position:sticky;top:0;z-index:20;}
-.tabs button{
-  flex:1;padding:12px;border:0;background:transparent;font-size:14.5px;
-  font-weight:bold;font-family:inherit;color:#456;cursor:pointer;border-bottom:4px solid transparent;
+/* ============ التبويبات الرئيسية الثلاث (المحرر - المعاينة - التحليل الآلي) ============ */
+.tabs-container {
+  background: #ffffff;
+  border-bottom: 3px solid var(--primary);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 4px 14px rgba(18, 58, 85, 0.08);
 }
-.tabs button.active{color:var(--primary);border-bottom-color:var(--accent);background:#f7fbfe;}
+.tabs {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 8px 12px;
+  gap: 10px;
+}
+.tabs button, .tabs .tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 14px;
+  border: 2px solid #d4e6f1;
+  border-radius: 12px;
+  background: #f8fafc;
+  font-size: 14.5px;
+  font-weight: bold;
+  font-family: inherit;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  line-height: 1.3;
+  box-shadow: 0 2px 6px rgba(18,58,85,0.05);
+}
+.tabs button:hover, .tabs .tab-btn:hover {
+  background: #eaf2f8;
+  color: var(--primary);
+  border-color: #aed6f1;
+}
+.tabs button.active, .tabs .tab-btn.active {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #1f618d, #2980b9) !important;
+  border-color: #1a5276 !important;
+  box-shadow: 0 4px 12px rgba(41, 128, 185, 0.35) !important;
+}
+.tabs .tab-icon {
+  font-size: 21px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.tabs .tab-label {
+  display: inline-block;
+  text-align: center;
+}
+@media (max-width: 768px) {
+  .tabs {
+    padding: 6px 4px;
+    gap: 5px;
+  }
+  .tabs button, .tabs .tab-btn {
+    padding: 8px 4px;
+    font-size: 11.5px;
+    gap: 4px;
+    flex-direction: column;
+    border-radius: 9px;
+  }
+  .tabs .tab-icon {
+    font-size: 18px;
+  }
+}
 
-main{max-width:900px;margin:0 auto;padding:14px;}
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 14px;
+  transition: max-width 0.3s ease;
+}
+main.wide-main {
+  max-width: 1350px !important;
+}
 
 /* ============ عناصر النموذج ============ */
 .card{
@@ -455,9 +531,8 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 .online-dot.off{background:#c0392b;}
 
 /* ============ شريط اختيار قوالب الورقة ============ */
-.template-selector-card{
-  border:2px solid #2874a6;background:linear-gradient(180deg,#fbfdff,#f1f7fc);
-  border-radius:12px;padding:14px;margin-bottom:14px;
+.template-selector-card, .template-quick-bar{
+  display:none !important;
 }
 .template-selector-grid{
   display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:10px;
@@ -1011,6 +1086,7 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
     </div>
   </div>
   <div class="contact">
+    <button id="btnForceRefresh" class="contact-install" style="background:linear-gradient(135deg,#e67e22,#d35400);color:#fff;" title="تحديث لآخر نسخة وتفريغ الذاكرة المؤقتة">🔄 تحديث لآخر نسخة</button>
     <button id="btnHeaderAnalysis" class="contact-install" style="background:linear-gradient(135deg,#2980b9,#1f618d);color:#fff;" title="التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم">📊 تحليل درجات الطلاب</button>
     <button id="btnHeaderInstall" class="contact-install" title="تثبيت التطبيق على الهاتف للعمل بدون إنترنت">📱 تثبيت التطبيق</button>
     <a href="tel:772997043">📞 772997043</a>
@@ -1018,33 +1094,26 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   </div>
 </div>
 
-<!-- التبويبات -->
-<div class="tabs">
-  <button data-tab="edit" class="active">✏️ المحرر</button>
-  <button data-tab="preview">👁️ المعاينة واختيار القالب (4 نماذج)</button>
-  <button data-tab="analysis">📊 التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم</button>
+<!-- شريط التبويبات الرئيسي (المحرر - المعاينة - التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم) -->
+<div class="tabs-container">
+  <div class="tabs" role="tablist">
+    <button type="button" data-tab="edit" class="tab-btn active" role="tab" aria-selected="true" title="محرر الاختبارات والأسئلة">
+      <span class="tab-icon">✏️</span>
+      <span class="tab-label">المحرر</span>
+    </button>
+    <button type="button" data-tab="preview" class="tab-btn" role="tab" aria-selected="false" title="معاينة ورقة الاختبار والطباعة">
+      <span class="tab-icon">👁️</span>
+      <span class="tab-label">المعاينة والطباعة</span>
+    </button>
+    <button type="button" data-tab="analysis" class="tab-btn" role="tab" aria-selected="false" title="التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم">
+      <span class="tab-icon">📊</span>
+      <span class="tab-label">التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم</span>
+    </button>
+  </div>
 </div>
 
 <main>
   <section id="tab-edit">
-
-    <!-- بطاقة نماذج وقوالب ورقة الاختبار المباشرة -->
-    <div style="background:linear-gradient(135deg,#eaf2f8,#d4e6f1);border:2px solid #2874a6;padding:14px 16px;border-radius:14px;margin-bottom:14px;box-shadow:0 3px 10px rgba(40,116,166,0.12);">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
-        <div>
-          <b style="color:#1a5276;font-size:15px;display:flex;align-items:center;gap:6px;"><span>📑</span> نماذج وقوالب ورقة الاختبار (اختر أي قالب للاستعراض والتطبيق):</b>
-          <div style="font-size:12px;color:#5b7285;margin-top:2px;">يتم تطبيق محتوى أسئلتك تلقائياً داخل القالب المختار فوراً:</div>
-        </div>
-        <button type="button" class="btn success go-preview-btn" style="font-size:13.5px;padding:8px 16px;display:flex;align-items:center;gap:6px;">
-          <span>👁️</span> <b>فتح المعاينة الكاملة</b>
-        </button>
-      </div>
-      <div class="tqb-buttons" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:8px;">
-        <button type="button" class="tqb-btn" data-tpl="academic" style="padding:10px;text-align:center;">🎓 1. الأكاديمي الرسمي</button>
-        <button type="button" class="tqb-btn" data-tpl="minimal" style="padding:10px;text-align:center;">📄 2. القياسي المبسط</button>
-        <button type="button" class="tqb-btn" data-tpl="modern" style="padding:10px;text-align:center;">🎨 3. الأزرق العصري</button>
-        <button type="button" class="tqb-btn" data-tpl="compact" style="padding:10px;text-align:center;">⚡ 4. المضغوط الاقتصادي (A4)</button>
-      </div>
     <!-- بطاقة الوصول السريع للتحليل الآلي لدرجات الطلاب ومستواهم -->
     <div style="background:#fff;border:2px solid #2980b9;border-radius:14px;padding:12px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;box-shadow:0 3px 10px rgba(41,128,185,0.12);">
       <div style="display:flex;align-items:center;gap:12px;">
@@ -1061,12 +1130,17 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 
     <!-- قوالب الترويسة والتنسيق -->
     <div class="card">
-      <h2>📋 قوالب الترويسة والألوان (Templates)</h2>
-      <p class="hint" style="margin-top:0;">احفظ إعدادات المدرسة والترويسة والألوان كقالب للرجوع إليها مستقبلاً وتطبيقها بضغطة زر عند إنشاء أي اختبار جديد.</p>
+      <h2>📋 قوالب الترويسة والألوان ونماذج ورقة الاختبار (Templates)</h2>
+      <p class="hint" style="margin-top:0;">اختر من القائمة المنسدلة أي قالب لتطبيقه فوراً على ورقة الاختبار، أو احفظ إعداداتك كقالب جديد.</p>
       <div class="toolbar" style="align-items:center;">
         <button id="btnSaveTemplate" class="btn success">💾 حفظ الإعدادات الحالية كقالب</button>
-        <select id="selTemplates" class="sel" style="max-width:270px;">
-          <option value="">-- اختر قالباً محفوظاً --</option>
+        <select id="selTemplates" class="sel" style="min-width:270px;max-width:340px;font-weight:bold;color:#1a5276;">
+          <optgroup label="📋 نماذج ورقة الاختبار (اختر لتطبيق القالب فوراً):">
+            <option value="tpl:academic" selected>🎓 القالب 1: الأكاديمي الرسمي (Formal)</option>
+            <option value="tpl:minimal">📄 القالب 2: القياسي المبسط (Minimal)</option>
+            <option value="tpl:modern">🎨 القالب 3: الأزرق العصري (Modern)</option>
+            <option value="tpl:compact">⚡ القالب 4: المضغوط الاقتصادي (Compact A4)</option>
+          </optgroup>
         </select>
         <button id="btnApplyTemplate" class="btn primary">📥 تطبيق القالب</button>
         <button id="btnDeleteTemplate" class="btn ghost danger" style="color:var(--danger);border-color:#e8b5ae;">🗑 حذف القالب</button>
@@ -1194,7 +1268,7 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 
     <div style="text-align:center;margin:18px 0 12px;">
       <button type="button" class="btn success go-preview-btn" style="font-size:16px;padding:14px 26px;box-shadow:0 4px 14px rgba(30,132,73,0.3);width:100%;max-width:500px;">
-        👁️ معاينة الاختبار واستعراض القوالب (4 نماذج جاهزة) 📑
+        👁️ معاينة ورقة الاختبار والطباعة 📑
       </button>
     </div>
 
@@ -1206,49 +1280,6 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   </section>
 
   <section id="tab-preview" hidden>
-    <!-- شريط اختيار قالب ورقة الاختبار -->
-    <div class="template-selector-card">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
-        <h3 style="margin:0;color:var(--primary);font-size:15px;display:flex;align-items:center;gap:6px;">
-          <span>📑</span> نماذج وقوالب ورقة الاختبار (اختر أي قالب للاستعراض والحفظ):
-        </h3>
-        <span style="font-size:12px;color:#5b7285;">(يتم تطبيق محتوى أسئلتك تلقائياً داخل القالب المختار)</span>
-      </div>
-      <div class="template-selector-grid" id="paperTemplateGrid">
-        <button type="button" class="tpl-btn" data-tpl="academic">
-          <div class="tpl-badge">القالب 1</div>
-          <div class="tpl-name">🎓 الأكاديمي الرسمي (Formal)</div>
-          <div class="tpl-desc">تصميم وزاري رسمي كلاسيكي، خطوط سيريف رصينة، فواصل نقطية أنيقة وخيارات بين قوسين.</div>
-        </button>
-        <button type="button" class="tpl-btn" data-tpl="minimal">
-          <div class="tpl-badge">القالب 2</div>
-          <div class="tpl-name">📄 القياسي المبسط (Minimal)</div>
-          <div class="tpl-desc">إطار وتسطير كلاسيكي نقي، ترويسة قياسية وأسطر إجابة مريحة وواضحة.</div>
-        </button>
-        <button type="button" class="tpl-btn" data-tpl="modern">
-          <div class="tpl-badge">القالب 3</div>
-          <div class="tpl-name">🎨 الأزرق العصري (Modern)</div>
-          <div class="tpl-desc">تصميم ملون حديث، بطاقات أسئلة ملونة وقابلة لتخصيص الألوان والخطوط.</div>
-        </button>
-        <button type="button" class="tpl-btn" data-tpl="compact">
-          <div class="tpl-badge">القالب 4</div>
-          <div class="tpl-name">⚡ المضغوط الاقتصادي (Compact)</div>
-          <div class="tpl-desc">تصميم مكثف واقتصادي لطباعة أكبر قدر من الأسئلة في ورقة واحدة A4 بخط 11px وترويسة مدمجة.</div>
-        </button>
-      </div>
-    </div>
-
-    <!-- شريط التبديل السريع المباشر للقوالب -->
-    <div class="template-quick-bar">
-      <span class="tqb-label">📑 تبديل القالب المباشر:</span>
-      <div class="tqb-buttons">
-        <button type="button" class="tqb-btn" data-tpl="academic">🎓 1. الأكاديمي الرسمي</button>
-        <button type="button" class="tqb-btn" data-tpl="minimal">📄 2. القياسي المبسط</button>
-        <button type="button" class="tqb-btn" data-tpl="modern">🎨 3. الأزرق العصري</button>
-        <button type="button" class="tqb-btn" data-tpl="compact">⚡ 4. المضغوط الاقتصادي</button>
-      </div>
-    </div>
-
     <div class="toolbar">
       <button id="btnSavePdf" class="btn primary">💾 حفظ PDF</button>
       <button id="btnShare" class="btn success">📤 مشاركة</button>
@@ -1580,9 +1611,30 @@ function saveTemplates(tpls){
 function refreshTemplateSelect(){
   const sel = $('#selTemplates');
   if(!sel) return;
+  const currentTpl = state.paperTemplate || 'academic';
   const list = loadTemplates();
-  sel.innerHTML = '<option value="">-- اختر قالباً محفوظاً --</option>' +
-    list.map(t => `<option value="${t.id}">${esc(t.name)} (${esc(t.date || '')})</option>`).join('');
+
+  let html = `
+    <optgroup label="📋 نماذج ورقة الاختبار (اختر أي نموذج للتطبيق فوراً):">
+      <option value="tpl:academic" ${currentTpl === 'academic' ? 'selected' : ''}>🎓 القالب 1: الأكاديمي الرسمي (Formal)</option>
+      <option value="tpl:minimal" ${currentTpl === 'minimal' ? 'selected' : ''}>📄 القالب 2: القياسي المبسط (Minimal)</option>
+      <option value="tpl:modern" ${currentTpl === 'modern' ? 'selected' : ''}>🎨 القالب 3: الأزرق العصري (Modern)</option>
+      <option value="tpl:compact" ${currentTpl === 'compact' ? 'selected' : ''}>⚡ القالب 4: المضغوط الاقتصادي (Compact A4)</option>
+    </optgroup>
+  `;
+
+  if(list.length > 0){
+    html += `
+      <optgroup label="💾 قوالب ترويسة وألوان محفوظة مسبقاً:">
+        ${list.map(t => `<option value="${t.id}">${esc(t.name)} (${esc(t.date || '')})</option>`).join('')}
+      </optgroup>
+    `;
+  }
+
+  sel.innerHTML = html;
+  if(!sel.value || sel.value.startsWith('tpl:')){
+    sel.value = 'tpl:' + currentTpl;
+  }
 }
 
 function getQuestionMeta(qi){
@@ -2230,12 +2282,10 @@ function renderCompactTemplate(mode){
 
 function updateTemplateButtons(){
   const tpl = state.paperTemplate || 'academic';
-  $$('.tpl-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.tpl === tpl);
-  });
-  $$('.tqb-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.tpl === tpl);
-  });
+  const sel = $('#selTemplates');
+  if(sel && (!sel.value || sel.value.startsWith('tpl:'))){
+    sel.value = 'tpl:' + tpl;
+  }
 }
 
 function paperHTML(mode){
@@ -2738,29 +2788,64 @@ $('#btnSaveTemplate').addEventListener('click', ()=>{
   toast(`✅ تم حفظ القالب بنجاح: "${newTpl.name}"`, 'ok');
 });
 
-$('#btnApplyTemplate').addEventListener('click', ()=>{
-  const id = $('#selTemplates').value;
-  if(!id) return toast('يرجى اختيار قالب من القائمة أولاً', 'err');
+function applyPaperTemplateByKey(tplKey){
+  state.paperTemplate = tplKey;
+  saveLocal();
+  renderPreview();
+  const names = {
+    academic: '🎓 القالب 1: الأكاديمي الرسمي (Formal)',
+    minimal: '📄 القالب 2: القياسي المبسط (Minimal)',
+    modern: '🎨 القالب 3: الأزرق العصري (Modern)',
+    compact: '⚡ القالب 4: المضغوط الاقتصادي (Compact A4)'
+  };
+  toast('✅ تم تطبيق: ' + (names[tplKey] || tplKey), 'ok');
+}
+
+function applyCustomTemplateById(id, askConfirm = true){
   const list = loadTemplates();
   const tpl = list.find(t => t.id === id);
   if(!tpl) return toast('القالب غير موجود', 'err');
-  if(!confirm(`تطبيق قالب "${tpl.name}"؟ سيتم تحديث الترويسة ونموذج القالب والألوان مع بقاء الأسئلة كما هي.`)) return;
+  if(askConfirm && !confirm(`تطبيق قالب "${tpl.name}"؟ سيتم تحديث الترويسة ونموذج القالب والألوان مع بقاء الأسئلة كما هي.`)) return;
   state.meta = JSON.parse(JSON.stringify(tpl.meta));
   state.style = JSON.parse(JSON.stringify(tpl.style));
   if(tpl.paperTemplate) state.paperTemplate = tpl.paperTemplate;
   saveLocal();
   bindMetaValues();
   bindStyleValues();
+  refreshTemplateSelect();
   renderEditor();
   renderPreview();
   toast(`✅ تم تطبيق القالب: "${tpl.name}"`, 'ok');
+}
+
+// تطبيق القالب فوراً بمجرد اختياره من القائمة المنسدلة
+$('#selTemplates')?.addEventListener('change', e => {
+  const val = e.target.value;
+  if(!val) return;
+  if(val.startsWith('tpl:')){
+    applyPaperTemplateByKey(val.replace('tpl:', ''));
+  } else {
+    applyCustomTemplateById(val, false);
+  }
 });
 
-$('#btnDeleteTemplate').addEventListener('click', ()=>{
-  const id = $('#selTemplates').value;
-  if(!id) return toast('يرجى اختيار قالب لحذفه من القائمة', 'err');
+$('#btnApplyTemplate')?.addEventListener('click', ()=>{
+  const val = $('#selTemplates')?.value;
+  if(!val) return toast('يرجى اختيار قالب من القائمة أولاً', 'err');
+  if(val.startsWith('tpl:')){
+    applyPaperTemplateByKey(val.replace('tpl:', ''));
+  } else {
+    applyCustomTemplateById(val, true);
+  }
+});
+
+$('#btnDeleteTemplate')?.addEventListener('click', ()=>{
+  const val = $('#selTemplates')?.value;
+  if(!val || val.startsWith('tpl:')){
+    return toast('⚠️ النماذج الأساسية الأربعة مدمجة في التطبيق ولا يمكن حذفها، يمكنك حذف القوالب التي قمت بحفظها بنفسك.', 'warn');
+  }
   const list = loadTemplates();
-  const idx = list.findIndex(t => t.id === id);
+  const idx = list.findIndex(t => t.id === val);
   if(idx === -1) return;
   if(!confirm(`هل أنت متأكد من حذف قالب "${list[idx].name}"؟`)) return;
   const removedName = list[idx].name;
@@ -2872,13 +2957,47 @@ $('#previewPaper').addEventListener('click', e => {
 /* ============ التبويبات ============ */
 function switchToTab(tabName){
   $$('.tabs button').forEach(b => {
-    b.classList.toggle('active', b.dataset.tab === tabName);
+    const isAct = b.dataset.tab === tabName;
+    b.classList.toggle('active', isAct);
+    b.setAttribute('aria-selected', isAct ? 'true' : 'false');
   });
   $('#tab-edit').hidden = tabName !== 'edit';
   $('#tab-preview').hidden = tabName !== 'preview';
   const anTab = $('#tab-analysis');
   if(anTab) anTab.hidden = tabName !== 'analysis';
   if(tabName === 'preview') renderPreview();
+  if(tabName === 'analysis') {
+    if(typeof initAnalysisTable === 'function'){
+      initAnalysisTable();
+    }
+    const tbody = document.getElementById('tableBody');
+    if(!tbody || tbody.children.length === 0){
+      const loaded = typeof loadAnalysisLocal === 'function' ? loadAnalysisLocal() : false;
+      if(!loaded && typeof addStudentRow === 'function'){
+        for(let i = 0; i < 5; i++) addStudentRow();
+      }
+    }
+    if($('#an-subject') && !$('#an-subject').value && state?.meta?.subject){
+      $('#an-subject').value = state.meta.subject;
+    }
+    if($('#an-class') && !$('#an-class').value && state?.meta?.className){
+      $('#an-class').value = state.meta.className;
+    }
+    if($('#an-month') && !$('#an-month').value && state?.meta?.examTitle){
+      $('#an-month').value = state.meta.examTitle;
+    }
+    if(typeof calculateAll === 'function'){
+      calculateAll();
+    }
+  }
+  const mainEl = $('main');
+  if(mainEl){
+    if(tabName === 'analysis'){
+      mainEl.classList.add('wide-main');
+    } else {
+      mainEl.classList.remove('wide-main');
+    }
+  }
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
@@ -3172,14 +3291,47 @@ window.addEventListener('appinstalled', ()=>{
   toast('📱 تم تثبيت التطبيق بنجاح في جهازك ويعمل الآن بدون إنترنت!', 'ok');
 });
 
+// زر إجبار التحديث الفوري ومسح الذاكرة المخزنة
+$('#btnForceRefresh')?.addEventListener('click', async () => {
+  try {
+    toast('جارٍ تفريغ الذاكرة المؤقتة وتحديث التطبيق...', 'warn');
+    if('caches' in window){
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k)));
+    }
+    if('serviceWorker' in navigator){
+      const regs = await navigator.serviceWorker.getRegistrations();
+      for(let r of regs) await r.unregister();
+    }
+  } catch(e){ console.warn(e); }
+  window.location.href = window.location.origin + window.location.pathname + '?reload=' + Date.now();
+});
+
 // تسجيل Service Worker مع إجبار التحقق من التحديث الفوري
 if('serviceWorker' in navigator && location.protocol !== 'file:'){
   window.addEventListener('load', ()=>{
-    navigator.serviceWorker.register('sw.js').then(reg => {
+    navigator.serviceWorker.register('sw.js?v=' + Date.now()).then(reg => {
       reg.update();
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        if(newWorker){
+          newWorker.addEventListener('statechange', () => {
+            if(newWorker.state === 'activated' && navigator.serviceWorker.controller){
+              window.location.reload();
+            }
+          });
+        }
+      });
     }).catch(err => {
       console.log('SW registration failed:', err);
     });
+  });
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if(!refreshing){
+      refreshing = true;
+      window.location.reload();
+    }
   });
 }
 
@@ -3200,10 +3352,11 @@ const LS_ANALYSIS_KEY = 'anwer_exam_analysis_v2';
 let studentIdCounter = 1;
 const numQuestions = 10;
 
-function initAnalysisTable(){
+function initAnalysisTable(force = false){
   const qHeader = document.getElementById('questions-header');
   const maxHeader = document.getElementById('max-grades-row');
   if(!qHeader || !maxHeader) return;
+  if(!force && qHeader.children.length > 0) return;
 
   let qHtml = '';
   for (let i = 1; i <= numQuestions; i++) {
@@ -3527,6 +3680,44 @@ function printAnalysisReport(){
   }, 1000);
 }
 
+/* ربط أحداث الإدخال والحذف التلقائي لكشف التحليل */
+document.addEventListener('input', e => {
+  if(e.target && e.target.closest('#tab-analysis')){
+    if(e.target.matches('.name-input, .grade-input, .max-grade-input, .notes-input, .reasons-input, .solutions-input, .role-input, #an-year, #an-term, #an-subject, #an-class, #an-month')){
+      calculateAll();
+      saveAnalysisLocal();
+    }
+  }
+});
+
+document.addEventListener('click', e => {
+  if(e.target.closest('.add-row-btn, #btnAddStudent')){
+    addStudentRow();
+  }
+  const delBtn = e.target.closest('#tableBody .action-btn');
+  if(delBtn){
+    const tr = delBtn.closest('tr');
+    if(tr){
+      tr.remove();
+      renumberStudentRows();
+      calculateAll();
+      saveAnalysisLocal();
+    }
+  }
+});
+
+/* تصدير كافة دوال التحليل على كائن window لضمان الوصول المباشر */
+window.initAnalysisTable = initAnalysisTable;
+window.addStudentRow = addStudentRow;
+window.deleteRow = deleteRow;
+window.calculateAll = calculateAll;
+window.saveAnalysisLocal = saveAnalysisLocal;
+window.loadAnalysisLocal = loadAnalysisLocal;
+window.syncAnalysisHeaderFromMeta = syncAnalysisHeaderFromMeta;
+window.clearAnalysisData = clearAnalysisData;
+window.printAnalysisReport = printAnalysisReport;
+window.switchToAnalysisTab = switchToAnalysisTab;
+
 /* ============ التشغيل ============ */
 function init(){
   bindMetaValues();
@@ -3539,6 +3730,7 @@ function init(){
   if(!loadedAn){
     for(let i = 0; i < 5; i++) addStudentRow();
   }
+  calculateAll();
   if(isAppStandalone() && btnHeaderInstall){
     btnHeaderInstall.style.display = 'none';
   }

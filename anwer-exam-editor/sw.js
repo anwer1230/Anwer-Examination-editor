@@ -1,5 +1,5 @@
 /* محرر الاختبارات أنور الصبري - Service Worker (Network-First) */
-const CACHE_NAME = 'anwer-exam-v10-network-first';
+const CACHE_NAME = 'anwer-exam-v16-network-first';
 const ASSETS = [
   './',
   './index.html',
