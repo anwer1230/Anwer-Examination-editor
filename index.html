@@ -21,6 +21,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="محرر الاختبارات">
 <title>محرر الاختبارات أنور الصبري</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
@@ -772,9 +773,229 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   .paper.tpl-modern .circlebox{color:#1a5276 !important;border-color:#2874a6 !important;}
   .paper.tpl-modern .p-footer .f1{color:#145a32 !important;}
   .paper.tpl-modern .p-footer .f2{color:#7b241c !important;}
-  .paper.tpl-modern .p-footer .f3{color:#1a5276 !important;}
   *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
   @page{size:A4;margin:8mm;}
+}
+
+/* ============ التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم ============ */
+#tab-analysis {
+  font-family: 'Cairo', Tahoma, sans-serif;
+}
+#tab-analysis .paper-container {
+  background-color: white;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  border-radius: 12px;
+  position: relative;
+  font-family: 'Cairo', Tahoma, sans-serif;
+}
+#tab-analysis .paper-container * {
+  font-family: 'Cairo', Tahoma, sans-serif;
+  box-sizing: border-box;
+}
+#tab-analysis .paper-header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+#tab-analysis .main-title {
+  font-size: 20px;
+  font-weight: bold;
+  border-bottom: 2px solid #333;
+  display: inline-block;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+#tab-analysis .info-row {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 15px;
+  padding: 0 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+#tab-analysis .info-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+#tab-analysis .info-item input {
+  border: none;
+  border-bottom: 1px dotted #333;
+  outline: none;
+  font-family: 'Cairo', Tahoma, sans-serif;
+  font-size: 16px;
+  width: 130px;
+  text-align: center;
+  background: transparent;
+}
+#tab-analysis .table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+#tab-analysis table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin-bottom: 20px;
+}
+#tab-analysis th, #tab-analysis td {
+  border: 1.5px solid #333;
+  padding: 5px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 14px;
+}
+#tab-analysis th {
+  font-weight: bold;
+  background-color: #f0f0f0;
+}
+#tab-analysis .col-serial { width: 40px; }
+#tab-analysis .col-name { width: 200px; }
+#tab-analysis .col-q { width: 40px; }
+#tab-analysis .col-total { width: 60px; }
+#tab-analysis .col-percent { width: 60px; }
+#tab-analysis .col-grade { width: 80px; }
+#tab-analysis .col-notes { width: 150px; }
+
+#tab-analysis .name-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-family: 'Cairo', Tahoma, sans-serif;
+  font-size: 14px;
+  text-align: center;
+  background: transparent;
+}
+#tab-analysis .grade-input, #tab-analysis .max-grade-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-family: 'Cairo', Tahoma, sans-serif;
+  font-size: 14px;
+  text-align: center;
+  background: transparent;
+}
+#tab-analysis .max-grade-input {
+  font-weight: bold;
+  color: #d35400;
+  border-bottom: 1px solid #ccc;
+}
+#tab-analysis .notes-input {
+  width: 100%;
+  height: 35px;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: 'Cairo', Tahoma, sans-serif;
+  font-size: 13px;
+  text-align: right;
+  padding: 2px;
+  background: transparent;
+}
+#tab-analysis .action-btn {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 2px 6px;
+}
+#tab-analysis .add-row-btn {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(39,174,96,0.3);
+}
+#tab-analysis .add-row-btn:hover { background-color: #219653; }
+
+#tab-analysis .summary-row td {
+  font-weight: bold;
+  background-color: #f9f9f9;
+  text-align: right;
+  padding-right: 15px;
+}
+#tab-analysis .summary-val { text-align: center; color: #c0392b; }
+
+#tab-analysis .summary-table-container {
+  margin-bottom: 20px;
+}
+#tab-analysis .summary-table th, #tab-analysis .summary-table td {
+  padding: 8px;
+  font-size: 16px;
+}
+#tab-analysis .low-achievers-title {
+  background-color: #fff;
+  border: 1.5px solid #333;
+  border-bottom: none;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px;
+  margin-top: 20px;
+}
+#tab-analysis .low-achievers-table th {
+  font-size: 16px;
+  background-color: #fff;
+}
+#tab-analysis .low-achievers-table textarea {
+  width: 100%;
+  min-height: 50px;
+  border: none;
+  outline: none;
+  resize: vertical;
+  font-family: 'Cairo', Tahoma, sans-serif;
+  font-size: 13px;
+  background: transparent;
+}
+
+/* طباعة قسم التحليل */
+@media print {
+  body.print-mode-analysis .appbar,
+  body.print-mode-analysis .tabs,
+  body.print-mode-analysis #tab-edit,
+  body.print-mode-analysis #tab-preview,
+  body.print-mode-analysis .analysis-hide-print,
+  body.print-mode-analysis .action-btn,
+  body.print-mode-analysis .delete-col,
+  body.print-mode-analysis .pwa-notify-card,
+  body.print-mode-analysis .modal,
+  body.print-mode-analysis .busy,
+  body.print-mode-analysis .toast {
+    display: none !important;
+  }
+  body.print-mode-analysis #tab-analysis {
+    display: block !important;
+  }
+  body.print-mode-analysis .paper-container {
+    box-shadow: none !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    background-color: white !important;
+  }
+  body.print-mode-analysis input,
+  body.print-mode-analysis textarea {
+    background: transparent !important;
+  }
+  body.print-mode-analysis th,
+  body.print-mode-analysis td {
+    border: 1px solid black !important;
+  }
+  body.print-mode-analysis .low-achievers-title {
+    border: 1px solid black !important;
+  }
 }
 </style>
 </head>
@@ -790,6 +1011,7 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
     </div>
   </div>
   <div class="contact">
+    <button id="btnHeaderAnalysis" class="contact-install" style="background:linear-gradient(135deg,#2980b9,#1f618d);color:#fff;" title="التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم">📊 تحليل درجات الطلاب</button>
     <button id="btnHeaderInstall" class="contact-install" title="تثبيت التطبيق على الهاتف للعمل بدون إنترنت">📱 تثبيت التطبيق</button>
     <a href="tel:772997043">📞 772997043</a>
     <a class="wa" href="https://wa.me/966510349663" target="_blank" rel="noopener">💬 واتساب</a>
@@ -800,6 +1022,7 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 <div class="tabs">
   <button data-tab="edit" class="active">✏️ المحرر</button>
   <button data-tab="preview">👁️ المعاينة واختيار القالب (4 نماذج)</button>
+  <button data-tab="analysis">📊 التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم</button>
 </div>
 
 <main>
@@ -822,6 +1045,18 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
         <button type="button" class="tqb-btn" data-tpl="modern" style="padding:10px;text-align:center;">🎨 3. الأزرق العصري</button>
         <button type="button" class="tqb-btn" data-tpl="compact" style="padding:10px;text-align:center;">⚡ 4. المضغوط الاقتصادي (A4)</button>
       </div>
+    <!-- بطاقة الوصول السريع للتحليل الآلي لدرجات الطلاب ومستواهم -->
+    <div style="background:#fff;border:2px solid #2980b9;border-radius:14px;padding:12px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;box-shadow:0 3px 10px rgba(41,128,185,0.12);">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:44px;height:44px;border-radius:12px;background:#ebf5fb;color:#2980b9;display:flex;align-items:center;justify-content:center;font-size:24px;border:1.5px solid #aed6f1;flex-shrink:0;">📊</div>
+        <div>
+          <b style="color:#1f618d;font-size:15px;display:block;">التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم</b>
+          <div style="font-size:12px;color:#5b7285;margin-top:2px;">كشف رصد ذكي: حساب فوري للمجاميع، النسب، التقديرات، رصد الضعف، ومعالجات الطلاب ذوي المستوى المتدني (&lt;50%).</div>
+        </div>
+      </div>
+      <button type="button" class="btn primary go-analysis-btn" style="background:linear-gradient(135deg,#2980b9,#1f618d);font-size:13.5px;padding:9px 18px;display:flex;align-items:center;gap:6px;">
+        <span>📊</span> <b>فتح كشف التحليل والرصد الآن</b>
+      </button>
     </div>
 
     <!-- قوالب الترويسة والتنسيق -->
@@ -1021,6 +1256,123 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
     </div>
     <p class="hint">💡 اضغط أي مكان مخصص للصورة داخل الورقة لرفع صورة من جهازك.</p>
     <div id="previewPaper"></div>
+  </section>
+
+  <!-- ========================================================
+       قسم التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم
+       ======================================================== -->
+  <section id="tab-analysis" hidden>
+    <!-- شريط أدوات التحليل -->
+    <div class="analysis-toolbar analysis-hide-print" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;background:#fff;padding:12px 16px;border-radius:14px;border:2px solid #2980b9;box-shadow:0 3px 10px rgba(41,128,185,0.12);">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <button type="button" class="btn success" onclick="addStudentRow()" style="background:linear-gradient(135deg,#1e8449,#25d366);color:#fff;display:inline-flex;align-items:center;gap:6px;">
+          <span>➕</span> <b>إضافة طالب</b>
+        </button>
+        <button type="button" class="btn primary" onclick="syncAnalysisHeaderFromMeta()" style="background:linear-gradient(135deg,#2980b9,#3498db);display:inline-flex;align-items:center;gap:6px;">
+          <span>🔄</span> <b>مزامنة المادة والصف من الترويسة</b>
+        </button>
+        <button type="button" class="btn ghost danger" onclick="clearAnalysisData()" style="color:var(--danger);border-color:#e8b5ae;">
+          <span>🧹</span> تفريغ الجدول
+        </button>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button type="button" class="btn primary" onclick="printAnalysisReport()" style="background:#2980b9;font-size:15px;padding:10px 20px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(41,128,185,0.3);">
+          <span>🖨️</span> <b>طباعة كشف التحليل</b>
+        </button>
+      </div>
+    </div>
+
+    <div class="paper-container">
+      <!-- Header Section -->
+      <div class="paper-header">
+        <div class="main-title">تحليل لنتائج الاختبارات الشهرية للعام الدراسي / <input type="text" id="an-year" style="border:none; border-bottom:1px dotted #000; width:110px; text-align:center; font-family:'Cairo',sans-serif;" placeholder="1446-1447هـ" oninput="saveAnalysisLocal()"> الفصل / <input type="text" id="an-term" style="border:none; border-bottom:1px dotted #000; width:90px; text-align:center; font-family:'Cairo',sans-serif;" placeholder="الأول" oninput="saveAnalysisLocal()"></div>
+      </div>
+
+      <div class="info-row">
+        <div class="info-item">المادة : <input type="text" id="an-subject" placeholder=".........." oninput="saveAnalysisLocal()"></div>
+        <div class="info-item">الصف : <input type="text" id="an-class" placeholder=".........." oninput="saveAnalysisLocal()"></div>
+        <div class="info-item">الشهر : <input type="text" id="an-month" placeholder=".........." oninput="saveAnalysisLocal()"></div>
+      </div>
+
+      <button type="button" class="add-row-btn analysis-hide-print" onclick="addStudentRow()">+ إضافة طالب</button>
+
+      <!-- Main Table -->
+      <div class="table-wrapper">
+        <table id="mainTable">
+          <thead>
+            <tr>
+              <th rowspan="2" class="col-serial">م</th>
+              <th rowspan="2" class="col-name">اسم الطالب</th>
+              <th colspan="10">السؤال + درجة</th>
+              <th rowspan="2" class="col-total">المجموع</th>
+              <th rowspan="2" class="col-percent">النسبة</th>
+              <th rowspan="2" class="col-grade">التقدير</th>
+              <th rowspan="2" class="col-notes">ملاحظات الإجراءات المتخذة</th>
+              <th rowspan="2" class="delete-col analysis-hide-print"></th>
+            </tr>
+            <tr id="questions-header"></tr>
+            <tr id="max-grades-row">
+              <td colspan="2" style="background-color: #f9f9f9; font-size:12px; font-weight:bold;">الدرجة القصوى لكل سؤال 👇</td>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+          <tfoot>
+            <tr class="summary-row">
+              <td colspan="12">المجموع الكلي للفصل</td>
+              <td id="grand-total" class="summary-val">0</td>
+              <td id="grand-percent" class="summary-val">0%</td>
+              <td id="grand-grade" class="summary-val">-</td>
+              <td colspan="2"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- 1. Summary Grades Table -->
+      <div class="summary-table-container">
+        <table class="summary-table">
+          <thead>
+            <tr>
+              <th style="width: 100px; background-color: #f9f9f9;">التقدير</th>
+              <th>ممتاز<br><span style="font-size:12px; font-weight:normal;">100 - 90</span></th>
+              <th>جيد جداً<br><span style="font-size:12px; font-weight:normal;">89 - 80</span></th>
+              <th>جيد<br><span style="font-size:12px; font-weight:normal;">79 - 65</span></th>
+              <th>متوسط<br><span style="font-size:12px; font-weight:normal;">64 - 50</span></th>
+              <th>ضعيف<br><span style="font-size:12px; font-weight:normal;">أقل - 49</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: bold; background-color: #f9f9f9;">العدد</td>
+              <td id="count-mmtaz" style="font-weight:bold; font-size:18px; color: #27ae60;">0</td>
+              <td id="count-jayid-jiddan" style="font-weight:bold; font-size:18px; color: #2980b9;">0</td>
+              <td id="count-jayid" style="font-weight:bold; font-size:18px; color: #f39c12;">0</td>
+              <td id="count-mutawassit" style="font-weight:bold; font-size:18px; color: #d35400;">0</td>
+              <td id="count-daif" style="font-weight:bold; font-size:18px; color: #c0392b;">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 2. Low Achievers Section -->
+      <div class="low-achievers-title">
+        الطلاب ذوي المستويات المتدنية أقل من 50%
+      </div>
+      <table class="low-achievers-table">
+        <thead>
+          <tr>
+            <th style="width: 40px;">م</th>
+            <th style="width: 200px;">الأســم</th>
+            <th>أسباب الضعف</th>
+            <th>الحلول والمعالجات</th>
+            <th>دور المعلم للتحسين</th>
+          </tr>
+        </thead>
+        <tbody id="lowAchieversBody">
+          <tr><td colspan="5" style="text-align: center; color: #777; padding: 15px;">لا يوجد طلاب في هذه الفئة حالياً (أو لم يتم إدخال درجات كافية).</td></tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 </main>
 
@@ -2518,31 +2870,38 @@ $('#previewPaper').addEventListener('click', e => {
 });
 
 /* ============ التبويبات ============ */
-function switchToPreviewTab(){
-  $$('.tabs button').forEach(b => b.classList.remove('active'));
-  const prevBtn = $('[data-tab="preview"]');
-  if(prevBtn) prevBtn.classList.add('active');
-  $('#tab-edit').hidden = true;
-  $('#tab-preview').hidden = false;
-  renderPreview();
+function switchToTab(tabName){
+  $$('.tabs button').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === tabName);
+  });
+  $('#tab-edit').hidden = tabName !== 'edit';
+  $('#tab-preview').hidden = tabName !== 'preview';
+  const anTab = $('#tab-analysis');
+  if(anTab) anTab.hidden = tabName !== 'analysis';
+  if(tabName === 'preview') renderPreview();
   window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function switchToPreviewTab(){
+  switchToTab('preview');
+}
+
+function switchToAnalysisTab(){
+  switchToTab('analysis');
 }
 
 $$('.tabs button').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    $$('.tabs button').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    const tab = btn.dataset.tab;
-    $('#tab-edit').hidden = tab !== 'edit';
-    $('#tab-preview').hidden = tab !== 'preview';
-    if(tab === 'preview') renderPreview();
-    window.scrollTo({top:0, behavior:'smooth'});
+    switchToTab(btn.dataset.tab);
   });
 });
 
 document.addEventListener('click', e => {
   if(e.target.closest('.go-preview-btn')){
     switchToPreviewTab();
+  }
+  if(e.target.closest('.go-analysis-btn, #btnHeaderAnalysis')){
+    switchToAnalysisTab();
   }
 });
 
@@ -2834,6 +3193,340 @@ window.addEventListener('online', updateOnline);
 window.addEventListener('offline', updateOnline);
 updateOnline();
 
+/* ========================================================
+   التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم
+   ======================================================== */
+const LS_ANALYSIS_KEY = 'anwer_exam_analysis_v2';
+let studentIdCounter = 1;
+const numQuestions = 10;
+
+function initAnalysisTable(){
+  const qHeader = document.getElementById('questions-header');
+  const maxHeader = document.getElementById('max-grades-row');
+  if(!qHeader || !maxHeader) return;
+
+  let qHtml = '';
+  for (let i = 1; i <= numQuestions; i++) {
+    qHtml += `<th class="col-q">${i}</th>`;
+  }
+  qHeader.innerHTML = qHtml;
+
+  let maxHtml = '';
+  for (let i = 1; i <= numQuestions; i++) {
+    maxHtml += `<td class="col-q"><input type="number" min="0" class="max-grade-input" value="10" oninput="calculateAll(); saveAnalysisLocal();"></td>`;
+  }
+  maxHeader.innerHTML = `<td colspan="2" style="background-color: #f9f9f9; font-size:12px; font-weight:bold;">الدرجة القصوى لكل سؤال 👇</td>` + maxHtml;
+}
+
+function addStudentRow(studentData){
+  const tbody = document.getElementById('tableBody');
+  if(!tbody) return;
+  const currentId = studentIdCounter;
+  const tr = document.createElement('tr');
+  tr.id = `row-${currentId}`;
+
+  const defaultName = studentData ? studentData.name : '';
+  const defaultNotes = studentData ? studentData.notes : '';
+  const grades = studentData && Array.isArray(studentData.grades) ? studentData.grades : [];
+
+  let html = `
+    <td>${currentId}</td>
+    <td><input type="text" class="name-input" placeholder="اسم الطالب..." value="${esc(defaultName)}" oninput="calculateAll(); saveAnalysisLocal();"></td>
+  `;
+
+  for (let i = 0; i < numQuestions; i++) {
+    const gVal = grades[i] != null ? grades[i] : '';
+    html += `<td><input type="number" min="0" class="grade-input" value="${gVal}" oninput="calculateAll(); saveAnalysisLocal();"></td>`;
+  }
+
+  html += `
+    <td class="total-cell" id="total-${currentId}">0</td>
+    <td class="percent-cell" id="percent-${currentId}">0%</td>
+    <td class="grade-cell" id="grade-${currentId}">-</td>
+    <td><textarea class="notes-input" placeholder="ملاحظات..." oninput="saveAnalysisLocal();">${esc(defaultNotes)}</textarea></td>
+    <td class="delete-col analysis-hide-print"><button type="button" class="action-btn" onclick="deleteRow(${currentId})" title="حذف الطالب">✖</button></td>
+  `;
+
+  tr.innerHTML = html;
+  tbody.appendChild(tr);
+  studentIdCounter++;
+  renumberStudentRows();
+  calculateAll();
+}
+
+function deleteRow(id){
+  const row = document.getElementById(`row-${id}`);
+  if(row){
+    row.remove();
+    renumberStudentRows();
+    calculateAll();
+    saveAnalysisLocal();
+  }
+}
+
+function renumberStudentRows(){
+  const rows = document.querySelectorAll('#tableBody tr');
+  rows.forEach((r, idx) => {
+    const firstCell = r.querySelector('td:first-child');
+    if(firstCell) firstCell.textContent = idx + 1;
+  });
+}
+
+function calculateAll(){
+  let totalPossibleMarks = 0;
+  const maxInputs = document.querySelectorAll('.max-grade-input');
+  maxInputs.forEach(input => {
+    let val = parseFloat(input.value);
+    if (!isNaN(val) && val > 0) totalPossibleMarks += val;
+  });
+
+  const rows = document.querySelectorAll('#tableBody tr');
+  let classTotalSum = 0;
+  let validStudentsCount = 0;
+
+  let countMmtaz = 0;
+  let countJayidJiddan = 0;
+  let countJayid = 0;
+  let countMutawassit = 0;
+  let countDaif = 0;
+
+  let lowAchieversData = [];
+
+  rows.forEach(row => {
+    const id = row.id.split('-')[1];
+    const nameInput = row.querySelector('.name-input');
+    const studentName = nameInput ? nameInput.value.trim() || `طالب ${id}` : `طالب ${id}`;
+
+    const gradeInputs = row.querySelectorAll('.grade-input');
+    let studentTotal = 0;
+    let hasGrades = false;
+
+    gradeInputs.forEach((input, index) => {
+      let val = parseFloat(input.value);
+      let maxVal = maxInputs[index] ? parseFloat(maxInputs[index].value) || 0 : 0;
+
+      if (!isNaN(val) && val >= 0) {
+        hasGrades = true;
+        if (maxVal > 0 && val > maxVal) {
+          val = maxVal;
+          input.value = maxVal;
+        }
+        studentTotal += val;
+      }
+    });
+
+    const totalEl = document.getElementById(`total-${id}`);
+    if(totalEl) totalEl.innerText = studentTotal;
+
+    let percentage = 0;
+    if (totalPossibleMarks > 0) {
+      percentage = (studentTotal / totalPossibleMarks) * 100;
+    }
+    const percentEl = document.getElementById(`percent-${id}`);
+    if(percentEl) percentEl.innerText = `${percentage.toFixed(1)}%`;
+
+    let grade = "-";
+    if (hasGrades) {
+      if (percentage >= 90) { 
+        grade = "ممتاز"; 
+        countMmtaz++; 
+      } else if (percentage >= 80) { 
+        grade = "جيد جداً"; 
+        countJayidJiddan++; 
+      } else if (percentage >= 65) { 
+        grade = "جيد"; 
+        countJayid++; 
+      } else if (percentage >= 50) { 
+        grade = "متوسط"; 
+        countMutawassit++; 
+      } else { 
+        grade = "ضعيف"; 
+        countDaif++; 
+        lowAchieversData.push({ id, name: studentName });
+      }
+    }
+    const gradeEl = document.getElementById(`grade-${id}`);
+    if(gradeEl) gradeEl.innerText = grade;
+
+    if (hasGrades) {
+      validStudentsCount++;
+      classTotalSum += studentTotal;
+    }
+  });
+
+  const grandTotalEl = document.getElementById('grand-total');
+  if(grandTotalEl) grandTotalEl.innerText = classTotalSum;
+
+  const grandPercentEl = document.getElementById('grand-percent');
+  const grandGradeEl = document.getElementById('grand-grade');
+  if (validStudentsCount > 0 && totalPossibleMarks > 0) {
+    let overallPercent = (classTotalSum / (validStudentsCount * totalPossibleMarks)) * 100;
+    if(grandPercentEl) grandPercentEl.innerText = `${overallPercent.toFixed(1)}%`;
+
+    let overallGrade = "-";
+    if (overallPercent >= 90) overallGrade = "ممتاز";
+    else if (overallPercent >= 80) overallGrade = "جيد جداً";
+    else if (overallPercent >= 65) overallGrade = "جيد";
+    else if (overallPercent >= 50) overallGrade = "متوسط";
+    else overallGrade = "ضعيف";
+
+    if(grandGradeEl) grandGradeEl.innerText = overallGrade;
+  } else {
+    if(grandPercentEl) grandPercentEl.innerText = "0%";
+    if(grandGradeEl) grandGradeEl.innerText = "-";
+  }
+
+  const cM = document.getElementById('count-mmtaz'); if(cM) cM.innerText = countMmtaz;
+  const cJJ = document.getElementById('count-jayid-jiddan'); if(cJJ) cJJ.innerText = countJayidJiddan;
+  const cJ = document.getElementById('count-jayid'); if(cJ) cJ.innerText = countJayid;
+  const cMut = document.getElementById('count-mutawassit'); if(cMut) cMut.innerText = countMutawassit;
+  const cD = document.getElementById('count-daif'); if(cD) cD.innerText = countDaif;
+
+  updateLowAchieversTable(lowAchieversData);
+}
+
+function updateLowAchieversTable(lowAchieversData){
+  const tbody = document.getElementById('lowAchieversBody');
+  if(!tbody) return;
+
+  if (lowAchieversData.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #777; padding: 15px;">لا يوجد طلاب في هذه الفئة حالياً (أو لم يتم إدخال درجات كافية).</td></tr>`;
+    return;
+  }
+
+  const existingNotes = {};
+  const currentRows = tbody.querySelectorAll('tr[data-student-id]');
+  currentRows.forEach(row => {
+    const id = row.getAttribute('data-student-id');
+    existingNotes[id] = {
+      reasons: row.querySelector('.reasons-input')?.value || '',
+      solutions: row.querySelector('.solutions-input')?.value || '',
+      role: row.querySelector('.role-input')?.value || ''
+    };
+  });
+
+  let html = '';
+  lowAchieversData.forEach((student, index) => {
+    const saved = existingNotes[student.id] || { reasons: '', solutions: '', role: '' };
+    html += `
+      <tr data-student-id="${student.id}">
+        <td>${index + 1}</td>
+        <td style="font-weight: bold; color: #c0392b;">${esc(student.name)}</td>
+        <td><textarea class="reasons-input" placeholder="اكتب أسباب الضعف هنا..." oninput="saveAnalysisLocal()">${esc(saved.reasons)}</textarea></td>
+        <td><textarea class="solutions-input" placeholder="اكتب الحلول والمعالجات..." oninput="saveAnalysisLocal()">${esc(saved.solutions)}</textarea></td>
+        <td><textarea class="role-input" placeholder="دور المعلم للتحسين..." oninput="saveAnalysisLocal()">${esc(saved.role)}</textarea></td>
+      </tr>
+    `;
+  });
+  tbody.innerHTML = html;
+}
+
+function saveAnalysisLocal(){
+  try {
+    const data = {
+      year: $('#an-year')?.value || '',
+      term: $('#an-term')?.value || '',
+      subject: $('#an-subject')?.value || '',
+      className: $('#an-class')?.value || '',
+      month: $('#an-month')?.value || '',
+      maxGrades: Array.from(document.querySelectorAll('.max-grade-input')).map(inp => inp.value),
+      students: Array.from(document.querySelectorAll('#tableBody tr')).map(row => {
+        const id = row.id.split('-')[1];
+        return {
+          id,
+          name: row.querySelector('.name-input')?.value || '',
+          grades: Array.from(row.querySelectorAll('.grade-input')).map(inp => inp.value),
+          notes: row.querySelector('.notes-input')?.value || ''
+        };
+      }),
+      lowNotes: {}
+    };
+    document.querySelectorAll('#lowAchieversBody tr[data-student-id]').forEach(r => {
+      const id = r.getAttribute('data-student-id');
+      data.lowNotes[id] = {
+        reasons: r.querySelector('.reasons-input')?.value || '',
+        solutions: r.querySelector('.solutions-input')?.value || '',
+        role: r.querySelector('.role-input')?.value || ''
+      };
+    });
+    localStorage.setItem(LS_ANALYSIS_KEY, JSON.stringify(data));
+  } catch(e) { console.warn(e); }
+}
+
+function loadAnalysisLocal(){
+  try {
+    const raw = localStorage.getItem(LS_ANALYSIS_KEY);
+    if(!raw) return false;
+    const data = JSON.parse(raw);
+    if(!data) return false;
+    if(data.year && $('#an-year')) $('#an-year').value = data.year;
+    if(data.term && $('#an-term')) $('#an-term').value = data.term;
+    if(data.subject && $('#an-subject')) $('#an-subject').value = data.subject;
+    if(data.className && $('#an-class')) $('#an-class').value = data.className;
+    if(data.month && $('#an-month')) $('#an-month').value = data.month;
+
+    if(Array.isArray(data.maxGrades)){
+      const maxInputs = document.querySelectorAll('.max-grade-input');
+      data.maxGrades.forEach((val, idx) => {
+        if(maxInputs[idx] && val != null) maxInputs[idx].value = val;
+      });
+    }
+
+    if(Array.isArray(data.students) && data.students.length > 0){
+      const tbody = document.getElementById('tableBody');
+      if(tbody) tbody.innerHTML = '';
+      studentIdCounter = 1;
+      data.students.forEach(st => {
+        addStudentRow(st);
+      });
+      calculateAll();
+
+      if(data.lowNotes){
+        Object.keys(data.lowNotes).forEach(id => {
+          const row = document.querySelector(`#lowAchieversBody tr[data-student-id="${id}"]`);
+          if(row){
+            const n = data.lowNotes[id];
+            if(n.reasons && row.querySelector('.reasons-input')) row.querySelector('.reasons-input').value = n.reasons;
+            if(n.solutions && row.querySelector('.solutions-input')) row.querySelector('.solutions-input').value = n.solutions;
+            if(n.role && row.querySelector('.role-input')) row.querySelector('.role-input').value = n.role;
+          }
+        });
+      }
+      return true;
+    }
+  } catch(e) { console.warn(e); }
+  return false;
+}
+
+function syncAnalysisHeaderFromMeta(){
+  if(state && state.meta){
+    if(state.meta.subject && $('#an-subject')) $('#an-subject').value = state.meta.subject;
+    if(state.meta.className && $('#an-class')) $('#an-class').value = state.meta.className;
+    if(state.meta.examTitle && $('#an-month')) $('#an-month').value = state.meta.examTitle;
+    saveAnalysisLocal();
+    toast('✅ تمت مزامنة بيانات المادة والصف من الترويسة', 'ok');
+  }
+}
+
+function clearAnalysisData(){
+  if(!confirm('هل تريد تفريغ جدول درجات الطلاب والبدء من جديد؟')) return;
+  const tbody = document.getElementById('tableBody');
+  if(tbody) tbody.innerHTML = '';
+  studentIdCounter = 1;
+  for(let i = 0; i < 5; i++) addStudentRow();
+  calculateAll();
+  saveAnalysisLocal();
+  toast('🧹 تم تفريغ بيانات الجدول', 'ok');
+}
+
+function printAnalysisReport(){
+  document.body.classList.add('print-mode-analysis');
+  window.print();
+  setTimeout(() => {
+    document.body.classList.remove('print-mode-analysis');
+  }, 1000);
+}
+
 /* ============ التشغيل ============ */
 function init(){
   bindMetaValues();
@@ -2841,6 +3534,11 @@ function init(){
   refreshTemplateSelect();
   renderEditor();
   renderPreview();
+  initAnalysisTable();
+  const loadedAn = loadAnalysisLocal();
+  if(!loadedAn){
+    for(let i = 0; i < 5; i++) addStudentRow();
+  }
   if(isAppStandalone() && btnHeaderInstall){
     btnHeaderInstall.style.display = 'none';
   }
