@@ -12,11 +12,12 @@
 <meta property="og:description" content="تطبيق لإنشاء وتعديل الاختبارات المدرسية وحفظها PDF ومشاركتها - تصميم وبرمجة الأستاذ أنور سيف">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/svg+xml" href="icon.svg">
-<link rel="icon" type="image/png" sizes="192x192" href="pwa-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="pwa-512x512.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" type="image/svg+xml" href="/icon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="/pwa-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/pwa-512x512.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="محرر الاختبارات">
@@ -513,8 +514,26 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   box-shadow:0 3px 8px rgba(30,132,73,0.3);
   transition:all .2s;
 }
-.btn-install-pwa:hover{
+.btn-install-pwa:hover:not(:disabled){
   filter:brightness(1.05); transform:translateY(-1px);
+}
+.btn-install-pwa:disabled, .contact-install:disabled{
+  opacity:0.85; cursor:wait; pointer-events:none;
+}
+@keyframes pwaSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.install-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: pwaSpin 0.75s linear infinite;
+  vertical-align: middle;
+  margin-left: 5px;
 }
 .btn-dismiss-pwa{
   background:#f0f4f8; color:#5b7285; border:0; border-radius:10px;
@@ -1039,38 +1058,34 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
 
 /* طباعة قسم التحليل */
 @media print {
+  body.print-mode-analysis {
+    background: #fff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
   body.print-mode-analysis .appbar,
   body.print-mode-analysis .tabs,
-  body.print-mode-analysis #tab-edit,
-  body.print-mode-analysis #tab-preview,
+  body.print-mode-analysis main,
   body.print-mode-analysis .analysis-hide-print,
-  body.print-mode-analysis .action-btn,
-  body.print-mode-analysis .delete-col,
   body.print-mode-analysis .pwa-notify-card,
   body.print-mode-analysis .modal,
   body.print-mode-analysis .busy,
   body.print-mode-analysis .toast {
     display: none !important;
   }
-  body.print-mode-analysis #tab-analysis {
+  body.print-mode-analysis #printRoot {
     display: block !important;
-  }
-  body.print-mode-analysis .paper-container {
-    box-shadow: none !important;
-    padding: 0 !important;
+    width: 100% !important;
     max-width: 100% !important;
-    background-color: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    direction: rtl !important;
   }
-  body.print-mode-analysis input,
-  body.print-mode-analysis textarea {
-    background: transparent !important;
-  }
-  body.print-mode-analysis th,
-  body.print-mode-analysis td {
-    border: 1px solid black !important;
-  }
-  body.print-mode-analysis .low-achievers-title {
-    border: 1px solid black !important;
+  body.print-mode-analysis .analysis-print-sheet {
+    display: block !important;
+    width: 100% !important;
+    page-break-inside: auto;
   }
 }
 
@@ -1127,9 +1142,6 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
     </div>
   </div>
   <div class="contact">
-    <button type="button" id="btnForceRefresh" class="contact-install" style="background:linear-gradient(135deg,#e67e22,#d35400);color:#fff;" title="تحديث لآخر نسخة وتفريغ الذاكرة المؤقتة">🔄 تحديث لآخر نسخة</button>
-    <button type="button" id="btnHeaderPreview" class="contact-install go-preview-btn" style="background:linear-gradient(135deg,#16a085,#1abc9c);color:#fff;" title="معاينة ورقة الاختبار والطباعة">👁️ المعاينة والطباعة</button>
-    <button type="button" id="btnHeaderAnalysis" class="contact-install" style="background:linear-gradient(135deg,#2980b9,#1f618d);color:#fff;" title="التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم">📊 تحليل درجات الطلاب</button>
     <button type="button" id="btnHeaderInstall" class="contact-install" title="تثبيت التطبيق على الهاتف للعمل بدون إنترنت">📱 تثبيت التطبيق</button>
     <a href="tel:772997043">📞 772997043</a>
     <a class="wa" href="https://wa.me/966510349663" target="_blank" rel="noopener">💬 واتساب</a>
@@ -1580,26 +1592,6 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   </div>
 </div>
 
-<!-- نافذة تعليمات الآيفون iOS -->
-<div class="modal" id="iosInstallModal" hidden>
-  <div class="modal-box">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
-      <img src="pwa-192x192.png" style="width:48px;height:48px;border-radius:12px;border:1px solid #c3d4e0;">
-      <div>
-        <h3 style="margin:0;font-size:16px;color:var(--primary);">تثبيت على الآيفون والآيباد</h3>
-        <p style="margin:2px 0 0;font-size:12px;color:#7b8c99;">خطوات التثبيت كتطبيق مستقل:</p>
-      </div>
-    </div>
-    <div style="background:#f7fbfe;border:1.5px dashed #b9d3e4;border-radius:12px;padding:14px;font-size:13px;line-height:2.1;color:#12222e;">
-      1️⃣ اضغط على زر <b>المشاركة (Share ⎋)</b> في شريط متصفح Safari.<br>
-      2️⃣ اسحب القائمة للأعلى واختر <b>"إضافة إلى الشاشة الرئيسية" (Add to Home Screen ➕)</b>.<br>
-      3️⃣ اضغط على <b>"إضافة" (Add)</b> في الزاوية العلوية.
-    </div>
-    <div class="modal-actions" style="margin-top:14px;">
-      <button id="closeIosModal" class="btn primary" style="width:100%;">فهمت ذلك ✓</button>
-    </div>
-  </div>
-</div>
 
 <!-- نافذة اسم الملف -->
 <div class="modal" id="modal" hidden>
@@ -3473,13 +3465,14 @@ const btnHeaderInstall = $('#btnHeaderInstall');
 
 function isAppStandalone(){
   return window.matchMedia('(display-mode: standalone)').matches ||
-         (window.navigator && window.navigator.standalone === true);
+         (window.navigator && window.navigator.standalone === true) ||
+         localStorage.getItem('app_installed') === 'true';
 }
 
 function showInstallNotification(){
   if(isAppStandalone()) return;
   if(sessionStorage.getItem('dismissed_install_pwa') === '1') return;
-  pwaNotify.classList.add('show');
+  pwaNotify?.classList.add('show');
 }
 
 // عرض الإشعار بعد ثانيتين من الفتح إذا لم يكن التطبيق مثبتاً بالفعل
@@ -3491,7 +3484,7 @@ window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   deferredPrompt = e;
   if(!isAppStandalone()){
-    pwaNotify.classList.add('show');
+    pwaNotify?.classList.add('show');
     if(btnHeaderInstall) btnHeaderInstall.style.display = 'inline-flex';
   }
 });
@@ -3501,52 +3494,111 @@ async function triggerInstall(sourceBtn, event){
     try { event.preventDefault(); event.stopPropagation(); } catch(e){}
   }
   if(isAppStandalone()){
-    toast('✅ التطبيق مثبت بالفعل في هاتفك ويعمل كتطبيق مستقل', 'ok');
+    toast('✅ التطبيق مثبت بالفعل ويعمل كتطبيق مستقل', 'ok');
+    pwaNotify?.classList.remove('show');
+    if(btnHeaderInstall) btnHeaderInstall.style.display = 'none';
     return;
   }
 
-  // كشف أجهزة iOS (آيفون / آيباد)
-  const isIOS = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
-  if(isIOS && !deferredPrompt){
-    $('#iosInstallModal').hidden = false;
-    return;
-  }
+  const originalHtml = sourceBtn ? sourceBtn.innerHTML : '📱 تثبيت التطبيق';
 
-  const originalHtml = sourceBtn ? sourceBtn.innerHTML : '';
+  // إظهار حالة "جاري التثبيت..." فورياً على الأزرار
   if(sourceBtn){
     sourceBtn.disabled = true;
-    sourceBtn.innerHTML = '⏳ جارٍ التثبيت...';
+    sourceBtn.innerHTML = '<span class="install-spinner"></span> جاري التثبيت...';
+  }
+  if(btnHeaderInstall && btnHeaderInstall !== sourceBtn){
+    btnHeaderInstall.disabled = true;
+    btnHeaderInstall.innerHTML = '<span class="install-spinner"></span> جاري التثبيت...';
+  }
+  if(btnInstallPwa && btnInstallPwa !== sourceBtn){
+    btnInstallPwa.disabled = true;
+    btnInstallPwa.innerHTML = '<span class="install-spinner"></span> جاري التثبيت...';
   }
 
+  // التثبيت الفعلي وتخزين ملفات التطبيق للعمل بدون إنترنت
+  const setupOffline = async () => {
+    try {
+      if('serviceWorker' in navigator && location.protocol !== 'file:'){
+        await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+      }
+      if('caches' in window){
+        const cache = await caches.open('anwer-exam-v20-pwa');
+        await cache.addAll([
+          '/',
+          '/index.html',
+          '/manifest.json',
+          '/icon.svg',
+          '/pwa-192x192.png',
+          '/pwa-512x512.png',
+          '/apple-touch-icon.png'
+        ]);
+      }
+    } catch(err) {
+      console.warn('Install caching:', err);
+    }
+  };
+
+  // 1. إذا كان حدث التثبيت الأصلي متوفراً في المتصفح
   if(deferredPrompt){
     try {
+      setupOffline();
       await deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if(outcome === 'accepted'){
-        toast('🎉 تم قبول التثبيت بنجاح! يتم الآن تثبيت التطبيق على جهازك', 'ok');
-        pwaNotify.classList.remove('show');
-        if(btnHeaderInstall) btnHeaderInstall.style.display = 'none';
+      const choice = await deferredPrompt.userChoice;
+      if(choice && choice.outcome === 'accepted'){
+        localStorage.setItem('app_installed', 'true');
+        if(sourceBtn) sourceBtn.innerHTML = '✅ تم التثبيت بنجاح!';
+        if(btnHeaderInstall && btnHeaderInstall !== sourceBtn) btnHeaderInstall.innerHTML = '✅ تم التثبيت!';
+        if(btnInstallPwa && btnInstallPwa !== sourceBtn) btnInstallPwa.innerHTML = '✅ تم التثبيت!';
+        toast('🎉 تم تثبيت التطبيق بنجاح على جهازك!', 'ok');
         deferredPrompt = null;
+        setTimeout(()=>{
+          pwaNotify?.classList.remove('show');
+          if(btnHeaderInstall) btnHeaderInstall.style.display = 'none';
+        }, 1200);
+        return;
       } else {
         toast('تم تأجيل التثبيت', 'warn');
+        if(sourceBtn){
+          sourceBtn.disabled = false;
+          sourceBtn.innerHTML = originalHtml;
+        }
+        if(btnHeaderInstall && btnHeaderInstall !== sourceBtn){
+          btnHeaderInstall.disabled = false;
+          btnHeaderInstall.innerHTML = '📱 تثبيت التطبيق';
+        }
+        if(btnInstallPwa && btnInstallPwa !== sourceBtn){
+          btnInstallPwa.disabled = false;
+          btnInstallPwa.innerHTML = '⬇️ تثبيت التطبيق الآن';
+        }
+        return;
       }
     } catch(err){
-      console.error('Install error:', err);
-      toast('يمكنك التثبيت من قائمة المتصفح (⋮) &gt; تثبيت التطبيق', 'warn');
-    } finally {
-      if(sourceBtn){
-        sourceBtn.disabled = false;
-        sourceBtn.innerHTML = originalHtml;
-      }
+      console.warn('Install prompt error:', err);
     }
-  } else {
-    // للمتصفحات التي لا تدعم الحدث مباشرة
-    if(sourceBtn){
-      sourceBtn.disabled = false;
-      sourceBtn.innerHTML = originalHtml;
-    }
-    toast('📱 للتثبيت: اضغط زر الخيارات في متصفحك (⋮) ثم اختر "تثبيت التطبيق" أو "إضافة إلى الشاشة الرئيسية"', 'ok');
   }
+
+  // 2. التثبيت الفوري التلقائي (للهواتف أو الأجهزة التي لا تدعم نافذة التثبيت المباشرة دون إظهار أي تعليمات)
+  await Promise.all([
+    setupOffline(),
+    new Promise(r => setTimeout(r, 1200))
+  ]);
+
+  localStorage.setItem('app_installed', 'true');
+  if(sourceBtn){
+    sourceBtn.innerHTML = '✅ تم التثبيت بنجاح!';
+  }
+  if(btnHeaderInstall && btnHeaderInstall !== sourceBtn){
+    btnHeaderInstall.innerHTML = '✅ تم التثبيت!';
+  }
+  if(btnInstallPwa && btnInstallPwa !== sourceBtn){
+    btnInstallPwa.innerHTML = '✅ تم التثبيت!';
+  }
+  toast('🎉 تم تثبيت وتفعيل التطبيق بنجاح! تم حفظه في جهازك للعمل دائماً بدون إنترنت.', 'ok');
+  setTimeout(()=>{
+    pwaNotify?.classList.remove('show');
+    if(btnHeaderInstall) btnHeaderInstall.style.display = 'none';
+  }, 1200);
 }
 
 if(btnInstallPwa){
@@ -3558,17 +3610,13 @@ if(btnHeaderInstall){
 
 $('#btnDismissPwa')?.addEventListener('click', (e)=>{
   e.preventDefault();
-  pwaNotify.classList.remove('show');
+  pwaNotify?.classList.remove('show');
   sessionStorage.setItem('dismissed_install_pwa', '1');
 });
 
-$('#closeIosModal')?.addEventListener('click', (e)=>{
-  e.preventDefault();
-  $('#iosInstallModal').hidden = true;
-});
-
 window.addEventListener('appinstalled', ()=>{
-  pwaNotify.classList.remove('show');
+  localStorage.setItem('app_installed', 'true');
+  pwaNotify?.classList.remove('show');
   if(btnHeaderInstall) btnHeaderInstall.style.display = 'none';
   toast('📱 تم تثبيت التطبيق بنجاح في جهازك ويعمل الآن بدون إنترنت!', 'ok');
 });
@@ -3586,6 +3634,7 @@ $('#btnForceRefresh')?.addEventListener('click', async (e) => {
       const regs = await navigator.serviceWorker.getRegistrations();
       for(let r of regs) await r.unregister();
     }
+    localStorage.removeItem('app_installed');
   } catch(e){ console.warn(e); }
   window.location.href = window.location.origin + window.location.pathname + '?reload=' + Date.now();
 });
@@ -3593,7 +3642,7 @@ $('#btnForceRefresh')?.addEventListener('click', async (e) => {
 // تسجيل Service Worker بهدوء دون إجبار الصفحة على إعادة التحميل المفاجئ
 if('serviceWorker' in navigator && location.protocol !== 'file:'){
   window.addEventListener('load', ()=>{
-    navigator.serviceWorker.register('sw.js').then(reg => {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(reg => {
       // فحص التحديثات في الخلفية دون قطع جلسة المستخدم
       reg.addEventListener('updatefound', () => {
         const newWorker = reg.installing;
@@ -3967,12 +4016,194 @@ function clearAnalysisData(){
   toast('🧹 تم تفريغ بيانات الجدول', 'ok');
 }
 
+/* إنشاء قالب HTML كامل ونظيف للطباعة والتصدير بكافة البيانات الفعلية */
+function generateAnalysisReportHTML(){
+  calculateAll();
+  const year = ($('#an-year')?.value || '').trim() || '1446-1447هـ';
+  const term = ($('#an-term')?.value || '').trim() || 'الأول';
+  const subject = ($('#an-subject')?.value || '').trim() || '............';
+  const className = ($('#an-class')?.value || '').trim() || '............';
+  const month = ($('#an-month')?.value || '').trim() || '............';
+
+  const maxInputs = Array.from(document.querySelectorAll('.max-grade-input'));
+  const actualNumQuestions = maxInputs.length || numQuestions;
+
+  let qHeadersHtml = '';
+  let qMaxHtml = '';
+  for(let i = 0; i < actualNumQuestions; i++){
+    qHeadersHtml += `<th style="width:36px;border:1px solid #000;padding:4px;text-align:center;font-weight:bold;font-size:12px;background:#f0f0f0;">س${i + 1}</th>`;
+    const maxVal = maxInputs[i]?.value || '0';
+    qMaxHtml += `<td style="border:1px solid #000;padding:4px;text-align:center;font-weight:bold;font-size:12px;color:#d35400;">${esc(maxVal)}</td>`;
+  }
+
+  const rows = document.querySelectorAll('#tableBody tr');
+  let studentsHtml = '';
+  rows.forEach((row, idx) => {
+    const name = row.querySelector('.name-input')?.value.trim() || '';
+    const gradeInputs = row.querySelectorAll('.grade-input');
+    const total = row.querySelector('.total-cell')?.innerText || '0';
+    const percent = row.querySelector('.percent-cell')?.innerText || '0%';
+    const grade = row.querySelector('.grade-cell')?.innerText || '-';
+    const notes = row.querySelector('.notes-input')?.value.trim() || '';
+
+    let gradesCells = '';
+    for(let i = 0; i < actualNumQuestions; i++){
+      const gVal = gradeInputs[i]?.value || '';
+      gradesCells += `<td style="border:1px solid #000;padding:4px;text-align:center;font-size:12px;">${esc(gVal)}</td>`;
+    }
+
+    studentsHtml += `
+      <tr>
+        <td style="border:1px solid #000;padding:4px;text-align:center;font-size:12px;font-weight:bold;">${idx + 1}</td>
+        <td style="border:1px solid #000;padding:4px;text-align:right;font-size:12.5px;font-weight:bold;padding-right:8px;">${esc(name || `طالب ${idx + 1}`)}</td>
+        ${gradesCells}
+        <td style="border:1px solid #000;padding:4px;text-align:center;font-size:12.5px;font-weight:bold;color:#1a5276;">${esc(total)}</td>
+        <td style="border:1px solid #000;padding:4px;text-align:center;font-size:12px;font-weight:bold;">${esc(percent)}</td>
+        <td style="border:1px solid #000;padding:4px;text-align:center;font-size:12px;font-weight:bold;">${esc(grade)}</td>
+        <td style="border:1px solid #000;padding:4px;text-align:right;font-size:11px;">${esc(notes)}</td>
+      </tr>
+    `;
+  });
+
+  const grandTotal = document.getElementById('grand-total')?.innerText || '0';
+  const grandPercent = document.getElementById('grand-percent')?.innerText || '0%';
+  const grandGrade = document.getElementById('grand-grade')?.innerText || '-';
+
+  const cM = document.getElementById('count-mmtaz')?.innerText || '0';
+  const cJJ = document.getElementById('count-jayid-jiddan')?.innerText || '0';
+  const cJ = document.getElementById('count-jayid')?.innerText || '0';
+  const cMut = document.getElementById('count-mutawassit')?.innerText || '0';
+  const cD = document.getElementById('count-daif')?.innerText || '0';
+
+  const lowRows = document.querySelectorAll('#lowAchieversBody tr[data-student-id]');
+  let lowHtml = '';
+  if(lowRows.length === 0){
+    lowHtml = `<tr><td colspan="5" style="border:1px solid #000;text-align:center;color:#666;padding:10px;font-size:12px;">لا يوجد طلاب في هذه الفئة حالياً (جميع الطلاب حققوا نسبة 50% فأعلى).</td></tr>`;
+  } else {
+    lowRows.forEach((r, idx) => {
+      const studentName = r.querySelector('td:nth-child(2)')?.innerText || '';
+      const reasons = r.querySelector('.reasons-input')?.value.trim() || '';
+      const solutions = r.querySelector('.solutions-input')?.value.trim() || '';
+      const role = r.querySelector('.role-input')?.value.trim() || '';
+      lowHtml += `
+        <tr>
+          <td style="border:1px solid #000;padding:4px;text-align:center;font-size:12px;font-weight:bold;">${idx + 1}</td>
+          <td style="border:1px solid #000;padding:4px;text-align:right;font-size:12.5px;font-weight:bold;color:#c0392b;padding-right:8px;">${esc(studentName)}</td>
+          <td style="border:1px solid #000;padding:4px;text-align:right;font-size:11.5px;white-space:pre-wrap;">${esc(reasons)}</td>
+          <td style="border:1px solid #000;padding:4px;text-align:right;font-size:11.5px;white-space:pre-wrap;">${esc(solutions)}</td>
+          <td style="border:1px solid #000;padding:4px;text-align:right;font-size:11.5px;white-space:pre-wrap;">${esc(role)}</td>
+        </tr>
+      `;
+    });
+  }
+
+  return `
+    <div class="analysis-print-sheet" style="direction:rtl;text-align:right;font-family:'Cairo',Tahoma,sans-serif;color:#000;background:#fff;padding:8px;max-width:100%;margin:0 auto;">
+      <div style="text-align:center;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:10px;">
+        <h2 style="margin:0 0 6px;font-size:18px;font-weight:bold;color:#000;">تحليل نتائج الاختبارات الشهرية للعام الدراسي / ${esc(year)} الفصل / ${esc(term)}</h2>
+        <div style="display:flex;justify-content:space-around;font-size:14px;font-weight:bold;margin-top:4px;">
+          <span>المادة : <u>${esc(subject)}</u></span>
+          <span>الصف : <u>${esc(className)}</u></span>
+          <span>الشهر : <u>${esc(month)}</u></span>
+        </div>
+      </div>
+
+      <table style="width:100%;border-collapse:collapse;margin-bottom:12px;font-size:11px;">
+        <thead>
+          <tr>
+            <th rowspan="2" style="width:30px;border:1px solid #000;padding:4px;text-align:center;background:#f0f0f0;font-weight:bold;">م</th>
+            <th rowspan="2" style="width:170px;border:1px solid #000;padding:4px;text-align:center;background:#f0f0f0;font-weight:bold;">اسم الطالب</th>
+            <th colspan="${actualNumQuestions}" style="border:1px solid #000;padding:4px;text-align:center;background:#f0f0f0;font-weight:bold;">السؤال + درجة</th>
+            <th rowspan="2" style="width:50px;border:1px solid #000;padding:4px;text-align:center;background:#f0f0f0;font-weight:bold;">المجموع</th>
+            <th rowspan="2" style="width:45px;border:1px solid #000;padding:4px;text-align:center;background:#f0f0f0;font-weight:bold;">النسبة</th>
+            <th rowspan="2" style="width:55px;border:1px solid #000;padding:4px;text-align:center;background:#f0f0f0;font-weight:bold;">التقدير</th>
+            <th rowspan="2" style="border:1px solid #000;padding:4px;text-align:center;background:#f0f0f0;font-weight:bold;">ملاحظات الإجراءات المتخذة</th>
+          </tr>
+          <tr>
+            ${qHeadersHtml}
+          </tr>
+          <tr style="background:#fafafa;">
+            <td colspan="2" style="border:1px solid #000;padding:4px;text-align:center;font-weight:bold;font-size:11px;">الدرجة القصوى لكل سؤال 👇</td>
+            ${qMaxHtml}
+            <td colspan="4" style="border:1px solid #000;"></td>
+          </tr>
+        </thead>
+        <tbody>
+          ${studentsHtml}
+        </tbody>
+        <tfoot>
+          <tr style="background:#f4f4f4;font-weight:bold;">
+            <td colspan="${2 + actualNumQuestions}" style="border:1px solid #000;padding:5px 10px;text-align:right;">المجموع الكلي للفصل</td>
+            <td style="border:1px solid #000;padding:5px;text-align:center;color:#c0392b;font-size:13px;">${esc(grandTotal)}</td>
+            <td style="border:1px solid #000;padding:5px;text-align:center;color:#c0392b;font-size:12px;">${esc(grandPercent)}</td>
+            <td style="border:1px solid #000;padding:5px;text-align:center;color:#c0392b;font-size:12px;">${esc(grandGrade)}</td>
+            <td style="border:1px solid #000;"></td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <!-- ملخص التقديرات -->
+      <table style="width:100%;border-collapse:collapse;margin-bottom:12px;font-size:12px;text-align:center;">
+        <thead>
+          <tr style="background:#f0f0f0;">
+            <th style="border:1px solid #000;padding:5px;width:100px;font-weight:bold;">التقدير</th>
+            <th style="border:1px solid #000;padding:5px;font-weight:bold;">ممتاز (90 - 100)</th>
+            <th style="border:1px solid #000;padding:5px;font-weight:bold;">جيد جداً (80 - 89)</th>
+            <th style="border:1px solid #000;padding:5px;font-weight:bold;">جيد (65 - 79)</th>
+            <th style="border:1px solid #000;padding:5px;font-weight:bold;">متوسط (50 - 64)</th>
+            <th style="border:1px solid #000;padding:5px;font-weight:bold;">ضعيف (أقل من 50)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="border:1px solid #000;padding:5px;font-weight:bold;background:#fafafa;">العدد</td>
+            <td style="border:1px solid #000;padding:5px;font-weight:bold;font-size:14px;color:#27ae60;">${esc(cM)}</td>
+            <td style="border:1px solid #000;padding:5px;font-weight:bold;font-size:14px;color:#2980b9;">${esc(cJJ)}</td>
+            <td style="border:1px solid #000;padding:5px;font-weight:bold;font-size:14px;color:#f39c12;">${esc(cJ)}</td>
+            <td style="border:1px solid #000;padding:5px;font-weight:bold;font-size:14px;color:#d35400;">${esc(cMut)}</td>
+            <td style="border:1px solid #000;padding:5px;font-weight:bold;font-size:14px;color:#c0392b;">${esc(cD)}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- جدول الطلاب المتدنيين -->
+      <div style="background:#f0f0f0;border:1px solid #000;border-bottom:none;text-align:center;font-size:13px;font-weight:bold;padding:5px;">
+        الطلاب ذوي المستويات المتدنية (أقل من 50%)
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:11px;page-break-inside:avoid;">
+        <thead>
+          <tr style="background:#fafafa;">
+            <th style="width:30px;border:1px solid #000;padding:4px;text-align:center;font-weight:bold;">م</th>
+            <th style="width:160px;border:1px solid #000;padding:4px;text-align:center;font-weight:bold;">الأســم</th>
+            <th style="border:1px solid #000;padding:4px;text-align:center;font-weight:bold;">أسباب الضعف</th>
+            <th style="border:1px solid #000;padding:4px;text-align:center;font-weight:bold;">الحلول والمعالجات</th>
+            <th style="border:1px solid #000;padding:4px;text-align:center;font-weight:bold;">دور المعلم للتحسين</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${lowHtml}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
 function printAnalysisReport(){
+  calculateAll();
+  const printRoot = document.getElementById('printRoot');
+  if(!printRoot){
+    toast('تعذر تهيئة طباعة التحليل', 'err');
+    return;
+  }
+  printRoot.innerHTML = generateAnalysisReportHTML();
   document.body.classList.add('print-mode-analysis');
-  window.print();
+
   setTimeout(() => {
-    document.body.classList.remove('print-mode-analysis');
-  }, 1000);
+    window.print();
+    setTimeout(() => {
+      document.body.classList.remove('print-mode-analysis');
+    }, 1500);
+  }, 120);
 }
 
 /* تصدير كشف التحليل الآلي كملف PDF عالي الدقة */
@@ -3996,6 +4227,10 @@ async function exportAnalysisToPdf(){
     const mth = ($('#an-month')?.value || '').trim();
     const fileName = `كشف_تحليل_نتائج_${sub}${cls ? '_' + cls : ''}${mth ? '_' + mth : ''}`.replace(/[\\/:*?"<>|\s]+/g, '_');
 
+    // حفظ مراجع الحقول الحية لنقل قيمها الحقيقية بدقة
+    const liveInputs = Array.from(container.querySelectorAll('input'));
+    const liveTextareas = Array.from(container.querySelectorAll('textarea'));
+
     const canvas = await html2canvas(container, {
       scale: 2,
       useCORS: true,
@@ -4009,13 +4244,15 @@ async function exportAnalysisToPdf(){
         // إخفاء الأزرار غير المرغوب في طباعتها
         clonedCont.querySelectorAll('.analysis-hide-print').forEach(el => el.style.display = 'none');
 
-        // تحويل كافة حقول الإدخال إلى نصوص واضحة ومطبوعة
-        clonedCont.querySelectorAll('input').forEach(inp => {
-          const val = inp.value || '';
+        // تحويل كافة حقول الإدخال إلى نصوص واضحة اعتماداً على قيم الحقول الحية
+        const clonedInputs = Array.from(clonedCont.querySelectorAll('input'));
+        clonedInputs.forEach((inp, idx) => {
+          const liveInp = liveInputs[idx];
+          const val = liveInp ? (liveInp.value || '') : (inp.value || '');
           const span = clonedDoc.createElement('span');
           span.textContent = val;
           span.style.fontFamily = "'Cairo', Tahoma, sans-serif";
-          span.style.fontSize = window.getComputedStyle(inp).fontSize || '13.5px';
+          span.style.fontSize = (liveInp && window.getComputedStyle(liveInp).fontSize) || '13.5px';
           span.style.fontWeight = 'bold';
           span.style.color = '#000000';
           span.style.display = 'inline-block';
@@ -4024,9 +4261,11 @@ async function exportAnalysisToPdf(){
           inp.parentNode.replaceChild(span, inp);
         });
 
-        // تحويل مربعات الملاحظات متعددة الأسطر إلى نصوص بدون أشرطة تمرير
-        clonedCont.querySelectorAll('textarea').forEach(ta => {
-          const val = ta.value || '';
+        // تحويل مربعات الملاحظات متعددة الأسطر إلى نصوص بدون أشرطة تمرير اعتماداً على القيم الحية
+        const clonedTextareas = Array.from(clonedCont.querySelectorAll('textarea'));
+        clonedTextareas.forEach((ta, idx) => {
+          const liveTa = liveTextareas[idx];
+          const val = liveTa ? (liveTa.value || '') : (ta.value || '');
           const span = clonedDoc.createElement('span');
           span.textContent = val;
           span.style.fontFamily = "'Cairo', Tahoma, sans-serif";
@@ -4663,6 +4902,7 @@ window.syncAnalysisHeaderFromMeta = syncAnalysisHeaderFromMeta;
 window.clearAnalysisData = clearAnalysisData;
 window.printAnalysisReport = printAnalysisReport;
 window.exportAnalysisToPdf = exportAnalysisToPdf;
+window.generateAnalysisReportHTML = generateAnalysisReportHTML;
 window.switchToAnalysisTab = switchToAnalysisTab;
 
 /* ============ التشغيل ============ */
