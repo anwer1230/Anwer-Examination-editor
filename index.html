@@ -1451,35 +1451,44 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
        قسم التحليل الآلي والتلقائي لدرجات الطلاب ومستواهم
        ======================================================== -->
   <section id="tab-analysis" hidden>
-    <!-- شريط أدوات التحليل -->
-    <div class="analysis-toolbar analysis-hide-print" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;background:#fff;padding:12px 16px;border-radius:14px;border:2px solid #2980b9;box-shadow:0 3px 10px rgba(41,128,185,0.12);">
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-        <button type="button" class="btn success" onclick="addStudentRow()" style="background:linear-gradient(135deg,#1e8449,#25d366);color:#fff;display:inline-flex;align-items:center;gap:6px;">
-          <span>➕</span> <b>إضافة طالب</b>
-        </button>
-        <button type="button" class="btn" onclick="openStudentImportModal()" style="background:linear-gradient(135deg,#8e44ad,#9b59b6);color:#fff;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(142,68,173,0.3);cursor:pointer;" title="لصق أسماء الطلاب كدفعة واحدة وترتيبهم أبجدياً أو استيرادهم من ملف (PDF / CSV / VC)">
-          <span>📋</span> <b>لصق واستيراد أسماء الطلاب</b>
-        </button>
-        <button type="button" class="btn" onclick="sortCurrentStudentsAlphabetically()" style="background:linear-gradient(135deg,#16a085,#1abc9c);color:#fff;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(22,160,133,0.3);cursor:pointer;" title="ترتيب جميع الطلاب الحاليين في الكشف أبجدياً مع الحفاظ على درجاتهم">
-          <span>🔤</span> <b>ترتيب أبجدي للكشف</b>
-        </button>
-        <button type="button" class="btn warning" onclick="syncQuestionsFromExam()" style="background:linear-gradient(135deg,#d35400,#e67e22);color:#fff;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(211,84,0,0.3);cursor:pointer;" title="مزامنة درجات الأسئلة الرئيسية وعدد الأعمدة تلقائياً من محرر الامتحان">
-          <span>🎯</span> <b>مزامنة درجات الأسئلة من الامتحان</b>
-        </button>
-        <button type="button" class="btn primary" onclick="syncAnalysisHeaderFromMeta()" style="background:linear-gradient(135deg,#2980b9,#3498db);display:inline-flex;align-items:center;gap:6px;" title="مزامنة عنوان المادة والصف والفصل من ترويسة الاختبار">
-          <span>🔄</span> <b>مزامنة المادة والصف</b>
-        </button>
-        <button type="button" class="btn ghost danger" onclick="clearAnalysisData()" style="color:var(--danger);border-color:#e8b5ae;">
-          <span>🧹</span> تفريغ الجدول
-        </button>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-        <button type="button" class="btn success" id="btnExportAnalysisPdf" onclick="exportAnalysisToPdf()" style="background:linear-gradient(135deg,#1e8449,#27ae60);color:#fff;font-size:15px;padding:10px 18px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(30,132,73,0.3);border:none;cursor:pointer;">
-          <span>💾</span> <b>تصدير كشف التحليل PDF</b>
-        </button>
-        <button type="button" class="btn primary" onclick="printAnalysisReport()" style="background:#2980b9;font-size:15px;padding:10px 20px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(41,128,185,0.3);">
-          <span>🖨️</span> <b>طباعة كشف التحليل</b>
-        </button>
+    <!-- أيقونة وقائمة إعدادات التحليل القابلة للطي والإظهار والإخفاء -->
+    <div class="analysis-settings-wrapper analysis-hide-print" style="margin-bottom:14px;">
+      <button type="button" id="btnToggleAnalysisSettings" class="analysis-settings-toggle" onclick="toggleAnalysisSettings()" aria-expanded="false" style="display:inline-flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,#1f618d,#2980b9);color:#fff;border:none;border-radius:12px;padding:9px 18px;font-size:14.5px;font-weight:bold;cursor:pointer;box-shadow:0 3px 10px rgba(41,128,185,0.25);font-family:inherit;transition:all 0.2s;" title="إظهار وإخفاء خيارات وإعدادات التحليل">
+        <span style="display:inline-flex;align-items:center;gap:8px;">
+          <span style="font-size:18px;">⚙️</span>
+          <span>إعدادات التحليل</span>
+        </span>
+        <span id="analysisSettingsArrow" style="transition:transform 0.25s ease;display:inline-block;font-size:12px;">▼</span>
+      </button>
+
+      <!-- محتوى الإعدادات القابل للطي -->
+      <div id="analysisSettingsPanel" class="analysis-settings-panel" style="display:none;margin-top:10px;background:#fff;padding:14px;border-radius:14px;border:2px solid #2980b9;box-shadow:0 4px 14px rgba(41,128,185,0.15);">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <button type="button" class="btn success" onclick="addStudentRow()" style="background:linear-gradient(135deg,#1e8449,#25d366);color:#fff;display:inline-flex;align-items:center;gap:6px;">
+            <span>➕</span> <b>إضافة طالب</b>
+          </button>
+          <button type="button" class="btn" onclick="openStudentImportModal()" style="background:linear-gradient(135deg,#8e44ad,#9b59b6);color:#fff;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(142,68,173,0.3);cursor:pointer;" title="لصق أسماء الطلاب كدفعة واحدة وترتيبهم أبجدياً أو استيرادهم من ملف (PDF / CSV / VC)">
+            <span>📋</span> <b>لصق واستيراد أسماء الطلاب</b>
+          </button>
+          <button type="button" class="btn" onclick="sortCurrentStudentsAlphabetically()" style="background:linear-gradient(135deg,#16a085,#1abc9c);color:#fff;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(22,160,133,0.3);cursor:pointer;" title="ترتيب جميع الطلاب الحاليين في الكشف أبجدياً مع الحفاظ على درجاتهم">
+            <span>🔤</span> <b>ترتيب أبجدي للكشف</b>
+          </button>
+          <button type="button" class="btn warning" onclick="syncQuestionsFromExam()" style="background:linear-gradient(135deg,#d35400,#e67e22);color:#fff;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(211,84,0,0.3);cursor:pointer;" title="مزامنة درجات الأسئلة الرئيسية وعدد الأعمدة تلقائياً من محرر الامتحان">
+            <span>🎯</span> <b>مزامنة درجات الأسئلة من الامتحان</b>
+          </button>
+          <button type="button" class="btn primary" onclick="syncAnalysisHeaderFromMeta()" style="background:linear-gradient(135deg,#2980b9,#3498db);display:inline-flex;align-items:center;gap:6px;" title="مزامنة عنوان المادة والصف والفصل من ترويسة الاختبار">
+            <span>🔄</span> <b>مزامنة المادة والصف</b>
+          </button>
+          <button type="button" class="btn ghost danger" onclick="clearAnalysisData()" style="color:var(--danger);border-color:#e8b5ae;">
+            <span>🧹</span> تفريغ الجدول
+          </button>
+          <button type="button" class="btn success" id="btnExportAnalysisPdf" onclick="exportAnalysisToPdf()" style="background:linear-gradient(135deg,#1e8449,#27ae60);color:#fff;font-size:14px;padding:8px 16px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(30,132,73,0.3);border:none;cursor:pointer;">
+            <span>💾</span> <b>تصدير كشف التحليل PDF</b>
+          </button>
+          <button type="button" class="btn primary" onclick="printAnalysisReport()" style="background:#2980b9;font-size:14px;padding:8px 18px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(41,128,185,0.3);">
+            <span>🖨️</span> <b>طباعة كشف التحليل</b>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -4016,6 +4025,19 @@ function clearAnalysisData(){
   toast('🧹 تم تفريغ بيانات الجدول', 'ok');
 }
 
+/* طي وإظهار قائمة إعدادات التحليل */
+function toggleAnalysisSettings(forceState){
+  const panel = document.getElementById('analysisSettingsPanel');
+  const arrow = document.getElementById('analysisSettingsArrow');
+  const btn = document.getElementById('btnToggleAnalysisSettings');
+  if(!panel) return;
+  const isHidden = panel.style.display === 'none' || panel.hidden;
+  const shouldOpen = forceState !== undefined ? forceState : isHidden;
+  panel.style.display = shouldOpen ? 'block' : 'none';
+  if(arrow) arrow.style.transform = shouldOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+  if(btn) btn.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+}
+
 /* إنشاء قالب HTML كامل ونظيف للطباعة والتصدير بكافة البيانات الفعلية */
 function generateAnalysisReportHTML(){
   calculateAll();
@@ -4903,6 +4925,7 @@ window.clearAnalysisData = clearAnalysisData;
 window.printAnalysisReport = printAnalysisReport;
 window.exportAnalysisToPdf = exportAnalysisToPdf;
 window.generateAnalysisReportHTML = generateAnalysisReportHTML;
+window.toggleAnalysisSettings = toggleAnalysisSettings;
 window.switchToAnalysisTab = switchToAnalysisTab;
 
 /* ============ التشغيل ============ */
