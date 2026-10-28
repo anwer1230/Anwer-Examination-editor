@@ -1294,38 +1294,6 @@ textarea.inp{resize:vertical;min-height:60px;line-height:1.9;}
   </section>
 
   <section id="tab-preview" hidden>
-    <!-- بطاقة نماذج وقوالب ورقة الاختبار (مخفية بناءً على طلب المستخدم) -->
-    <div class="template-selector-card" style="display:none !important;">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
-        <h3 style="margin:0;color:var(--primary);font-size:15px;display:flex;align-items:center;gap:6px;">
-          <span>📑</span> نماذج وقوالب ورقة الاختبار (اختر أي قالب للاستعراض والحفظ):
-        </h3>
-        <span style="font-size:12px;color:#5b7285;">(يتم تطبيق محتوى أسئلتك تلقائياً داخل القالب المختار)</span>
-      </div>
-      <div class="template-selector-grid" id="paperTemplateGrid">
-        <button type="button" class="tpl-btn" data-tpl="academic">
-          <div class="tpl-badge">القالب 1</div>
-          <div class="tpl-name">🎓 الأكاديمي الرسمي (Formal)</div>
-          <div class="tpl-desc">تصميم وزاري رسمي كلاسيكي، خطوط سيريف رصينة، فواصل نقطية أنيقة وخيارات بين قوسين.</div>
-        </button>
-        <button type="button" class="tpl-btn" data-tpl="minimal">
-          <div class="tpl-badge">القالب 2</div>
-          <div class="tpl-name">📄 القياسي المبسط (Minimal)</div>
-          <div class="tpl-desc">إطار وتسطير كلاسيكي نقي، ترويسة قياسية وأسطر إجابة مريحة وواضحة.</div>
-        </button>
-        <button type="button" class="tpl-btn" data-tpl="modern">
-          <div class="tpl-badge">القالب 3</div>
-          <div class="tpl-name">🎨 الأزرق العصري (Modern)</div>
-          <div class="tpl-desc">تصميم ملون حديث، بطاقات أسئلة ملونة وقابلة لتخصيص الألوان والخطوط.</div>
-        </button>
-        <button type="button" class="tpl-btn" data-tpl="compact">
-          <div class="tpl-badge">القالب 4</div>
-          <div class="tpl-name">⚡ المضغوط الاقتصادي (Compact)</div>
-          <div class="tpl-desc">تصميم مكثف واقتصادي لطباعة أكبر قدر من الأسئلة في ورقة واحدة A4 بخط 11px وترويسة مدمجة.</div>
-        </button>
-      </div>
-    </div>
-
     <!-- شريط التبديل السريع المباشر للقوالب -->
     <div class="template-quick-bar">
       <span class="tqb-label">📑 تبديل القالب المباشر:</span>
