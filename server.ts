@@ -1053,15 +1053,23 @@ async function startServer() {
       saveFetchedCanva(updated);
     }
 
-    const combinedMap = new Map<string, CanvaTemplate>();
+    if (canvaImgMemCache.size < 10) {
+      void warmCanvaImageCache();
+    }
+
+    const combinedMap = new Map<string, CanvaTemplate & { thumb_url?: string }>();
     const sourceList = importedTemplate
       ? [importedTemplate, ...fetched, ...PREPARED_EDU_CANVA_TEMPLATES]
       : [...fetched, ...PREPARED_EDU_CANVA_TEMPLATES];
     for (const item of sourceList) {
       if (!combinedMap.has(item.id)) {
         const fb = item.fallback_preview_data_url || buildCanvaSvgDataUrl(item);
+        const thumbUrl = item.preview_image
+          ? `/api/edu/canva/proxy_img?tid=${encodeURIComponent(item.id)}&url=${encodeURIComponent(item.preview_image)}`
+          : '';
         combinedMap.set(item.id, {
           ...item,
+          thumb_url: thumbUrl,
           safe_preview_data_url: item.safe_preview_data_url || fb,
           fallback_preview_data_url: fb,
         });
@@ -1198,13 +1206,20 @@ async function startServer() {
   });
 
   // Fast In-Memory + Disk Cached Canva Image Proxy with request deduplication
-  app.get('/api/edu/canva/proxy_img', async (req, res) => {
-    const imgUrl = String(req.query.url || '').trim();
-    const tid = String(req.query.tid || '').trim();
-
+  const serveCanvaProxyImg = async (
+    imgUrlRaw: string,
+    tid: string,
+    res: express.Response
+  ): Promise<void> => {
     const matchedTpl =
-      [...loadFetchedCanva(), ...PREPARED_EDU_CANVA_TEMPLATES].find((t) => t.id === tid || t.preview_image === imgUrl) ||
-      PRESENTATION_CANVA_TEMPLATES.find((t) => t.id === tid);
+      [...loadFetchedCanva(), ...PREPARED_EDU_CANVA_TEMPLATES].find(
+        (t) => (tid && t.id === tid) || (imgUrlRaw && t.preview_image === imgUrlRaw)
+      ) || PRESENTATION_CANVA_TEMPLATES.find((t) => tid && t.id === tid);
+
+    const imgUrl = imgUrlRaw || String(matchedTpl?.preview_image || '').trim();
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
 
     const sendSvgFallback = () => {
       const tplForSvg = matchedTpl || {
@@ -1240,6 +1255,17 @@ async function startServer() {
     }
 
     sendSvgFallback();
+  };
+
+  app.get('/api/edu/canva/proxy_img', async (req, res) => {
+    const imgUrl = String(req.query.url || '').trim();
+    const tid = String(req.query.tid || '').trim();
+    await serveCanvaProxyImg(imgUrl, tid, res);
+  });
+
+  app.get('/api/edu/canva/thumb/:tid', async (req, res) => {
+    const tid = String(req.params.tid || '').trim();
+    await serveCanvaProxyImg('', tid, res);
   });
 
   app.post('/api/edu/canva/import_file', upload.single('file'), (req, res) => {
@@ -1283,30 +1309,40 @@ async function startServer() {
     res.json({ success: true, template: tpl });
   });
 
-  app.post('/api/edu/canva/process_for_merge', (req, res) => {
+  app.post('/api/edu/canva/process_for_merge', async (req, res) => {
     const tplItem: CanvaTemplate = req.body?.template || req.body;
     if (!tplItem || (!tplItem.id && !tplItem.name)) {
       res.status(400).json({ success: false, error: 'بيانات القالب المختار مطلوبة للمعالجة' });
       return;
     }
-    const base = EDU_CANVA_TEMPLATES.find((t) => t.id === tplItem.id) || tplItem;
+    const base =
+      [...loadFetchedCanva(), ...PREPARED_EDU_CANVA_TEMPLATES].find((t) => t.id === tplItem.id) || tplItem;
     const svgUrl = buildCanvaSvgDataUrl(base);
     const safeDataUrl = base.safe_preview_data_url || svgUrl;
-    const processed: CanvaTemplate = {
+    const realPreviewSrc = String(base.preview_image || '').trim();
+    if (realPreviewSrc) {
+      await fetchAndCacheCanvaImage(realPreviewSrc, 4500);
+    }
+    const pageImgUrl = realPreviewSrc
+      ? `/api/edu/canva/proxy_img?tid=${encodeURIComponent(base.id)}&url=${encodeURIComponent(realPreviewSrc)}`
+      : safeDataUrl;
+    const processedPages = [{ page_index: 1, image_url: pageImgUrl }];
+    const processed = {
       ...base,
       safe_preview_data_url: safeDataUrl,
       fallback_preview_data_url: base.fallback_preview_data_url || svgUrl,
       processed: true,
       processed_asset_id: base.id,
-      processed_pages: [safeDataUrl],
-      processed_format: 'PNG / SVG A4',
+      processed_page_count: processedPages.length,
+      processed_pages: processedPages,
+      processed_format: realPreviewSrc ? 'صورة كانفا عالية الدقة A4' : 'SVG A4',
     };
 
     res.json({
       success: true,
       template: processed,
       processed_pdf_url: '',
-      processed_pages: processed.processed_pages,
+      processed_pages: processedPages,
       processed_format: processed.processed_format,
     });
   });

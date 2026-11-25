@@ -45,8 +45,18 @@
     return /^#[0-9a-fA-F]{3,8}$/.test(s) ? s : fallback;
   }
 
+  function buildLocalSvgThumb(tpl) {
+    const c = (tpl && tpl.colors) || {};
+    const p = safeHex(c.primary, '#0f766e');
+    const s = safeHex(c.secondary, '#09323d');
+    const a = safeHex(c.accent, '#c89b3c');
+    const bg = safeHex(c.bg, '#f8fafc');
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260"><rect width="400" height="260" fill="${bg}"/><rect x="14" y="14" width="372" height="232" rx="10" fill="none" stroke="${p}" stroke-width="3"/><rect x="30" y="28" width="340" height="58" rx="10" fill="${p}"/><circle cx="62" cy="57" r="14" fill="${a}"/><rect x="40" y="106" width="320" height="14" rx="4" fill="${s}" opacity="0.16"/><rect x="40" y="132" width="240" height="12" rx="4" fill="${p}" opacity="0.12"/></svg>`;
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  }
+
   function getFallbackImageSrc(tpl) {
-    return (tpl && tpl.fallback_preview_data_url) || '';
+    return (tpl && tpl.fallback_preview_data_url) || buildLocalSvgThumb(tpl);
   }
 
   function isRealRasterUrl(u) {
@@ -56,18 +66,22 @@
   function getSafeImageSrc(tpl) {
     if (!tpl) return '';
     if (isRealRasterUrl(tpl.safe_preview_data_url)) return tpl.safe_preview_data_url;
+    if (tpl.thumb_url) return tpl.thumb_url;
     if (tpl.preview_image && /^https?:\/\//i.test(tpl.preview_image)) {
       const tidPart = tpl.id ? '&tid=' + encodeURIComponent(tpl.id) : '';
       return '/api/edu/canva/proxy_img?url=' + encodeURIComponent(tpl.preview_image) + tidPart;
     }
-    return tpl.fallback_preview_data_url || tpl.safe_preview_data_url || '';
+    if (tpl.id) return '/api/edu/canva/thumb/' + encodeURIComponent(tpl.id);
+    return getFallbackImageSrc(tpl);
   }
 
-  const ECS_CATALOG_CACHE_KEY = 'edu_canva_catalog_cache_v1';
+  const ECS_CATALOG_CACHE_KEY = 'edu_canva_catalog_cache_v2';
   function loadCatalogFromLocalCache() {
     try {
       const parsed = JSON.parse(localStorage.getItem(ECS_CATALOG_CACHE_KEY) || 'null');
-      if (parsed && Array.isArray(parsed.templates) && parsed.templates.length) return parsed;
+      if (parsed && Array.isArray(parsed.templates) && parsed.templates.length && parsed.templates.some(t => t.preview_image || t.thumb_url)) {
+        return parsed;
+      }
     } catch (_) {}
     return null;
   }
@@ -752,7 +766,7 @@
       return `<div class="ecs-card ${isSel ? 'selected' : ''}" data-card-id="${escHtml(t.id)}">
         <div class="ecs-card-art" style="background:${bg};" onclick="EduCanvaStudio.openInternalViewer('${escHtml(t.id)}')">
           ${artImg
-            ? `<img src="${escHtml(artImg)}" data-fb="${escHtml(fbImg)}" onerror="if(this.dataset.fb&&this.src!==this.dataset.fb){this.src=this.dataset.fb;}" alt="${escHtml(t.name)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;display:block;">`
+            ? `<img src="${escHtml(artImg)}" decoding="async" crossorigin="anonymous" data-fb="${escHtml(fbImg)}" onerror="if(this.dataset.fb&&this.src!==this.dataset.fb){this.src=this.dataset.fb;}" alt="${escHtml(t.name)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;display:block;">`
             : `<div style="padding:10px;width:100%;">
                  <div style="height:34px;background:linear-gradient(135deg,${p},${s});border-radius:7px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;">
                    <span style="width:48%;height:6px;background:#fff;border-radius:4px;opacity:0.92;"></span>
@@ -823,17 +837,15 @@
       ? `<a href="${escHtml(t.canva_url)}" target="_blank" rel="noopener noreferrer" style="background:#00c4cc;color:#0f172a;text-decoration:none;padding:4px 10px;border-radius:7px;font-size:11px;font-weight:800;">🔗 فتح في كانفا</a>`
       : '';
 
-    const previewPane = t.canva_embed_url
-      ? `<iframe src="${escHtml(t.canva_embed_url)}" style="width:100%;height:390px;border:1.5px solid #cbd5e1;border-radius:10px;background:#fff;" allowfullscreen loading="lazy"></iframe>`
-      : `<div style="background:#f1f5f9;border:1.5px solid #cbd5e1;border-radius:12px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:8px;">
-           <div style="font-size:12px;font-weight:800;color:#0f172a;width:100%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
-             <span>🖼️ التصميم الفعلي من كانفا (${escHtml(t.canva_id || 'A4')})</span>
-             ${openExternalBtn}
-           </div>
-           ${artImg
-             ? `<img src="${escHtml(artImg)}" data-fb="${escHtml(fbImg)}" onerror="if(this.dataset.fb&&this.src!==this.dataset.fb){this.src=this.dataset.fb;}" alt="${escHtml(t.name)}" style="width:100%;max-height:380px;object-fit:contain;border-radius:8px;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,0.14);">`
-             : ''}
-         </div>`;
+    const previewPane = `<div style="background:#f1f5f9;border:1.5px solid #cbd5e1;border-radius:12px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:8px;">
+         <div style="font-size:12px;font-weight:800;color:#0f172a;width:100%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+           <span>🖼️ التصميم الفعلي من كانفا (${escHtml(t.canva_id || 'A4')})</span>
+           ${openExternalBtn}
+         </div>
+         ${artImg
+           ? `<img src="${escHtml(artImg)}" decoding="async" crossorigin="anonymous" data-fb="${escHtml(fbImg)}" onerror="if(this.dataset.fb&&this.src!==this.dataset.fb){this.src=this.dataset.fb;}" alt="${escHtml(t.name)}" style="width:100%;max-height:400px;object-fit:contain;border-radius:8px;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,0.14);">`
+           : ''}
+       </div>`;
 
     const miniMockupPane = `<div style="display:flex;flex-direction:column;gap:10px;">
       <div style="background:${bg};border:2px solid ${p};border-radius:12px;padding:14px;box-shadow:0 4px 12px rgba(0,0,0,0.06);">
@@ -882,6 +894,8 @@
     fetchBtn.onclick = () => fetchSingleAndApply(t.id);
 
     viewer.style.display = 'block';
+    const bodyScroll = document.querySelector(`#${MODAL_ID} .ecs-body`);
+    if (bodyScroll) bodyScroll.scrollTo({ top: 0, behavior: 'smooth' });
     viewer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
@@ -975,7 +989,7 @@
       const fbImg = getFallbackImageSrc(t);
       return `<div class="ecs-card">
         <div class="ecs-card-art" style="background:${bg};height:145px;cursor:pointer;" onclick="EduCanvaStudio.applySingle('${escHtml(t.id)}')">
-          ${artImg ? `<img src="${escHtml(artImg)}" data-fb="${escHtml(fbImg)}" onerror="if(this.dataset.fb&&this.src!==this.dataset.fb){this.src=this.dataset.fb;}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;">` : ''}
+          ${artImg ? `<img src="${escHtml(artImg)}" decoding="async" crossorigin="anonymous" data-fb="${escHtml(fbImg)}" onerror="if(this.dataset.fb&&this.src!==this.dataset.fb){this.src=this.dataset.fb;}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;">` : ''}
           <div style="position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:8px;">
             <span style="background:${p};color:#fff;font-size:11px;padding:3px 9px;border-radius:6px;font-weight:800;">${escHtml(t.badge_text || t.category)}</span>
             <span style="width:16px;height:16px;border-radius:50%;background:${a};border:2px solid #fff;"></span>
@@ -1243,7 +1257,7 @@
     const styleVars = buildSheetStyleVars(tpl);
     const layoutClass = 'layout-' + (tpl.layout || 'gradient_arch');
     const lines = docData.coverLines || [];
-    const safeRaster = isRealRasterUrl(tpl.safe_preview_data_url) ? tpl.safe_preview_data_url : '';
+    const safeRaster = getSafeImageSrc(tpl);
 
     return `<div class="canva-a4-sheet ${layoutClass}" style="${styleVars}">
       <div class="canva-cover-hero">
@@ -1253,7 +1267,7 @@
             <h1 style="margin:0;font-size:32px;font-weight:900;font-family:'Amiri','Cairo',serif;line-height:1.4;color:#fff;">${escHtml(docData.docTitle)}</h1>
             <div style="font-size:14.5px;margin-top:8px;opacity:0.92;">${escHtml(docData.subtitle || '')}</div>
           </div>
-          ${safeRaster ? `<div style="width:94px;height:126px;flex-shrink:0;border-radius:10px;overflow:hidden;border:2px solid rgba(255,255,255,0.75);background:#fff;box-shadow:0 4px 12px rgba(0,0,0,0.25);"><img src="${escHtml(safeRaster)}" alt="" style="width:100%;height:100%;object-fit:cover;display:block;"></div>` : ''}
+          ${safeRaster ? `<div style="width:94px;height:126px;flex-shrink:0;border-radius:10px;overflow:hidden;border:2px solid rgba(255,255,255,0.75);background:#fff;box-shadow:0 4px 12px rgba(0,0,0,0.25);"><img src="${escHtml(safeRaster)}" crossorigin="anonymous" alt="" style="width:100%;height:100%;object-fit:cover;display:block;"></div>` : ''}
         </div>
         <div style="width:100%;display:flex;flex-direction:column;gap:9px;text-align:center;">
           ${lines.slice(1, 9).map(l => `<div style="background:rgba(15,23,42,0.035);padding:9px 14px;border-radius:8px;font-size:15px;font-weight:700;border-right:4px solid var(--c-accent);">${escHtml(l)}</div>`).join('')}

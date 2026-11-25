@@ -927,7 +927,7 @@
     }
     .canva-panel {
       background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px;
-      box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+      box-shadow: 0 2px 8px rgba(15,23,42,0.04); flex-shrink: 0;
     }
     .canva-cat-chip {
       background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1;
@@ -965,7 +965,7 @@
     .canva-live-preview-stage {
       background: linear-gradient(135deg, #f8fafc, #eef2ff);
       border: 2px solid #cbd5e1; border-radius: 12px; padding: 14px;
-      display: flex; flex-direction: column; gap: 12px;
+      display: flex; flex-direction: column; gap: 12px; flex-shrink: 0;
     }
     .canva-live-sheets {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -3209,7 +3209,7 @@ let currentActiveView = "plan";
       }
     }
 
-    const CANVA_CATALOG_CACHE_KEY = "edu_canva_catalog_cache_v1";
+    const CANVA_CATALOG_CACHE_KEY = "edu_canva_catalog_cache_v2";
 
     function openCanvaHubModal() {
       document.getElementById("canvaTemplatesModal")?.classList.add("show");
@@ -3217,7 +3217,7 @@ let currentActiveView = "plan";
       if (!canvaFetchedTemplates.length) {
         try {
           const cached = JSON.parse(localStorage.getItem(CANVA_CATALOG_CACHE_KEY) || "null");
-          if (cached && Array.isArray(cached.templates) && cached.templates.length) {
+          if (cached && Array.isArray(cached.templates) && cached.templates.length && cached.templates.some(t => t.preview_image || t.thumb_url)) {
             canvaFetchedTemplates = cached.templates;
             renderFetchedCanvaTemplates();
             if (!livePreviewCanvaId && canvaFetchedTemplates[0]) {
@@ -3264,6 +3264,19 @@ let currentActiveView = "plan";
         }, isLive ? 15000 : 10000);
         if (!res.ok || d.error) throw new Error(d.error || "تعذر جلب القوالب");
         canvaFetchedTemplates = Array.isArray(d.templates) ? d.templates : [];
+        if (canvaCollectedTemplates.length && canvaFetchedTemplates.length) {
+          const byId = new Map(canvaFetchedTemplates.map(x => [x.id, x]));
+          let changed = false;
+          canvaCollectedTemplates = canvaCollectedTemplates.map(c => {
+            const fresh = byId.get(c.id);
+            if (fresh && (!c.preview_image || !c.thumb_url)) { changed = true; return { ...c, ...fresh }; }
+            return c;
+          });
+          if (changed) {
+            try { localStorage.setItem(CANVA_SELECTED_STORAGE_KEY, JSON.stringify(canvaCollectedTemplates)); } catch (e) {}
+            renderCollectedCanvaTemplates();
+          }
+        }
         if (!q && (!isLive || canvaSelectedCategory === "all")) {
           try {
             const slim = canvaFetchedTemplates.slice(0, 40).map(item => ({
@@ -3377,14 +3390,26 @@ let currentActiveView = "plan";
       renderFetchedCanvaTemplates();
     }
 
+    function buildLocalCanvaFallbackSvg(t) {
+      const c = (t && t.colors) || {};
+      const p = c.primary || "#0f4c5c";
+      const s = c.secondary || "#09323d";
+      const a = c.accent || "#c89b3c";
+      const bg = c.bg || "#f8fafc";
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260"><rect width="400" height="260" fill="${bg}"/><rect x="14" y="14" width="372" height="232" rx="10" fill="none" stroke="${p}" stroke-width="3"/><rect x="30" y="28" width="340" height="58" rx="10" fill="${p}"/><circle cx="62" cy="57" r="14" fill="${a}"/><rect x="40" y="106" width="320" height="14" rx="4" fill="${s}" opacity="0.16"/><rect x="40" y="132" width="240" height="12" rx="4" fill="${p}" opacity="0.12"/></svg>`;
+      return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+    }
+
     function getSafeCanvaThumbUrl(t) {
       if (!t) return "";
       if (t.safe_preview_data_url && /^data:image\/(jpeg|jpg|png|webp|gif)/i.test(t.safe_preview_data_url)) return t.safe_preview_data_url;
+      if (t.thumb_url) return t.thumb_url;
       if (t.preview_image && /^https?:\/\//i.test(t.preview_image)) {
         const tidPart = t.id ? "&tid=" + encodeURIComponent(t.id) : "";
         return "/api/edu/canva/proxy_img?url=" + encodeURIComponent(t.preview_image) + tidPart;
       }
-      return t.fallback_preview_data_url || t.safe_preview_data_url || "";
+      if (t.id) return "/api/edu/canva/thumb/" + encodeURIComponent(t.id);
+      return t.fallback_preview_data_url || t.safe_preview_data_url || buildLocalCanvaFallbackSvg(t);
     }
 
     function buildCanvaCardThumbHTML(t) {
@@ -3394,9 +3419,9 @@ let currentActiveView = "plan";
       const a = c.accent || "#c89b3c";
       const bg = c.bg || "#f8fafc";
       const srcUrl = getSafeCanvaThumbUrl(t);
-      const fbUrl = t.fallback_preview_data_url || "";
+      const fbUrl = t.fallback_preview_data_url || buildLocalCanvaFallbackSvg(t);
       const previewImg = srcUrl
-        ? `<img class="canva-tpl-img" loading="lazy" src="${escCanvaHtml(srcUrl)}" data-fb="${escCanvaHtml(fbUrl)}" onerror="if(this.dataset.fb&&this.src!==this.dataset.fb){this.src=this.dataset.fb;}else{this.style.display='none';}" alt="${escCanvaHtml(t.name)}">`
+        ? `<img class="canva-tpl-img" decoding="async" src="${escCanvaHtml(srcUrl)}" data-fb="${escCanvaHtml(fbUrl)}" onerror="if(this.dataset.fb&&this.src!==this.dataset.fb){this.src=this.dataset.fb;}" alt="${escCanvaHtml(t.name)}">`
         : `<div style="height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,${p},${s});color:#fff;font-weight:900;font-size:13px;padding:12px;text-align:center;">${escCanvaHtml(t.name)}</div>`;
       return `<div class="canva-tpl-thumb" style="background:${bg};border-bottom:2px solid ${p};" onclick="event.stopPropagation(); previewCanvaTemplateInsideModal('${escCanvaHtml(t.id)}', true)">
         ${previewImg}
@@ -3431,7 +3456,7 @@ let currentActiveView = "plan";
       const bg = c.bg || "#f8fafc";
       const snap = getActivitiesSnapshotForPreview();
       const realImgUrl = getSafeCanvaThumbUrl(tpl);
-      const fbImgUrl = tpl.fallback_preview_data_url || "";
+      const fbImgUrl = tpl.fallback_preview_data_url || buildLocalCanvaFallbackSvg(tpl);
 
       if (meta) {
         const externalLink = tpl.canva_url
@@ -3449,7 +3474,7 @@ let currentActiveView = "plan";
             <span>🖼️ التصميم الفعلي للقالب من كانفا</span>
             <span style="color:${p};">${escCanvaHtml(tpl.canva_id || "A4")}</span>
           </div>
-          ${realImgUrl ? `<img src="${escCanvaHtml(realImgUrl)}" data-fb="${escCanvaHtml(fbImgUrl)}" onerror="if(this.dataset.fb&&this.src!==this.dataset.fb){this.src=this.dataset.fb;}" alt="${escCanvaHtml(tpl.name)}" style="width:100%;max-height:310px;object-fit:contain;border-radius:8px;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,0.12);">` : ""}
+          ${realImgUrl ? `<img src="${escCanvaHtml(realImgUrl)}" decoding="async" data-fb="${escCanvaHtml(fbImgUrl)}" onerror="if(this.dataset.fb&&this.src!==this.dataset.fb){this.src=this.dataset.fb;}" alt="${escCanvaHtml(tpl.name)}" style="width:100%;max-height:360px;object-fit:contain;border-radius:8px;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,0.12);">` : ""}
           <div style="width:100%;font-size:10.5px;color:#475569;text-align:center;font-weight:700;">${escCanvaHtml(tpl.description || "")}</div>
         </div>
         <div class="canva-mini-a4" style="border:2px solid ${p};background:linear-gradient(160deg,${bg} 0%,#ffffff 65%);">
@@ -3483,7 +3508,11 @@ let currentActiveView = "plan";
 
       stage.style.display = "flex";
       renderFetchedCanvaTemplates();
-      if (scrollIntoView) stage.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      if (scrollIntoView) {
+        const hubBody = stage.closest(".canva-hub-body");
+        if (hubBody) hubBody.scrollTo({ top: 0, behavior: "smooth" });
+        stage.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
     }
 
     function closeCanvaLivePreview() {
@@ -3572,6 +3601,7 @@ let currentActiveView = "plan";
           <div class="canva-tpl-body">
             <div><div style="font-size:13px;font-weight:800;color:#0f172a;">${escCanvaHtml(t.name)} ${isApplied ? '<span style="color:#d97706;">(مطبق)</span>' : ""}</div></div>
             <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;">
+              <button type="button" onclick="previewCanvaTemplateInsideModal('${escCanvaHtml(t.id)}', true)" style="background:#5b21b6;color:#fff;border:none;padding:7px 8px;border-radius:7px;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;">👁️ حية</button>
               <button type="button" onclick="applyCollectedCanvaById('${escCanvaHtml(t.id)}', true, false)" style="flex:1;background:#0f766e;color:#fff;border:none;padding:7px 8px;border-radius:7px;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;">✨ تطبيق ومعاينة</button>
               <button type="button" onclick="applyCollectedCanvaById('${escCanvaHtml(t.id)}', true, true)" style="background:#1e3a8a;color:#fff;border:none;padding:7px 10px;border-radius:7px;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;">🖨️ طباعة</button>
             </div>

@@ -160,6 +160,65 @@ export default function App() {
   }, [allServicesOpen, activeTool]);
 
   useEffect(() => {
+    let cancelled = false;
+    const warmCanvaCatalog = async () => {
+      try {
+        const res = await fetch('/api/edu/canva/browse', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category: 'all', source: 'cached' }),
+        });
+        if (!res.ok || cancelled) return;
+        const data = await res.json();
+        const templates = Array.isArray(data?.templates) ? data.templates : [];
+        const fetched = Array.isArray(data?.fetched) ? data.fetched : [];
+        if (!templates.length || cancelled) return;
+
+        try {
+          const slim = (arr: Array<Record<string, unknown>>) =>
+            arr.slice(0, 40).map((item) => ({
+              ...item,
+              safe_preview_data_url:
+                typeof item.safe_preview_data_url === 'string' &&
+                /^data:image\/(jpeg|jpg|png|webp|gif)/i.test(item.safe_preview_data_url)
+                  ? item.safe_preview_data_url
+                  : '',
+              fallback_preview_data_url: '',
+            }));
+          localStorage.setItem(
+            'edu_canva_catalog_cache_v2',
+            JSON.stringify({
+              templates: slim(templates),
+              fetched: slim(fetched),
+              updatedAt: Date.now(),
+            })
+          );
+        } catch {
+          // Ignore localStorage quota errors
+        }
+
+        templates.slice(0, 10).forEach((tpl: { thumb_url?: string; id?: string }) => {
+          const src = tpl?.thumb_url || (tpl?.id ? `/api/edu/canva/thumb/${encodeURIComponent(tpl.id)}` : '');
+          if (src) {
+            const img = new Image();
+            img.decoding = 'async';
+            img.src = src;
+          }
+        });
+      } catch {
+        // Silent background warmup
+      }
+    };
+    const timer = setTimeout(() => {
+      void warmCanvaCatalog();
+    }, 350);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, []);
+
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         if (activeTool) {
