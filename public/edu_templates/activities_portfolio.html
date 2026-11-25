@@ -1,0 +1,3726 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <script>(function(){try{var p=new URLSearchParams(window.location.search);if((window.self!==window.top&&p.get("standalone")!=="1")||p.get("embedded")==="1"){document.documentElement.classList.add("embedded-mode");}}catch(e){}})();</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ملف الأنشطة المدرسية وبطاقات التنفيذ | مدرسة آمنة بنت عفان - 1448هـ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --primary: #0f4c5c;
+      --primary-dark: #09323d;
+      --primary-light: #196b80;
+      --accent: #c89b3c;
+      --accent-soft: #fdf7ea;
+      --teal-soft: #eef6f8;
+      --border: #9fb8c0;
+      --border-strong: #0f4c5c;
+      --text: #1b262c;
+      --muted: #526570;
+      --bg-page: #e8eef1;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg-page);
+      color: var(--text);
+      font-family: 'Cairo', Tahoma, Arial, sans-serif;
+      line-height: 1.55;
+      font-size: 13.5px;
+    }
+
+    /* ================= شريط الأيقونتين الوظيفيتين العلوي ================= */
+    .app-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: var(--white);
+      padding: 12px 24px;
+      box-shadow: 0 6px 20px rgba(9, 50, 61, 0.25);
+      border-bottom: 3px solid var(--accent);
+    }
+
+    .topbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .brand-sub {
+      font-size: 12px;
+      color: #f3d796;
+      font-weight: 600;
+    }
+
+    /* الأيقونتان الوظيفيتان الرئيسيتان */
+    .main-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .func-icon-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      font-family: 'Cairo', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .func-icon-btn .icon-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: rgba(255, 255, 255, 0.18);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .func-icon-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .func-icon-btn.active {
+      background: #ffffff;
+      color: var(--primary-dark);
+      border-color: var(--accent);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+    }
+
+    .func-icon-btn.active .icon-circle {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .print-action-btn {
+      background: var(--accent);
+      color: #102027;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .print-action-btn:hover {
+      opacity: 0.94;
+    }
+
+    .print-action-btn.pdf-action-btn {
+      background: #10b981;
+      color: #ffffff;
+    }
+
+    /* ================= شاشة تقدم وإشعار جاهزية PDF ================= */
+    html.pdf-exporting,
+    body.pdf-exporting {
+      background: #ffffff !important;
+      overflow: visible !important;
+      width: 794px !important;
+      min-width: 794px !important;
+    }
+
+    body.pdf-exporting .workspace {
+      padding: 0 !important;
+      margin: 0 !important;
+      width: 794px !important;
+      align-items: flex-start !important;
+    }
+
+    body.pdf-exporting .a4-sheet {
+      width: 794px !important;
+      min-width: 794px !important;
+      max-width: 794px !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+    }
+
+    .pdf-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 20000;
+      background: rgba(9, 50, 61, 0.78);
+      backdrop-filter: blur(3px);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .pdf-overlay.show {
+      display: flex;
+    }
+
+    .pdf-overlay-box {
+      background: #ffffff;
+      color: var(--text);
+      border-radius: 14px;
+      padding: 24px 28px;
+      max-width: 390px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      border-top: 4px solid var(--primary);
+    }
+
+    .pdf-progress-track {
+      width: 100%;
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 14px 0 8px 0;
+    }
+
+    .pdf-progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transition: width 0.2s ease;
+    }
+
+    .pdf-ready-banner {
+      display: none;
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 15000;
+      background: var(--primary-dark);
+      color: #ffffff;
+      padding: 10px 16px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.38);
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      max-width: 94vw;
+    }
+
+    .pdf-ready-banner.show {
+      display: flex;
+    }
+
+    .pdf-ready-banner a,
+    .pdf-ready-banner button {
+      background: #10b981;
+      color: #ffffff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .pdf-ready-banner button.open-btn {
+      background: #3b82f6;
+    }
+
+    .pdf-ready-banner button.close-btn {
+      background: #475569;
+      padding: 6px 9px;
+    }
+
+    /* ================= حاويات الواجهات ================= */
+    .workspace {
+      padding: 24px 16px 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .view-panel {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .view-panel.hidden {
+      display: none !important;
+    }
+
+    /* ================= تنسيق الصفحات الرسمية A4 ================= */
+    .a4-sheet {
+      width: 210mm;
+      min-height: 297mm;
+      background: var(--white);
+      padding: 12mm 13mm;
+      border-radius: 6px;
+      box-shadow: 0 10px 30px rgba(15, 76, 92, 0.13);
+      border-top: 6px solid var(--primary);
+      border-bottom: 6px solid var(--accent);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    /* الترويسة الرسمية الموحدة */
+    .official-header {
+      border: 2px solid var(--border-strong);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .official-top-bar {
+      background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary) 65%, var(--primary-light) 100%);
+      color: #ffffff;
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+
+    .official-top-bar span.gold-tag {
+      color: #f4d58d;
+    }
+
+    .official-title-box {
+      background: var(--accent-soft);
+      border-top: 2px solid var(--accent);
+      border-bottom: 2px solid var(--border-strong);
+      padding: 8px 14px;
+      text-align: center;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .official-meta-strip {
+      background: var(--teal-soft);
+      padding: 6px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* الجداول الرسمية */
+    table.official-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      border: 2px solid var(--border-strong);
+      margin-bottom: 12px;
+    }
+
+    table.official-table th,
+    table.official-table td {
+      border: 1.5px solid var(--border);
+      padding: 6px 8px;
+      font-size: 12px;
+      vertical-align: middle;
+      word-wrap: break-word;
+    }
+
+    table.official-table thead th {
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    table.official-table th.lbl {
+      background: var(--teal-soft);
+      color: var(--primary-dark);
+      font-weight: 800;
+      width: 21%;
+      text-align: right;
+    }
+
+    table.official-table td.val {
+      background: #ffffff;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    table.official-table tbody tr:nth-child(even) td.striped {
+      background: #f8fbfc;
+    }
+
+    .banner-row td {
+      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%) !important;
+      color: #ffffff !important;
+      font-weight: 800;
+      font-size: 12.5px;
+      padding: 5px 10px !important;
+    }
+
+    /* بطاقة الغلاف في واجهة ملف الأنشطة */
+    .cover-frame {
+      border: 2.5px solid var(--primary);
+      border-radius: 12px;
+      padding: 18px;
+      background: linear-gradient(180deg, #ffffff 0%, #f6fafb 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .cover-hero {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 4px solid var(--accent);
+    }
+
+    .cover-hero h1 {
+      margin: 0 0 6px;
+      font-size: 22px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .cover-hero p {
+      margin: 0;
+      font-size: 14px;
+      color: #f6dc9c;
+      font-weight: 700;
+    }
+
+    .badge-pill {
+      display: inline-block;
+      background: var(--accent-soft);
+      color: var(--primary-dark);
+      border: 1px solid var(--accent);
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-size: 11.5px;
+      font-weight: 800;
+    }
+
+    /* شريط تصفية البطاقات داخل واجهة بطاقة التنفيذ */
+    .sub-filter-bar {
+      width: 210mm;
+      max-width: 100%;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(15, 76, 92, 0.08);
+    }
+
+    .sub-filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .sub-filter-row + .sub-filter-row {
+      padding-top: 9px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .sub-filter-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .sub-filter-label {
+      font-weight: 800;
+      color: var(--primary-dark);
+      font-size: 13px;
+    }
+
+    .cards-filter-count {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .sub-filter-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .wk-btn,
+    .type-btn {
+      border: 1.5px solid var(--border);
+      background: var(--teal-soft);
+      color: var(--primary-dark);
+      border-radius: 7px;
+      padding: 5px 11px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.16s ease;
+    }
+
+    .type-btn {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      padding: 6px 12px;
+      font-weight: 800;
+    }
+
+    .type-btn:hover,
+    .wk-btn:hover {
+      border-color: var(--primary);
+    }
+
+    .wk-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary-dark);
+    }
+
+    .type-btn.active {
+      background: var(--primary-dark);
+      color: #ffffff;
+      border-color: var(--accent);
+      box-shadow: 0 2px 8px rgba(9, 50, 61, 0.18);
+    }
+
+    .cat-count {
+      font-size: 11px;
+      font-weight: 800;
+      opacity: 0.85;
+    }
+
+    .card-meta-editbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      background: var(--teal-soft);
+      border: 1px dashed var(--border);
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .card-cat-select-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-cat-select {
+      font-family: 'Cairo', sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 8px;
+      cursor: pointer;
+    }
+
+    .card-cat-badge {
+      background: var(--accent-soft);
+      color: var(--primary-dark);
+      border: 1px solid var(--accent);
+      border-radius: 5px;
+      padding: 1px 8px;
+      font-size: 11.5px;
+      font-weight: 800;
+    }
+
+    .cards-empty-notice {
+      width: 210mm;
+      max-width: 100%;
+      background: #ffffff;
+      border: 1.5px dashed var(--border);
+      border-radius: 10px;
+      padding: 24px 16px;
+      text-align: center;
+      color: var(--primary-dark);
+      font-weight: 700;
+      font-size: 13.5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cards-empty-notice.hidden {
+      display: none !important;
+    }
+
+    /* خيارات أيقونة منصة مدرستي داخل بطاقة التنفيذ */
+    .icons-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 5px 10px;
+    }
+
+    .icon-choice {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .icon-choice.checked {
+      color: var(--primary-dark);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      padding: 2px 6px;
+    }
+
+    .chk-box {
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid var(--primary);
+      border-radius: 3px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 800;
+      background: #fff;
+    }
+
+    .icon-choice.checked .chk-box {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .highlight-note {
+      background: #f9fcfd;
+      border: 1.5px dashed var(--primary);
+      border-right: 4px solid var(--accent);
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 12px;
+    }
+
+    /* التواقيع والتذييل */
+    table.sign-grid {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      border: 2px solid var(--border-strong);
+      margin-bottom: 8px;
+    }
+
+    table.sign-grid th {
+      background: var(--accent-soft);
+      color: var(--primary-dark);
+      border: 1.5px solid var(--border);
+      padding: 5px 8px;
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    table.sign-grid td {
+      border: 1.5px solid var(--border);
+      padding: 6px 8px;
+      font-size: 11.5px;
+      vertical-align: top;
+    }
+
+    .official-footer {
+      border-top: 2px solid var(--primary);
+      padding-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .moe-badge {
+      background: var(--primary-dark);
+      color: #ffe8b3;
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+    }
+
+    /* ================= إعدادات الطباعة ================= */
+    @page {
+      size: A4 portrait;
+      margin: 8mm;
+    }
+
+    @media print {
+      html, body {
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      .app-topbar,
+      .sub-filter-bar,
+      .pdf-overlay,
+      .pdf-ready-banner {
+        display: none !important;
+      }
+
+      .workspace {
+        padding: 0 !important;
+        margin: 0 !important;
+        gap: 0 !important;
+      }
+
+      .view-panel.hidden,
+      .hidden-card {
+        display: none !important;
+      }
+
+      .a4-sheet {
+        width: 100% !important;
+        min-height: auto !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+        padding: 4mm 5mm !important;
+      }
+
+      .view-panel:not(.hidden) .a4-sheet:not(.hidden-card) ~ .a4-sheet:not(.hidden-card) {
+        page-break-before: always;
+        break-before: page;
+      }
+    }
+
+    .hidden-card {
+      display: none !important;
+    }
+  
+    .secondary-action-btn {
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 700;
+      font-size: 12.5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .secondary-action-btn:hover { background: rgba(255, 255, 255, 0.22); }
+    .model-switch-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(0, 0, 0, 0.28);
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+    .model-switch-btn {
+      background: transparent;
+      color: #e2e8f0;
+      border: none;
+      border-radius: 7px;
+      padding: 6px 11px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .model-switch-btn.active {
+      background: #ffffff;
+      color: var(--primary-dark);
+    }
+    .icon-choice { cursor: pointer; }
+    [contenteditable="true"]:focus {
+      outline: 2px dashed var(--accent);
+      background: #fffbeb;
+    }
+
+    html.embedded-mode .app-topbar { display: none !important; }
+    html.embedded-mode .sub-filter-bar { top: 0 !important; }
+    html.embedded-mode .workspace { padding-top: 14px !important; }
+    html.embedded-mode body.print-preview-mode .workspace { padding-top: 66px !important; }
+
+    .toolbar-actions-row {
+      max-width: 1200px;
+      margin: 8px auto 0 auto;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.16);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+    .tb-tool-btn {
+      background: #1e6f7d;
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      padding: 6px 11px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: 0.16s;
+      white-space: nowrap;
+    }
+    .tb-tool-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+    .tb-tool-btn.success { background: #16a34a; }
+    .tb-tool-btn.preview-btn { background: #7c3aed; }
+    .tb-tool-btn.canva-btn { background: linear-gradient(135deg,#00c4cc,#7d2ae8); }
+    .tb-tool-btn.pdf-btn { background: #d97706; color: #fff; }
+    .tb-tool-btn.print-btn { background: var(--accent); color: #102027; }
+    .tb-tool-btn.danger { background: #dc2626; }
+    .tb-status-text {
+      margin-right: auto;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+
+    /* ===== معاينة قبل الطباعة ===== */
+    .preview-bar {
+      display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 10001;
+      background: linear-gradient(135deg, #1e293b, #334155); color: #fff;
+      padding: 10px 16px; flex-wrap: wrap; gap: 8px; align-items: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.35); font-size: 13px;
+    }
+    body.print-preview-mode .preview-bar { display: flex; }
+    body.print-preview-mode .app-topbar,
+    body.print-preview-mode .sub-filter-bar,
+    body.print-preview-mode .edit-only { display: none !important; }
+    body.print-preview-mode { background: #475569; padding-bottom: 40px; }
+    body.print-preview-mode .workspace { padding-top: 68px !important; }
+    body.print-preview-mode .a4-sheet {
+      box-shadow: 0 12px 32px rgba(0,0,0,0.45);
+      transform-origin: top center;
+    }
+    body.print-preview-mode [contenteditable="true"] {
+      outline: none !important;
+      background: transparent !important;
+      pointer-events: none;
+    }
+    .preview-bar .preview-title { font-weight: 900; color: #ffd166; margin-left: 8px; }
+    .preview-bar button {
+      background: #0d9488; color: #fff; border: none; padding: 7px 13px;
+      border-radius: 6px; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 12.5px;
+    }
+    .preview-bar button.exit-btn { background: #e11d48; }
+    .preview-bar button.pdf-btn { background: #d97706; }
+    .preview-bar button.zoom-btn { background: #475569; }
+    .preview-bar button.zoom-btn.active { background: #3b82f6; }
+    .preview-bar .page-counter { margin-right: auto; font-size: 12px; color: #cbd5e1; font-weight: 700; }
+    .preview-page-badge {
+      width: fit-content; margin: 10px auto 4px auto; padding: 4px 14px;
+      background: rgba(15, 23, 42, 0.85); color: #f8fafc; border-radius: 999px;
+      font-size: 12px; font-weight: 700; border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* ===== نافذة تأكيد داخل التطبيق + قوالب كانفا ===== */
+    .app-confirm-overlay {
+      display: none; position: fixed; inset: 0; z-index: 260000;
+      background: rgba(15, 23, 42, 0.72); backdrop-filter: blur(4px);
+      align-items: center; justify-content: center; padding: 16px;
+    }
+    .app-confirm-overlay.show { display: flex; }
+    .app-confirm-box {
+      background: #ffffff; border-radius: 14px; width: 100%; max-width: 420px;
+      padding: 22px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    }
+    .canva-hub-modal {
+      display: none; position: fixed; inset: 0; z-index: 240000;
+      background: rgba(15, 23, 42, 0.78); backdrop-filter: blur(4px);
+      align-items: center; justify-content: center; padding: 14px;
+    }
+    .canva-hub-modal.show { display: flex; }
+    .canva-hub-dialog {
+      background: #fff; border-radius: 16px; width: 100%; max-width: 1120px;
+      max-height: 94vh; display: flex; flex-direction: column; overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+    }
+    .canva-hub-header {
+      background: linear-gradient(135deg, #00c4cc 0%, #5b21b6 55%, #1e1b4b 100%);
+      color: #fff; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .canva-hub-body {
+      padding: 16px 20px; overflow-y: auto; flex: 1; background: #f8fafc;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .canva-panel {
+      background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px;
+      box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+    }
+    .canva-cat-chip {
+      background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1;
+      padding: 5px 12px; border-radius: 999px; cursor: pointer;
+      font-family: inherit; font-size: 12px; font-weight: 700;
+    }
+    .canva-cat-chip.active { background: #5b21b6; color: #fff; border-color: #5b21b6; }
+    .canva-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 12px; margin-top: 10px;
+    }
+    .canva-tpl-card {
+      background: #fff; border: 2px solid #e2e8f0; border-radius: 12px; overflow: hidden;
+      display: flex; flex-direction: column; transition: 0.18s; position: relative; cursor: pointer;
+    }
+    .canva-tpl-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+    .canva-tpl-card.checked { border-color: #0f766e; box-shadow: 0 0 0 3px rgba(15,118,110,0.18); }
+    .canva-tpl-card.applied { border-color: #d97706; box-shadow: 0 0 0 3px rgba(217,119,6,0.22); }
+    .canva-tpl-card.previewing { border-color: #5b21b6; box-shadow: 0 0 0 3px rgba(91,33,182,0.24); }
+    .canva-tpl-thumb { height: 196px; padding: 0; position: relative; display: block; overflow: hidden; background: #f1f5f9; border-bottom: 2px solid #e2e8f0; cursor: pointer; }
+    .canva-tpl-img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; transition: transform 0.25s ease; }
+    .canva-tpl-card:hover .canva-tpl-img { transform: scale(1.03); }
+    .canva-tpl-check {
+      position: absolute; top: 8px; right: 8px; z-index: 4;
+      background: rgba(255,255,255,0.96); padding: 3px 9px; border-radius: 999px;
+      font-size: 11px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 5px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    }
+    .canva-tpl-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; justify-content: space-between; }
+    .canva-active-banner {
+      display: none; background: rgba(15,23,42,0.75); color: #fff;
+      padding: 4px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 700; align-items: center; gap: 6px;
+    }
+    .canva-active-banner.show { display: inline-flex; }
+    .canva-live-preview-stage {
+      background: linear-gradient(135deg, #f8fafc, #eef2ff);
+      border: 2px solid #cbd5e1; border-radius: 12px; padding: 14px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .canva-live-sheets {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px; align-items: stretch;
+    }
+    .canva-mini-a4 {
+      background: #fff; border-radius: 10px; padding: 14px; min-height: 230px;
+      box-shadow: 0 6px 18px rgba(15,23,42,0.1); display: flex; flex-direction: column;
+      justify-content: space-between; position: relative; overflow: hidden;
+    }
+    .custom-sheet-bar {
+      display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 8px;
+    }
+    .custom-del-btn {
+      background: #dc2626; color: #fff; border: none; border-radius: 6px;
+      padding: 4px 10px; font-family: inherit; font-size: 11.5px; font-weight: 800; cursor: pointer;
+    }
+    @media print {
+      .preview-bar, .preview-page-badge, .app-confirm-overlay, .canva-hub-modal, .edit-only { display: none !important; }
+    }
+
+  </style>
+  <style id="canvaDynamicThemeCss"></style>
+</head>
+<body>
+
+  <!-- ================= شريط الأيقونتين الوظيفيتين العلوي ================= -->
+  <header class="app-topbar">
+    <div class="topbar-inner">
+      <div class="brand-info">
+        <span class="brand-title">بوابة توثيق النشاط الطلابي — الدراسات الاجتماعية</span>
+        <span class="brand-sub">إدارة تعليم نجران | مدرسة آمنة بنت عفان | العام الدراسي 1448هـ</span>
+      </div>
+
+      <!-- الأيقونتان الوظيفيتان بجانب بعضهما -->
+      <nav class="main-tabs" aria-label="التبديل بين ملف الأنشطة وبطاقة التنفيذ">
+        <button type="button" class="secondary-action-btn" id="btnBackHome" style="display:none;" onclick="goBackToDashboard()">
+          <span>⬅️</span>
+          <span>الرئيسية</span>
+        </button>
+        <div class="model-switch-group" role="group" aria-label="اختيار النموذج">
+          <button type="button" id="btnActModelPrimary" class="model-switch-btn active" onclick="switchActivitiesModel('primary')">النموذج الأساسي</button>
+          <button type="button" id="btnActModelSecondary" class="model-switch-btn" onclick="switchActivitiesModel('secondary')">النموذج الثانوي</button>
+        </div>
+        <button type="button" class="func-icon-btn active" id="tabPlanBtn" onclick="switchView('plan')">
+          <span class="icon-circle">📁</span>
+          <span>ملف الأنشطة المدرسية</span>
+        </button>
+
+        <button type="button" class="func-icon-btn" id="tabCardBtn" onclick="switchView('cards')">
+          <span class="icon-circle">📋</span>
+          <span>بطاقة تنفيذ نشاط</span>
+        </button>
+      </nav>
+    </div>
+    <div class="toolbar-actions-row">
+      <button type="button" class="tb-tool-btn success" onclick="saveData()">💾 حفظ</button>
+      <button type="button" class="tb-tool-btn" onclick="loadData()">🔄 استرجاع</button>
+      <button type="button" class="tb-tool-btn" id="btnActAddNew" onclick="addNewPage()">➕ صفحة / بطاقة جديدة</button>
+      <button type="button" class="tb-tool-btn canva-btn" onclick="openCanvaHubModal()">🎨 قوالب كانفا</button>
+      <button type="button" class="tb-tool-btn preview-btn" onclick="togglePrintPreview(true)">👁️ معاينة قبل الطباعة</button>
+      <button type="button" class="tb-tool-btn pdf-btn" onclick="exportActivitiesPDF()">📄 تصدير PDF</button>
+      <button type="button" class="tb-tool-btn print-btn" onclick="printActivities()">🖨️ طباعة</button>
+      <button type="button" class="tb-tool-btn danger" onclick="resetAll()">🗑️ إعادة تعيين</button>
+      <span class="canva-active-banner" id="toolbarCanvaBadge">🎨 قالب: <span id="toolbarCanvaName"></span></span>
+      <span class="tb-status-text" id="statusMsg">جاهز للتعديل</span>
+    </div>
+  </header>
+
+  <!-- شريط وضع المعاينة قبل الطباعة -->
+  <div class="preview-bar" id="previewBar">
+    <span class="preview-title">👁️ وضع المعاينة قبل الطباعة</span>
+    <span class="canva-active-banner" id="previewCanvaBadge">🎨 القالب: <span id="previewCanvaName"></span></span>
+    <button type="button" class="exit-btn" onclick="togglePrintPreview(false)">⬅️ العودة للتعديل</button>
+    <button type="button" onclick="openCanvaHubModal()" style="background:linear-gradient(135deg,#00c4cc,#7d2ae8);">🎨 تبديل قالب كانفا</button>
+    <button type="button" id="btnResetCanvaPreview" onclick="resetCanvaTemplate()" style="background:#64748b;display:none;">↩️ التصميم الأصلي</button>
+    <button type="button" class="pdf-btn" onclick="exportActivitiesPDF()">📄 تنزيل PDF</button>
+    <button type="button" onclick="printActivities()">🖨️ طباعة مباشرة</button>
+    <button type="button" id="btnZoomFit" class="zoom-btn active" onclick="setPreviewZoom('fit')">🔍 ملائمة للشاشة</button>
+    <button type="button" id="btnZoomFull" class="zoom-btn" onclick="setPreviewZoom('full')">🔍 100% A4</button>
+    <span class="page-counter" id="previewPageCounter">إجمالي الصفحات: 0</span>
+  </div>
+
+  <!-- نافذة تأكيد داخل التطبيق -->
+  <div class="app-confirm-overlay" id="appConfirmModal">
+    <div class="app-confirm-box">
+      <h3 id="appConfirmTitle" style="color:#09323d;margin-bottom:10px;font-size:18px;font-weight:900;">تأكيد الإجراء</h3>
+      <p id="appConfirmMessage" style="color:#374151;font-size:15px;margin-bottom:22px;line-height:1.7;"></p>
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <button type="button" id="appConfirmOkBtn" style="background:#ef4444;color:#fff;border:none;padding:9px 22px;border-radius:8px;font-family:inherit;font-weight:700;cursor:pointer;">نعم، تأكيد</button>
+        <button type="button" onclick="closeAppConfirm(false)" style="background:#64748b;color:#fff;border:none;padding:9px 22px;border-radius:8px;font-family:inherit;font-weight:700;cursor:pointer;">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة مركز قوالب كانفا داخل الواجهة -->
+  <div class="canva-hub-modal" id="canvaTemplatesModal">
+    <div class="canva-hub-dialog">
+      <div class="canva-hub-header">
+        <div>
+          <div style="font-size:18px;font-weight:900;">🎨 استوديو قوالب كانفا — ملف الأنشطة المدرسية وبطاقات التنفيذ</div>
+          <div style="font-size:12px;opacity:0.9;margin-top:2px;">جلب القوالب مباشرة داخل الواجهة، معاينة حية بمحتوى الأنشطة والبطاقات، تطبيق فوري وطباعة PDF A4</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <span id="canvaGoogleActiveBadge" style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;">حساب Google متصل</span>
+          <button type="button" onclick="resetCanvaTemplate()" style="background:#475569;color:#fff;border:none;padding:7px 12px;border-radius:8px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">↩️ التصميم الأصلي</button>
+          <button type="button" onclick="closeCanvaHubModal()" style="background:#ef4444;color:#fff;border:none;padding:7px 14px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;">✕ إغلاق</button>
+        </div>
+      </div>
+      <div class="canva-hub-body">
+        <div class="canva-panel">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px;">
+            <span style="font-weight:900;font-size:14px;color:#0f172a;">1️⃣ الاتصال بكانفا واستعراض القوالب:</span>
+            <input type="text" id="canvaSearchInput" placeholder="ابحث عن قالب (تقارير، شواهد، شهادات، أزرق، ذهبي...)" style="flex:1;min-width:210px;padding:8px 12px;border:1px solid #cbd5e1;border-radius:8px;font-family:inherit;font-size:13px;" oninput="renderFetchedCanvaTemplates()" onkeydown="if(event.key==='Enter')fetchCanvaInsideUI()">
+            <button type="button" id="btnFetchCanvaInside" onclick="fetchCanvaInsideUI()" style="background:linear-gradient(135deg,#00c4cc,#7d2ae8);color:#fff;border:none;padding:9px 18px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;">🌐 تحديث وجلب قوالب كانفا</button>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;" id="canvaCategoryChips">
+            <button type="button" class="canva-cat-chip active" onclick="filterCanvaCategory('all', this)">الكل</button>
+            <button type="button" class="canva-cat-chip" onclick="filterCanvaCategory('ملفات أداء وإنجاز', this)">ملفات أداء وإنجاز</button>
+            <button type="button" class="canva-cat-chip" onclick="filterCanvaCategory('شواهد وتوثيق', this)">شواهد وتوثيق</button>
+            <button type="button" class="canva-cat-chip" onclick="filterCanvaCategory('تقارير مدرسية', this)">تقارير مدرسية</button>
+            <button type="button" class="canva-cat-chip" onclick="filterCanvaCategory('شهادات وتكريم', this)">شهادات وتكريم</button>
+            <button type="button" class="canva-cat-chip" onclick="filterCanvaCategory('تصاميمي المجلوبة', this)">تصاميمي من كانفا</button>
+          </div>
+          <details style="background:#f8fafc;border:1px dashed #cbd5e1;border-radius:8px;padding:8px 12px;font-size:12px;">
+            <summary style="cursor:pointer;font-weight:800;color:#475569;">🔗 خيار إضافي: جلب قالب من رابط كانفا أو مزامنة حسابك عبر API Token</summary>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
+              <input type="url" id="canvaImportUrlInput" dir="ltr" placeholder="https://www.canva.com/design/... أو رابط قالب كانفا" style="flex:2;min-width:200px;padding:7px 10px;border:1px solid #cbd5e1;border-radius:6px;font-family:inherit;">
+              <input type="text" id="canvaImportNameInput" placeholder="اسم مخصص للقالب (اختياري)" style="flex:1;min-width:140px;padding:7px 10px;border:1px solid #cbd5e1;border-radius:6px;font-family:inherit;">
+              <button type="button" onclick="importCanvaLinkInsideUI()" style="background:#0f766e;color:#fff;border:none;padding:7px 14px;border-radius:6px;font-family:inherit;font-weight:700;cursor:pointer;">📥 جلب الرابط</button>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
+              <input type="password" id="canvaTokenInput" dir="ltr" placeholder="Canva Connect API Token (اختياري لجلب تصاميمك الشخصية)" style="flex:1;min-width:220px;padding:7px 10px;border:1px solid #cbd5e1;border-radius:6px;font-family:inherit;">
+              <button type="button" onclick="syncCanvaTokenInsideUI()" style="background:#5b21b6;color:#fff;border:none;padding:7px 14px;border-radius:6px;font-family:inherit;font-weight:700;cursor:pointer;">🔄 جلب تصاميمي من كانفا</button>
+            </div>
+          </details>
+          <div id="canvaHubStatus" style="margin-top:8px;font-size:12px;font-weight:700;color:#0f766e;"></div>
+        </div>
+
+        <div class="canva-live-preview-stage" id="canvaLivePreviewStage" style="display:none;">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-size:14px;font-weight:900;color:#1e1b4b;">👁️ المعاينة الحية المباشرة للقالب بمحتوى الأنشطة والبطاقات</div>
+              <div id="canvaLivePreviewMeta" style="font-size:12px;color:#475569;margin-top:2px;"></div>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+              <button type="button" id="btnLiveCollectTpl" style="background:#0f766e;color:#fff;border:none;padding:7px 12px;border-radius:8px;font-family:inherit;font-size:12px;font-weight:800;cursor:pointer;">📥 حفظ في القوالب المحددة</button>
+              <button type="button" id="btnLiveApplyTpl" style="background:#5b21b6;color:#fff;border:none;padding:7px 14px;border-radius:8px;font-family:inherit;font-size:12px;font-weight:800;cursor:pointer;">✨ تطبيق على الملف ومعاينة A4</button>
+              <button type="button" id="btnLivePrintTpl" style="background:#1e3a8a;color:#fff;border:none;padding:7px 12px;border-radius:8px;font-family:inherit;font-size:12px;font-weight:800;cursor:pointer;">🖨️ تطبيق وطباعة</button>
+              <button type="button" onclick="closeCanvaLivePreview()" style="background:#e2e8f0;color:#0f172a;border:none;padding:7px 10px;border-radius:8px;font-family:inherit;font-size:12px;font-weight:800;cursor:pointer;">إغلاق المعاينة</button>
+            </div>
+          </div>
+          <div class="canva-live-sheets" id="canvaLivePreviewBody"></div>
+        </div>
+
+        <div class="canva-panel">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;">
+            <div style="font-size:14px;font-weight:900;color:#0f172a;">2️⃣ القوالب المستعرضة من كانفا (عاين أو حدّد ثم اضغط جلب القوالب المحددة)</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+              <button type="button" onclick="selectAllFetchedCanva(true)" style="background:#e2e8f0;color:#0f172a;border:none;padding:6px 10px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">☑️ تحديد الكل</button>
+              <button type="button" onclick="selectAllFetchedCanva(false)" style="background:#e2e8f0;color:#0f172a;border:none;padding:6px 10px;border-radius:6px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">⬜ إلغاء التحديد</button>
+              <button type="button" id="btnCollectSelectedCanva" onclick="collectSelectedCanvaTemplates()" style="background:#16a34a;color:#fff;border:none;padding:7px 14px;border-radius:8px;font-family:inherit;font-size:12px;font-weight:800;cursor:pointer;">📥 جلب القوالب المحددة (<span id="canvaCheckedCount">0</span>)</button>
+            </div>
+          </div>
+          <div class="canva-grid" id="canvaFetchedGrid"></div>
+        </div>
+
+        <div class="canva-panel" id="canvaSelectedSection">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;">
+            <div style="font-size:14px;font-weight:900;color:#0f766e;">3️⃣ القوالب المحددة والمجلوبة — جاهزة للتطبيق والمعاينة والطباعة</div>
+            <span style="font-size:12px;color:#475569;font-weight:700;" id="canvaSelectedCounter">0 قالب جاهز للتطبيق</span>
+          </div>
+          <div class="canva-grid" id="canvaSelectedGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- شاشة تقدم تصدير PDF -->
+  <div class="pdf-overlay" id="pdfProgressOverlay">
+    <div class="pdf-overlay-box">
+      <div style="font-size:28px;margin-bottom:6px;">📄</div>
+      <div style="font-weight:800;font-size:16px;" id="pdfProgressTitle">جاري تجهيز ملف PDF للطباعة...</div>
+      <div style="font-size:13px;color:#526570;margin-top:4px;" id="pdfProgressSub">يرجى الانتظار لحين تحويل الصفحات</div>
+      <div class="pdf-progress-track"><div class="pdf-progress-fill" id="pdfProgressFill"></div></div>
+      <div style="font-size:12px;font-weight:700;color:#0f4c5c;" id="pdfProgressPct">0%</div>
+    </div>
+  </div>
+
+  <!-- شريط جاهزية PDF المباشر -->
+  <div class="pdf-ready-banner" id="pdfReadyBanner">
+    <span id="pdfReadyLabel">✅ الملف جاهز للطباعة والحفظ:</span>
+    <a id="pdfDirectDownloadLink" href="#" download="ملف_الأنشطة_المدرسية.pdf">📥 حفظ PDF</a>
+    <button type="button" class="open-btn" onclick="openLastPdfBlob()">👁️ فتح الملف</button>
+    <button type="button" class="close-btn" onclick="closePdfReadyBanner()">✕</button>
+  </div>
+
+  <main class="workspace">
+
+    <!-- =====================================================================
+         الواجهة الأولى: ملف الأنشطة المدرسية الرسمي (التصميم الكامل والمحتوى)
+         ===================================================================== -->
+    <section id="planView" class="view-panel">
+
+      <!-- الصفحة 1: غلاف الملف وبيانات التوثيق وجدول الحصص -->
+      <article class="a4-sheet">
+        <div>
+          <div class="official-header">
+            <div class="official-top-bar">
+              <span>المملكة العربية السعودية — وزارة التعليم</span>
+              <span class="gold-tag">إدارة تعليم نجران — مدرسة آمنة بنت عفان</span>
+            </div>
+            <div class="official-title-box">ملف خطة النشاط الطلابي والتكامل المنهجي</div>
+            <div class="official-meta-strip">
+              <span>المادة: الدراسات الاجتماعية</span>
+              <span>الصفوف: الرابع – الخامس – السادس الابتدائي</span>
+              <span>الفصل الدراسي الأول 1448هـ</span>
+            </div>
+          </div>
+
+          <div class="cover-frame">
+            <div class="cover-hero">
+              <h1>التكامل المنهجي للأنشطة الصفية والإثرائية عن بُعد</h1>
+              <p>مقرر الدراسات الاجتماعية للصفوف العليا — تنفيذ عبر منصة مدرستي والكتاب المدرسي</p>
+            </div>
+
+            <!-- جدول بيانات التوثيق والمتابعة -->
+            <table class="official-table">
+              <tbody>
+                <tr class="banner-row">
+                  <td colspan="4">أولاً: بيانات التوثيق والمتابعة المدرسية</td>
+                </tr>
+                <tr>
+                  <th class="lbl">المدرسة والإدارة</th>
+                  <td class="val" contenteditable="true">مدرسة آمنة بنت عفان / إدارة تعليم نجران</td>
+                  <th class="lbl">العام الدراسي</th>
+                  <td class="val" contenteditable="true">1448هـ — الفصل الدراسي الأول</td>
+                </tr>
+                <tr>
+                  <th class="lbl">معلمة المادة</th>
+                  <td class="val" contenteditable="true">أ. أسماء ياسين الخيري</td>
+                  <th class="lbl">مديرة المدرسة</th>
+                  <td class="val" contenteditable="true">أ. البتول آل دويس</td>
+                </tr>
+                <tr>
+                  <th class="lbl">الفئة المستهدفة</th>
+                  <td class="val" contenteditable="true">طالبات الصفوف العليا (رابع – خامس – سادس)</td>
+                  <th class="lbl">آلية التنفيذ</th>
+                  <td class="val" id="planMechanismModeCell" contenteditable="true">منصة مدرستي (عن بُعد) + الكتاب المدرسي</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- جدول توزيع الحصص الأسبوعية المدمجة بالأنشطة -->
+            <table class="official-table">
+              <thead>
+                <tr>
+                  <th colspan="5">ثانياً: جدول توزيع الحصص الأسبوعية المدمجة بالأنشطة</th>
+                </tr>
+                <tr>
+                  <th>الأحد</th>
+                  <th>الاثنين</th>
+                  <th>الثلاثاء</th>
+                  <th>الأربعاء</th>
+                  <th>الخميس</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="text-align:center; font-weight:800;">
+                  <td class="val" contenteditable="true">رابع — الحصة 5<br><span class="badge-pill">شرح وتهيئة</span></td>
+                  <td class="val" contenteditable="true">سادس — الحصة 4<br><span class="badge-pill">تطبيق النشاط</span></td>
+                  <td class="val" contenteditable="true">رابع — الحصة 4<br><span class="badge-pill">تطبيق النشاط</span></td>
+                  <td class="val" contenteditable="true">خامس — الحصة 1<br><span class="badge-pill">شرح وتهيئة</span></td>
+                  <td class="val" contenteditable="true">خامس — الحصة 3<br><span class="badge-pill">تطبيق النشاط</span></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- مجالات النشاط المعتمدة وآلية التنفيذ عن بُعد -->
+            <table class="official-table">
+              <tbody>
+                <tr class="banner-row">
+                  <td colspan="2" id="planSec3BannerCell">ثالثاً: المجالات المعتمدة وآلية التنفيذ عن بُعد عبر منصة مدرستي</td>
+                </tr>
+                <tr>
+                  <th class="lbl">المجالات المعتمدة</th>
+                  <td class="val" contenteditable="true">المواطنة والحياة • الأيام والمناسبات الوطنية والعالمية • الثقافة والفنون • العلوم والتقنية • النشاط الكشفي • الرياضة والصحة</td>
+                </tr>
+                <tr>
+                  <th class="lbl" id="planSec3MechanismLbl">خطوات التنفيذ في المنصة</th>
+                  <td class="val" contenteditable="true">
+                    1. <strong>العرض والتمهيد (3 دقائق):</strong> ربط عنوان النشاط بدرس الاجتماعيات عبر شريحة أو رسالة في الدردشة.<br>
+                    2. <strong>التفاعل الرقمي (10 دقائق):</strong> طرح سؤال التحدي ومشاركة 4–6 طالبات صوتياً أو كتابياً في شات الحصة.<br>
+                    3. <strong>التوثيق والرفع:</strong> حفظ لقطات الشاشة وتعبئة بطاقة التنفيذ ورفعها عبر الأيقونة المناسبة في منصة مدرستي.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <footer class="official-footer">
+          <span>ملف النشاط الطلابي المعتمد — مدرسة آمنة بنت عفان (تعليم نجران)</span>
+          <span class="moe-badge">www.MOE.GOV.SA</span>
+        </footer>
+      </article>
+
+      <!-- الصفحة 2: الخطة الفصلية الكاملة (الأسابيع 1 إلى 10) -->
+      <article class="a4-sheet">
+        <div>
+          <div class="official-header">
+            <div class="official-top-bar">
+              <span>الخطة الفصلية للأنشطة الصفية واللاصفية (1448هـ)</span>
+              <span class="gold-tag">الجزء الأول: الأسابيع من (1) إلى (10)</span>
+            </div>
+            <div class="official-title-box">التوزيع الفصلي للأنشطة المرتبطة بمقرر الدراسات الاجتماعية</div>
+          </div>
+
+          <table class="official-table">
+            <thead>
+              <tr>
+                <th style="width:15%;">الأسبوع والتاريخ</th>
+                <th style="width:20%;">مجال النشاط والبرنامج</th>
+                <th style="width:28%;">مواضيع الدروس (رابع / خامس / سادس)</th>
+                <th style="width:37%;">آلية تنفيذ النشاط ونوعه (مدمج ومنصة)</th>
+              </tr>
+            </thead>
+            <tbody id="planPart1Body"></tbody>
+          </table>
+        </div>
+
+        <footer class="official-footer">
+          <span>المعلمة: أ. أسماء ياسين الخيري | مديرة المدرسة: أ. البتول آل دويس</span>
+          <span class="moe-badge">صفحة 2 من 3</span>
+        </footer>
+      </article>
+
+      <!-- الصفحة 3: الخطة الفصلية الكاملة (الأسابيع 11 إلى 19) + الاعتماد -->
+      <article class="a4-sheet">
+        <div>
+          <div class="official-header">
+            <div class="official-top-bar">
+              <span>الخطة الفصلية للأنشطة الصفية واللاصفية (1448هـ)</span>
+              <span class="gold-tag">الجزء الثاني: الأسابيع من (11) إلى (19)</span>
+            </div>
+            <div class="official-title-box">استكمال الخطة الفصلية واعتمادها الرسمي</div>
+          </div>
+
+          <table class="official-table">
+            <thead>
+              <tr>
+                <th style="width:15%;">الأسبوع والتاريخ</th>
+                <th style="width:20%;">مجال النشاط والبرنامج</th>
+                <th style="width:28%;">مواضيع الدروس (رابع / خامس / سادس)</th>
+                <th style="width:37%;">آلية تنفيذ النشاط ونوعه (مدمج ومنصة)</th>
+              </tr>
+            </thead>
+            <tbody id="planPart2Body"></tbody>
+          </table>
+
+          <table class="sign-grid">
+            <thead>
+              <tr>
+                <th>معلمة المادة</th>
+                <th>رائدة النشاط الطلابي</th>
+                <th>اعتماد مديرة المدرسة</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td contenteditable="true">
+                  <div><strong>الاسم:</strong> أ. أسماء ياسين الخيري</div>
+                  <div><strong>التوقيع:</strong> ....................................</div>
+                </td>
+                <td contenteditable="true">
+                  <div><strong>الاسم:</strong> ....................................</div>
+                  <div><strong>التوقيع:</strong> ....................................</div>
+                </td>
+                <td contenteditable="true">
+                  <div><strong>الاسم:</strong> أ. البتول آل دويس</div>
+                  <div><strong>التوقيع:</strong> ....................................</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <footer class="official-footer">
+          <span>تُعتمد الخطة وتُحفظ في ملف إنجاز المعلمة وسجل النشاط الطلابي بالمدرسة</span>
+          <span class="moe-badge">صفحة 3 من 3</span>
+        </footer>
+      </article>
+    </section>
+
+    <!-- =====================================================================
+         الواجهة الثانية: بطاقة تنفيذ نشاط (النماذج الرسمية المعبأة الفعلية)
+         ===================================================================== -->
+    <section id="cardsView" class="view-panel hidden">
+      <!-- شريط تصنيف وتصفية البطاقات حسب النوع والأسبوع -->
+      <div class="sub-filter-bar">
+        <div class="sub-filter-row">
+          <div class="sub-filter-head">
+            <span class="sub-filter-label">تصنيف البطاقات حسب النوع:</span>
+            <span class="cards-filter-count" id="cardsFilterCount">عرض 8 من أصل 8 بطاقات</span>
+          </div>
+          <div class="sub-filter-btns" id="cardTypeFilterBtns">
+            <button type="button" class="type-btn active" data-type="all" onclick="filterCardsByType('all', this)">الكل <span class="cat-count">(8)</span></button>
+            <button type="button" class="type-btn" data-type="نشاط صفي" onclick="filterCardsByType('نشاط صفي', this)">نشاط صفي <span class="cat-count">(3)</span></button>
+            <button type="button" class="type-btn" data-type="نشاط إثرائي" onclick="filterCardsByType('نشاط إثرائي', this)">نشاط إثرائي <span class="cat-count">(2)</span></button>
+            <button type="button" class="type-btn" data-type="مناسبات وأيام عالمية" onclick="filterCardsByType('مناسبات وأيام عالمية', this)">مناسبات وأيام عالمية <span class="cat-count">(3)</span></button>
+          </div>
+        </div>
+
+        <div class="sub-filter-row">
+          <span class="sub-filter-label">تصفية حسب الأسبوع:</span>
+          <div class="sub-filter-btns" id="cardWeekFilterBtns">
+            <button type="button" class="wk-btn active" data-wk="all" onclick="filterCards('all', this)">جميع الأسابيع (8)</button>
+            <button type="button" class="wk-btn" data-wk="2" onclick="filterCards('2', this)">أسبوع 2 (أبو بكر)</button>
+            <button type="button" class="wk-btn" data-wk="5" onclick="filterCards('5', this)">أسبوع 5 (اليوم الوطني)</button>
+            <button type="button" class="wk-btn" data-wk="13" onclick="filterCards('13', this)">أسبوع 13</button>
+            <button type="button" class="wk-btn" data-wk="14" onclick="filterCards('14', this)">أسبوع 14</button>
+            <button type="button" class="wk-btn" data-wk="15" onclick="filterCards('15', this)">أسبوع 15</button>
+            <button type="button" class="wk-btn" data-wk="16" onclick="filterCards('16', this)">أسبوع 16</button>
+            <button type="button" class="wk-btn" data-wk="17" onclick="filterCards('17', this)">أسبوع 17</button>
+            <button type="button" class="wk-btn" data-wk="18" onclick="filterCards('18', this)">أسبوع 18</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="cardsEmptyFilterNotice" class="cards-empty-notice hidden edit-only">
+        <div>لا توجد بطاقات تطابق النوع والأسبوع المحددين حالياً.</div>
+        <button type="button" class="wk-btn active" onclick="resetCardFilters()">عرض جميع البطاقات</button>
+      </div>
+
+      <div id="cardsListContainer" class="view-panel"></div>
+    </section>
+
+  </main>
+
+  <script>
+const primaryFullPlanData = [
+      {
+        week: "الأسبوع 1<br>03/10 – 03/14",
+        program: "التهيئة والاستعداد (حياكم)",
+        lessons: "• رابع وسادس: التهيئة.<br>• خامس: الخلفاء الراشدون (وصف البيعة).",
+        mechanism: "نشاط تهيئة وتعارف (صفي/منصة): تهيئة الطالبات للعام الجديد، وتنفيذ نشاط للخامس حول مفهوم الشورى والبيعة في عهد الخلفاء الراشدين."
+      },
+      {
+        week: "الأسبوع 2<br>03/17 – 03/21",
+        program: "المواطنة والحياة<br>(مهارات طموحة: رحلة النجاح)",
+        lessons: "• رابع: المواطنة: الهوية الوطنية.<br>• خامس: الخليفة أبو بكر الصديق رضي الله عنه.<br>• سادس: الخلافة الراشدة: سمات الخلفاء.",
+        mechanism: "نشاط قيم وسير (إثرائي/صفي): بطاقات إثرائية لصفات أبي بكر (الصدق، العفة ص25) ومناقشة لرابع حول مفهوم الوطن والهوية الوطنية."
+      },
+      {
+        week: "الأسبوع 3<br>03/24 – 03/28",
+        program: "المواطنة والحياة<br>(سفراء الاستدامة)",
+        lessons: "• رابع: المواطنة: نظام الحكم.<br>• خامس وسادس: الخليفة عمر بن الخطاب رضي الله عنه.",
+        mechanism: "نشاط تحليل تاريخي ووطني: استنتاج معنى لقب الفاروق (ص30) وتلخيص إنجازاته، وتوضيح مفهوم الحكومة للرابع عبر خريطة مفاهيم."
+      },
+      {
+        week: "الأسبوع 4<br>04/02 – 04/06",
+        program: "الرياضة والصحة<br>(صحتي ومسؤوليتي)",
+        lessons: "• رابع: مراجعة (الرموز الوطنية).<br>• خامس وسادس: الخليفة عثمان بن عفان رضي الله عنه.",
+        mechanism: "نشاط بحث وتلخيص: إبراز سبب تسمية عثمان بـ (ذو النورين ص37) واستشهاده وتنفيذ مسابقة مراجعة تفاعلية للصف الرابع."
+      },
+      {
+        week: "الأسبوع 5<br>04/09 – 04/13",
+        program: "الأيام والمناسبات<br>اليوم الوطني (الإرث والأمجاد)",
+        lessons: "• رابع: التاريخ: مفهوم التاريخ والمؤرخ.<br>• خامس وسادس: مراجعة عامة.<br>• الخميس 04/13: إجازة اليوم الوطني.",
+        mechanism: "فعاليات اليوم الوطني (4 حصص): توثيق أمجاد الوطن وتوحيده وربط درس (المؤرخ) لرابع بتدوين تاريخ المملكة العربية السعودية."
+      },
+      {
+        week: "الأسبوع 6<br>04/16 – 04/20",
+        program: "الرياضة والصحة<br>(الإرث والأمجاد)",
+        lessons: "• رابع: التاريخ: المصادر (مفهوم الإشاعة).<br>• خامس وسادس: الدولة الأموية.",
+        mechanism: "نشاط خرائط وتفكير ناقد: تحديد عاصمة الأمويين دمشق (ص50) على الخريطة ونسبهم، ونشاط لرابع حول التثبت من المصادر ومحاربة الإشاعة."
+      },
+      {
+        week: "الأسبوع 7<br>04/23 – 04/27",
+        program: "الأيام والمناسبات<br>(يوم المعلم + صانع الأثر)",
+        lessons: "• رابع: السبب والنتيجة (مناطق المملكة).<br>• خامس وسادس: الدولة العباسية.",
+        mechanism: "نشاط خرائط وشخصيات: تحديد نسب الدولة العباسية للعباس بن عبد المطلب (ص58) وتعداد مناطق المملكة لرابع مع الاحتفاء بيوم المعلم."
+      },
+      {
+        week: "الأسبوع 8<br>04/30 – 05/04",
+        program: "الرياضة والصحة<br>(صحتي في بيئتي)",
+        lessons: "• رابع وسادس: مراجعة عامة.<br>• خامس: الحضارة الإسلامية.",
+        mechanism: "نشاط إثرائي حضاري: تصميم بطاقة/مطوية مصغرة حول خصائص الحضارة الإسلامية وإسهاماتها وحل أوراق عمل مراجعة للرابع وسادس."
+      },
+      {
+        week: "الأسبوع 9<br>05/07 – 05/11",
+        program: "النشاط الكشفي<br>(بصمتي الكشفية)",
+        lessons: "• رابع: مفهوم الجغرافيا والخريطة.<br>• خامس وسادس: الأمن ورجال الأمن.",
+        mechanism: "نشاط كشفي وجغرافي: تدريب عملي على قراءة الخريطة وتحديد الموقع للرابع واستعراض بطولات رجال الأمن وكيفية المحافظة على نعمة الأمن."
+      },
+      {
+        week: "الأسبوع 10<br>05/14 – 05/18",
+        program: "النشاط الكشفي<br>(خيمتي الجميلة)",
+        lessons: "• رابع: الموقع والجهات الأصلية.<br>• خامس: أجهزة الأمن. • سادس: مراجعة.",
+        mechanism: "نشاط تطبيقي ومواطنة: تطبيق الجهات الأصلية للرابع وتصميم بطاقة أرقام الطوارئ (الشرطة 999، الدفاع المدني 998، 111) وواجبنا تجاه الشهداء."
+      },
+      {
+        week: "الأسبوع 11<br>05/21 – 05/25",
+        program: "النشاط الكشفي<br>(بوصلة الاكتشاف)",
+        lessons: "• رابع: المكان (الأماكن السياحية).<br>• خامس وسادس: الموقع والحدود.",
+        mechanism: "نشاط البوصلة والحدود: تحديد حدود المملكة وأهمية موقعها الاستراتيجي لخامس وسادس وعرض صور لأبرز المعالم السياحية للرابع."
+      },
+      {
+        week: "الأسبوع 12<br>05/28 – 06/02",
+        program: "العلوم والتقنية<br>(إنترنت الأشياء - كن واعياً)",
+        lessons: "• رابع: البيئة وتكيف الإنسان.<br>• خامس وسادس: مظاهر السطح.",
+        mechanism: "نشاط تضاريس وبركانية (ص62): وصف المعالم التضاريسية (حمم وصخور بركانية، جبل الملساء، حرة رهط وخيبر) واستعراض جبال عسير والسودة رقمياً."
+      },
+      {
+        week: "الأسبوع 13<br>06/05 – 06/09",
+        program: "العلوم والتقنية<br>(الاستدامة وجودة الحياة)",
+        lessons: "• رابع: الحركة (نقل البضائع) ومراجعة.<br>• خامس وسادس: المناطق الرملية.",
+        mechanism: "نشاط بيئي واقتصادي (عن بُعد): وصف صحراء الربع الخالي (ص93) ومشاريع الاستدامة فيها، وتتبع وسائل وخطوط نقل البضائع في المملكة للرابع."
+      },
+      {
+        week: "الأسبوع 14<br>06/12 – 06/16",
+        program: "مناسبات وتقنية<br>(اليوم العالمي لذوي الإعاقة + AI)",
+        lessons: "• رابع: مفهوم الاقتصاد والسلع.<br>• خامس وسادس: جغرافية وطني: الأودية.",
+        mechanism: "نشاط مجتمعي وجغرافي (عن بُعد): تحديد أطول أودية المملكة (وادي الرمة ص97) وتصنيف السلع الاستهلاكية للرابع مع تعزيز دمج ذوي الإعاقة."
+      },
+      {
+        week: "الأسبوع 15<br>06/19 – 06/23",
+        program: "النادي الثقافي<br>(الذكاء الاصطناعي وتطبيقاته)",
+        lessons: "• رابع: الاقتصاد: التبادل التجاري.<br>• خامس وسادس: المناطق الساحلية والجزر.",
+        mechanism: "نشاط مقارنات واستكشاف (عن بُعد): مقارنة بين التبادل التجاري قديماً وحديثاً للرابع واستكشاف جزر فرسان (ص93) والشعب المرجانية لخامس وسادس."
+      },
+      {
+        week: "الأسبوع 16<br>06/26 – 07/01",
+        program: "مناسبات وتقنية<br>(اليوم العالمي للغة العربية + AI)",
+        lessons: "• رابع وسادس: مراجعة عامة.<br>• خامس: المناطق الإدارية الـ 13.",
+        mechanism: "نشاط الخريطة الإدارية (عن بُعد): مسابقة تحديد المناطق الإدارية الـ 13 للمملكة (ص90) لخامس وتعزيز الهوية واللغة العربية في أنشطة المراجعة."
+      },
+      {
+        week: "الأسبوع 17<br>07/04 – 07/08",
+        program: "العلوم والتقنية<br>(مشاريع الذكاء الاصطناعي)",
+        lessons: "• جميع الصفوف (رابع / خامس / سادس): مراجعة عامة شاملة.",
+        mechanism: "نشاط المراجعة التفاعلية (عن بُعد): مسابقات إلكترونية وأسئلة تفاعلية شاملة لمقررات الفصل الدراسي الأول عبر منصة مدرستي."
+      },
+      {
+        week: "الأسبوع 18 و 19<br>07/18 – 07/29",
+        program: "الختام والتقويم / الاختبارات النهائية",
+        lessons: "• الأسبوع 18: مراجعة نهائية وتقييم الأنشطة.<br>• الأسبوع 19: الاختبارات النهائية.",
+        mechanism: "التقييم والختام: تكريم الطالبات المتفاعلات رقمياً، رصد الأنشطة والواجبات في منصة مدرستي والكتاب، وإعداد التقرير الختامي."
+      }
+    ];
+
+    /* ================= بيانات بطاقات التنفيذ المعبأة الفعلية ================= */
+    
+const primaryExecutionCardsData = [
+      {
+        weekKey: "2",
+        activityType: "نشاط إثرائي",
+        badge: "بطاقة نشاط صفي / إثرائي — الأسبوع الثاني",
+        programName: "بطاقات إثرائية لصفات الخليفة أبي بكر الصديق رضي الله عنه (مهارات طموحة: رحلة النجاح)",
+        domain: "المواطنة والحياة — التكامل المنهجي (ص 25)",
+        sessionsCount: "حصتان (الحصة 1 يوم الأربعاء والحصة 3 يوم الخميس)",
+        term: "الفصل الدراسي الأول 1448هـ",
+        startInfo: "اليوم: الأربعاء | الأسبوع: 2 | التاريخ: 20 / 03 / 1448هـ",
+        endInfo: "اليوم: الخميس | الأسبوع: 2 | التاريخ: 21 / 03 / 1448هـ",
+        grade: "الصف الخامس الابتدائي (الحصة 1 و 3)",
+        teacher: "أسماء ياسين الخيري",
+        studentsCount: "نسبة تفاعل تتجاوز 95% من طالبات الصف الخامس",
+        disabledStudentsCount: "مشمولون بالدمج الصفي والتفاعلي",
+        parentsCount: "متابعة أسرية عبر منصة مدرستي",
+        selectedIcon: "قيمنا الغالية",
+        partnersCount: "0",
+        partnersNames: "لا يوجد (نشاط صفي وإثرائي منهجي)",
+        detailsHtml: `
+          <strong>أهداف النشاط:</strong> تعدد الطالبة أبرز صفات أبي بكر الصديق رضي الله عنه (الصدق، العفة، التواضع، الحلم)، وتستنتج أثر التحلي بالصدق والأمانة في بناء المواطن الصالح.<br>
+          <strong>خطوات التنفيذ:</strong> عرض بصري تمهيدي، توزيع بطاقات مواقف من سيرته (ص 25)، استخراج الصفة القيادية وربطها بالسلوك اليومي للطالبة وتوثيقها في منصة مدرستي.
+        `,
+        notes: "تم توثيق نماذج البطاقات الإثرائية ورصد تفاعل الطالبات في سجل المتابعة ومنصة مدرستي.",
+        signDate: "21 / 03 / 1448هـ"
+      },
+      {
+        weekKey: "5",
+        activityType: "مناسبات وأيام عالمية",
+        badge: "بطاقة برنامج نشاط متكامل — الأسبوع الخامس",
+        programName: "اليوم الوطني السعودي (الإرث والأمجاد)",
+        domain: "الأيام والمناسبات الوطنية — التاريخ والمواطنة",
+        sessionsCount: "4 حصص (تكامل منهجي للصفوف العليا)",
+        term: "الفصل الدراسي الأول 1448هـ",
+        startInfo: "اليوم: الأحد | الأسبوع: 5 | التاريخ: 09 / 04 / 1448هـ",
+        endInfo: "اليوم: الأربعاء | الأسبوع: 5 | التاريخ: 12 / 04 / 1448هـ",
+        grade: "طالبات الصفوف العليا (رابع – خامس – سادس)",
+        teacher: "أسماء ياسين الخيري",
+        studentsCount: "جميع طالبات الصفوف العليا المشاركات بالفعاليات",
+        disabledStudentsCount: "مشاركة شاملة وميسّرة",
+        parentsCount: "مشاركة وتفاعل الأسرة في الأعمال الوطنية",
+        selectedIcon: "قيمنا الغالية",
+        partnersCount: "0",
+        partnersNames: "مبادرات داخلية ومعرض أعمال الطالبات بالمدرسة",
+        detailsHtml: `
+          <strong>أهداف البرنامج:</strong> تعزيز قيم الانتماء والولاء للوطن والقيادة الرشيدة، وربط درس (مفهوم التاريخ والمؤرخ للصف الرابع) بتوثيق أمجاد توحيد المملكة.<br>
+          <strong>مراحل التنفيذ:</strong> عروض مرئية حول توحيد المملكة، نشاط «توثيق أمجاد الوطن» للصف الرابع، ومسابقات ثقافية وتاريخية تفاعلية للصفين الخامس والسادس.
+        `,
+        notes: "تم توثيق ألبوم صور الفعاليات والمسابقات ونماذج من مطويات ولوحات الطالبات الوطنية.",
+        signDate: "12 / 04 / 1448هـ"
+      },
+      {
+        weekKey: "13",
+        activityType: "نشاط صفي",
+        badge: "بطاقة تنفيذ عن بُعد — الأسبوع الثالث عشر",
+        programName: "الاستدامة وجودة الحياة (كن واعياً) — المناطق الرملية وحركة البضائع",
+        domain: "العلوم والتقنية / الجغرافيا",
+        sessionsCount: "حسب دليل الخطط الدراسية / الإصدار السادس (حصة نشاط مدمجة)",
+        term: "الفصل الدراسي الأول 1448هـ",
+        startInfo: "اليوم: الاثنين | الأسبوع: 13 | التاريخ: 06 / 06 / 1448هـ",
+        endInfo: "اليوم: الخميس | الأسبوع: 13 | التاريخ: 09 / 06 / 1448هـ",
+        grade: "رابع (الثلاثاء ح4) | سادس (الاثنين ح4) | خامس (الخميس ح3)",
+        teacher: "أسماء ياسين الخيري",
+        studentsCount: "...... طالبة (من كشف حضور المنصة)",
+        disabledStudentsCount: "...... طالبة",
+        parentsCount: "...... ولي أمر",
+        selectedIcon: "بنك الإثراءات",
+        partnersCount: "0",
+        partnersNames: "لا يوجد (تنفيذ إلكتروني عبر منصة مدرستي)",
+        detailsHtml: `
+          <strong>التنفيذ عن بُعد عبر منصة مدرستي:</strong><br>
+          • <strong>رابع:</strong> نشاط «رحلة البضائع في وطني» وتحديد وسائل النقل الآمنة وحماية البيئة.<br>
+          • <strong>خامس وسادس:</strong> استكشاف «صحراء الربع الخالي والمناطق الرملية» ومشاريع الاستدامة والطاقة الشمسية وحماية الغطاء النباتي.
+        `,
+        notes: "تم تنفيذ النشاط في شات الحصة الافتراضية وتوثيق مشاركات الطالبات بلقطات الشاشة.",
+        signDate: "09 / 06 / 1448هـ"
+      },
+      {
+        weekKey: "14",
+        activityType: "مناسبات وأيام عالمية",
+        badge: "بطاقة تنفيذ عن بُعد — الأسبوع الرابع عشر",
+        programName: "اليوم العالمي لذوي الإعاقة + الأودية والسلع الاستهلاكية",
+        domain: "الأيام والمناسبات والتقنية / الجغرافيا والاقتصاد",
+        sessionsCount: "حسب دليل الخطط الدراسية / الإصدار السادس (حصة نشاط مدمجة)",
+        term: "الفصل الدراسي الأول 1448هـ",
+        startInfo: "اليوم: الاثنين | الأسبوع: 14 | التاريخ: 13 / 06 / 1448هـ",
+        endInfo: "اليوم: الخميس | الأسبوع: 14 | التاريخ: 16 / 06 / 1448هـ",
+        grade: "رابع (الثلاثاء ح4) | سادس (الاثنين ح4) | خامس (الخميس ح3)",
+        teacher: "أسماء ياسين الخيري",
+        studentsCount: "...... طالبة (من كشف حضور المنصة)",
+        disabledStudentsCount: "...... طالبة",
+        parentsCount: "...... ولي أمر",
+        selectedIcon: "قيمنا الغالية",
+        partnersCount: "0",
+        partnersNames: "لا يوجد (تنفيذ إلكتروني عبر منصة مدرستي)",
+        detailsHtml: `
+          <strong>التنفيذ عن بُعد عبر منصة مدرستي:</strong><br>
+          • <strong>رابع:</strong> تصنيف السلع الضرورية وغير الضرورية وكتابة عبارات ترحيب ودعم لزميلاتنا من ذوي الإعاقة.<br>
+          • <strong>خامس وسادس:</strong> تحديد أطول أودية المملكة (وادي الرمة ص97) والسلامة أثناء الأمطار واقتراح مبادرات لدمج ذوي الإعاقة.
+        `,
+        notes: "شهدت الحصص تفاعلاً إنسانياً وتربوياً مميزاً في تعزيز ثقافة دمج ذوي الإعاقة.",
+        signDate: "16 / 06 / 1448هـ"
+      },
+      {
+        weekKey: "15",
+        activityType: "نشاط إثرائي",
+        badge: "بطاقة تنفيذ عن بُعد — الأسبوع الخامس عشر",
+        programName: "النادي الثقافي والبيئي — المناطق الساحلية والجزر والتبادل التجاري",
+        domain: "النادي الثقافي / الجغرافيا والاقتصاد",
+        sessionsCount: "حسب دليل الخطط الدراسية / الإصدار السادس (حصة نشاط مدمجة)",
+        term: "الفصل الدراسي الأول 1448هـ",
+        startInfo: "اليوم: الاثنين | الأسبوع: 15 | التاريخ: 20 / 06 / 1448هـ",
+        endInfo: "اليوم: الخميس | الأسبوع: 15 | التاريخ: 23 / 06 / 1448هـ",
+        grade: "رابع (الثلاثاء ح4) | سادس (الاثنين ح4) | خامس (الخميس ح3)",
+        teacher: "أسماء ياسين الخيري",
+        studentsCount: "...... طالبة (من كشف حضور المنصة)",
+        disabledStudentsCount: "...... طالبة",
+        parentsCount: "...... ولي أمر",
+        selectedIcon: "بنك الإثراءات",
+        partnersCount: "0",
+        partnersNames: "لا يوجد (تنفيذ إلكتروني عبر منصة مدرستي)",
+        detailsHtml: `
+          <strong>التنفيذ عن بُعد عبر منصة مدرستي:</strong><br>
+          • <strong>رابع:</strong> مقارنة بين التبادل التجاري قديماً (المقايضة) وحديثاً (التسوق الإلكتروني الآمن).<br>
+          • <strong>خامس وسادس:</strong> رحلة افتراضية إلى جزر فرسان (ص93) والشعب المرجانية وتقديم نصائح لحماية البيئة البحرية.
+        `,
+        notes: "تم توثيق إجابات الطالبات في محادثة منصة مدرستي وإرفاق الشواهد في ملف الإنجاز.",
+        signDate: "23 / 06 / 1448هـ"
+      },
+      {
+        weekKey: "16",
+        activityType: "مناسبات وأيام عالمية",
+        badge: "بطاقة تنفيذ عن بُعد — الأسبوع السادس عشر",
+        programName: "اليوم العالمي للغة العربية وتحدي المناطق الإدارية الـ 13",
+        domain: "الأيام والمناسبات / الجغرافيا والمراجعة",
+        sessionsCount: "حسب دليل الخطط الدراسية / الإصدار السادس (حصة نشاط مدمجة)",
+        term: "الفصل الدراسي الأول 1448هـ",
+        startInfo: "اليوم: الاثنين | الأسبوع: 16 | التاريخ: 27 / 06 / 1448هـ",
+        endInfo: "اليوم: الخميس | الأسبوع: 16 | التاريخ: 01 / 07 / 1448هـ",
+        grade: "رابع (الثلاثاء ح4) | سادس (الاثنين ح4) | خامس (الخميس ح3)",
+        teacher: "أسماء ياسين الخيري",
+        studentsCount: "...... طالبة (من كشف حضور المنصة)",
+        disabledStudentsCount: "...... طالبة",
+        parentsCount: "...... ولي أمر",
+        selectedIcon: "نادي القراءة",
+        partnersCount: "0",
+        partnersNames: "لا يوجد (تنفيذ إلكتروني عبر منصة مدرستي)",
+        detailsHtml: `
+          <strong>التنفيذ عن بُعد عبر منصة مدرستي:</strong><br>
+          • <strong>رابع وسادس:</strong> صياغة جمل وتعريفات تاريخية وجغرافية بلغة عربية فصيحة احتفاءً باليوم العالمي للغة العربية.<br>
+          • <strong>خامس:</strong> مسابقة سريعة لتحديد المناطق الإدارية الـ 13 للمملكة (ص90) بلغة سليمة.
+        `,
+        notes: "أسهم النشاط في تعزيز الاعتزاز باللغة العربية الفصحى أثناء مراجعة المفاهيم الجغرافية.",
+        signDate: "01 / 07 / 1448هـ"
+      },
+      {
+        weekKey: "17",
+        activityType: "نشاط صفي",
+        badge: "بطاقة تنفيذ عن بُعد — الأسبوع السابع عشر",
+        programName: "المراجعة التفاعلية الشاملة (مسابقات إلكترونية لمقرر الفصل الأول)",
+        domain: "العلوم والتقنية / المراجعة الشاملة",
+        sessionsCount: "حسب دليل الخطط الدراسية / الإصدار السادس (حصة نشاط مدمجة)",
+        term: "الفصل الدراسي الأول 1448هـ",
+        startInfo: "اليوم: الاثنين | الأسبوع: 17 | التاريخ: 05 / 07 / 1448هـ",
+        endInfo: "اليوم: الخميس | الأسبوع: 17 | التاريخ: 08 / 07 / 1448هـ",
+        grade: "رابع (الثلاثاء ح4) | سادس (الاثنين ح4) | خامس (الخميس ح3)",
+        teacher: "أسماء ياسين الخيري",
+        studentsCount: "...... طالبة (من كشف حضور المنصة)",
+        disabledStudentsCount: "...... طالبة",
+        parentsCount: "...... ولي أمر",
+        selectedIcon: "التطوير الذاتي",
+        partnersCount: "0",
+        partnersNames: "لا يوجد (تنفيذ إلكتروني عبر منصة مدرستي)",
+        detailsHtml: `
+          <strong>التنفيذ عن بُعد عبر منصة مدرستي:</strong><br>
+          تنفيذ جولة تحدي ومسابقة إلكترونية سريعة شملت أبرز مفاهيم التاريخ والجغرافيا والمواطنة والاقتصاد للصفوف الرابع والخامس والسادس استعداداً للاختبارات النهائية.
+        `,
+        notes: "تفاعل مرتفع من الطالبات وسرعة استجابة عالية في أسئلة المراجعة التفاعلية.",
+        signDate: "08 / 07 / 1448هـ"
+      },
+      {
+        weekKey: "18",
+        activityType: "نشاط صفي",
+        badge: "بطاقة تنفيذ عن بُعد — الأسبوع الثامن عشر (الختام)",
+        programName: "الختام والتقويم — تقييم الأنشطة وتكريم المتميزات عن بُعد",
+        domain: "التقويم والختام / المواطنة والحياة",
+        sessionsCount: "حسب دليل الخطط الدراسية / الإصدار السادس (حصة نشاط مدمجة)",
+        term: "الفصل الدراسي الأول 1448هـ",
+        startInfo: "اليوم: الاثنين | الأسبوع: 18 | التاريخ: 19 / 07 / 1448هـ",
+        endInfo: "اليوم: الخميس | الأسبوع: 18 | التاريخ: 22 / 07 / 1448هـ",
+        grade: "رابع (الثلاثاء ح4) | سادس (الاثنين ح4) | خامس (الخميس ح3)",
+        teacher: "أسماء ياسين الخيري",
+        studentsCount: "...... طالبة (إجمالي المشاركات في الفصل الأول)",
+        disabledStudentsCount: "...... طالبة",
+        parentsCount: "...... ولي أمر",
+        selectedIcon: "قيمنا الغالية",
+        partnersCount: "0",
+        partnersNames: "لا يوجد (تنفيذ إلكتروني عبر منصة مدرستي)",
+        detailsHtml: `
+          <strong>التنفيذ عن بُعد عبر منصة مدرستي:</strong><br>
+          رصد تفاعل الطالبات في الأنشطة الصفية والإثرائية والواجبات، وتقديم رسائل الشكر والتكريم الرقمي للمتميزات، وإغلاق ملف الأنشطة للفصل الدراسي الأول.
+        `,
+        notes: "اكتملت جميع متطلبات خطة النشاط وتم إعداد الشواهد والتقرير الختامي للاعتماد.",
+        signDate: "22 / 07 / 1448هـ"
+      }
+    ];
+
+    
+const secondaryFullPlanData = [
+      {
+        week: "الأسبوع 1<br>03/10 – 03/14",
+        program: "التهيئة والاستعداد (حياكم)",
+        lessons: "• رابع وسادس: التهيئة.<br>• خامس: الخلفاء الراشدون (وصف البيعة).",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): نشاط تهيئة وتعارف لتهيئة الطالبات للعام الجديد، وتنفيذ نشاط للخامس حول مفهوم الشورى والبيعة في عهد الخلفاء الراشدين."
+      },
+      {
+        week: "الأسبوع 2<br>03/17 – 03/21",
+        program: "المواطنة والحياة<br>(مهارات طموحة: رحلة النجاح)",
+        lessons: "• رابع: المواطنة: الهوية الوطنية.<br>• خامس: الخليفة أبو بكر الصديق رضي الله عنه.<br>• سادس: الخلافة الراشدة: سمات الخلفاء.",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): بطاقات إثرائية لصفات أبي بكر (الصدق، العفة ص25) ومناقشة لرابع حول مفهوم الوطن والهوية الوطنية."
+      },
+      {
+        week: "الأسبوع 3<br>03/24 – 03/28",
+        program: "المواطنة والحياة<br>(سفراء الاستدامة)",
+        lessons: "• رابع: المواطنة: نظام الحكم.<br>• خامس وسادس: الخليفة عمر بن الخطاب رضي الله عنه.",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): تحليل تاريخي ووطني لاستنتاج معنى لقب الفاروق (ص30) وتلخيص إنجازاته، وتوضيح مفهوم الحكومة للرابع عبر خريطة مفاهيم."
+      },
+      {
+        week: "الأسبوع 4<br>04/02 – 04/06",
+        program: "الرياضة والصحة<br>(صحتي ومسؤوليتي)",
+        lessons: "• رابع: مراجعة (الرموز الوطنية).<br>• خامس وسادس: الخليفة عثمان بن عفان رضي الله عنه.",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): بحث وتلخيص لإبراز سبب تسمية عثمان بـ (ذو النورين ص37) واستشهاده وتنفيذ مسابقة مراجعة تفاعلية للصف الرابع."
+      },
+      {
+        week: "الأسبوع 5<br>04/09 – 04/13",
+        program: "الأيام والمناسبات<br>اليوم الوطني (الإرث والأمجاد)",
+        lessons: "• رابع: التاريخ: مفهوم التاريخ والمؤرخ.<br>• خامس وسادس: مراجعة عامة.<br>• الخميس 04/13: إجازة اليوم الوطني.",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): فعاليات اليوم الوطني (4 حصص) لتوثيق أمجاد الوطن وتوحيده وربط درس (المؤرخ) لرابع بتدوين تاريخ المملكة العربية السعودية."
+      },
+      {
+        week: "الأسبوع 6<br>04/16 – 04/20",
+        program: "الرياضة والصحة<br>(الإرث والأمجاد)",
+        lessons: "• رابع: التاريخ: المصادر (مفهوم الإشاعة).<br>• خامس وسادس: الدولة الأموية.",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): خرائط وتفكير ناقد لتحديد عاصمة الأمويين دمشق (ص50) ونسبهم، ونشاط لرابع حول التثبت من المصادر ومحاربة الإشاعة."
+      },
+      {
+        week: "الأسبوع 7<br>04/23 – 04/27",
+        program: "الأيام والمناسبات<br>(يوم المعلم + صانع الأثر)",
+        lessons: "• رابع: السبب والنتيجة (مناطق المملكة).<br>• خامس وسادس: الدولة العباسية.",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): خرائط وشخصيات لتحديد نسب الدولة العباسية للعباس بن عبد المطلب (ص58) وتعداد مناطق المملكة لرابع مع الاحتفاء بيوم المعلم."
+      },
+      {
+        week: "الأسبوع 8<br>04/30 – 05/04",
+        program: "الرياضة والصحة<br>(صحتي في بيئتي)",
+        lessons: "• رابع وسادس: مراجعة عامة.<br>• خامس: الحضارة الإسلامية.",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): تصميم بطاقة/مطوية مصغرة حول خصائص الحضارة الإسلامية وإسهاماتها وحل أوراق عمل مراجعة للرابع وسادس."
+      },
+      {
+        week: "الأسبوع 9<br>05/07 – 05/11",
+        program: "النشاط الكشفي<br>(بصمتي الكشفية)",
+        lessons: "• رابع: مفهوم الجغرافيا والخريطة.<br>• خامس وسادس: الأمن ورجال الأمن.",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): تدريب عملي على قراءة الخريطة وتحديد الموقع للرابع واستعراض بطولات رجال الأمن وكيفية المحافظة على نعمة الأمن."
+      },
+      {
+        week: "الأسبوع 10<br>05/14 – 05/18",
+        program: "النشاط الكشفي<br>(خيمتي الجميلة)",
+        lessons: "• رابع: الموقع والجهات الأصلية.<br>• خامس: أجهزة الأمن. • سادس: مراجعة.",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): تطبيق الجهات الأصلية للرابع وتصميم بطاقة أرقام الطوارئ (الشرطة 999، الدفاع المدني 998، 111) وواجبنا تجاه الشهداء."
+      },
+      {
+        week: "الأسبوع 11<br>05/21 – 05/25",
+        program: "النشاط الكشفي<br>(بوصلة الاكتشاف)",
+        lessons: "• رابع: المكان (الأماكن السياحية).<br>• خامس وسادس: الموقع والحدود.",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): تحديد حدود المملكة وأهمية موقعها الاستراتيجي لخامس وسادس وعرض صور لأبرز المعالم السياحية للرابع."
+      },
+      {
+        week: "الأسبوع 12<br>05/28 – 06/02",
+        program: "العلوم والتقنية<br>(إنترنت الأشياء - كن واعياً)",
+        lessons: "• رابع: البيئة وتكيف الإنسان.<br>• خامس وسادس: مظاهر السطح.",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): وصف المعالم التضاريسية (حمم وصخور بركانية، جبل الملساء، حرة رهط وخيبر ص62) واستعراض جبال عسير والسودة رقمياً."
+      },
+      {
+        week: "الأسبوع 13<br>06/05 – 06/09",
+        program: "العلوم والتقنية<br>(الاستدامة وجودة الحياة)",
+        lessons: "• رابع: الحركة (نقل البضائع) ومراجعة.<br>• خامس وسادس: المناطق الرملية.",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): وصف صحراء الربع الخالي (ص93) ومشاريع الاستدامة فيها، وتتبع وسائل وخطوط نقل البضائع في المملكة للرابع."
+      },
+      {
+        week: "الأسبوع 14<br>06/12 – 06/16",
+        program: "مناسبات وتقنية<br>(اليوم العالمي لذوي الإعاقة + AI)",
+        lessons: "• رابع: مفهوم الاقتصاد والسلع.<br>• خامس وسادس: جغرافية وطني: الأودية.",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): تحديد أطول أودية المملكة (وادي الرمة ص97) وتصنيف السلع الاستهلاكية للرابع مع تعزيز دمج ذوي الإعاقة."
+      },
+      {
+        week: "الأسبوع 15<br>06/19 – 06/23",
+        program: "النادي الثقافي<br>(الذكاء الاصطناعي وتطبيقاته)",
+        lessons: "• رابع: الاقتصاد: التبادل التجاري.<br>• خامس وسادس: المناطق الساحلية والجزر.",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): مقارنة بين التبادل التجاري قديماً وحديثاً للرابع واستكشاف جزر فرسان (ص93) والشعب المرجانية لخامس وسادس."
+      },
+      {
+        week: "الأسبوع 16<br>06/26 – 07/01",
+        program: "مناسبات وتقنية<br>(اليوم العالمي للغة العربية + AI)",
+        lessons: "• رابع وسادس: مراجعة عامة.<br>• خامس: المناطق الإدارية الـ 13.",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): مسابقة تحديد المناطق الإدارية الـ 13 للمملكة (ص90) لخامس وتعزيز الهوية واللغة العربية في أنشطة المراجعة."
+      },
+      {
+        week: "الأسبوع 17<br>07/04 – 07/08",
+        program: "العلوم والتقنية<br>(مشاريع الذكاء الاصطناعي)",
+        lessons: "• جميع الصفوف (رابع / خامس / سادس): مراجعة عامة شاملة.",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): مسابقات إلكترونية وأسئلة تفاعلية شاملة لمقررات الفصل الدراسي الأول عبر منصة مدرستي."
+      },
+      {
+        week: "الأسبوع 18 و 19<br>07/18 – 07/29",
+        program: "الختام والتقويم / الاختبارات النهائية",
+        lessons: "• الأسبوع 18: مراجعة نهائية وتقييم الأنشطة.<br>• الأسبوع 19: الاختبارات النهائية.",
+        mechanism: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): تكريم الطالبات المتفاعلات رقمياً، رصد الأنشطة والواجبات في منصة مدرستي والكتاب، وإعداد التقرير الختامي."
+      }
+    ];
+
+    /* ================= بيانات بطاقات التنفيذ المعبأة الفعلية ================= */
+    
+const secondaryExecutionCardsData = [
+      {
+        weekKey: "2",
+        activityType: "نشاط إثرائي",
+        badge: "بطاقة نشاط صفي / إثرائي — الأسبوع الثاني",
+        programName: "بطاقات إثرائية لصفات الخليفة أبي بكر الصديق رضي الله عنه (مهارات طموحة: رحلة النجاح)",
+        domain: "المواطنة والحياة — التكامل المنهجي (ص 25)",
+        sessionsCount: "حصتان (الحصة 1 يوم الأربعاء والحصة 3 يوم الخميس)",
+        term: "الفصل الدراسي الأول 1448هـ",
+        startInfo: "اليوم: الأربعاء | الأسبوع: 2 | التاريخ: 20 / 03 / 1448هـ",
+        endInfo: "اليوم: الخميس | الأسبوع: 2 | التاريخ: 21 / 03 / 1448هـ",
+        grade: "الصف الخامس الابتدائي (الحصة 1 و 3)",
+        teacher: "أسماء ياسين الخيري",
+        studentsCount: "نسبة تفاعل تتجاوز 95% من طالبات الصف الخامس",
+        disabledStudentsCount: "مشمولون بالدمج الصفي والتفاعلي",
+        parentsCount: "متابعة أسرية عبر منصة مدرستي",
+        selectedIcon: "قيمنا الغالية",
+        partnersCount: "0",
+        partnersNames: "لا يوجد (نشاط صفي وإثرائي منهجي)",
+        mechanismType: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): بطاقات إثرائية لصفات أبي بكر (الصدق، العفة ص25) ومناقشة لرابع حول مفهوم الوطن والهوية الوطنية عبر منصة مدرستي والكتاب المدرسي.",
+        detailsHtml: `
+          <strong>أهداف النشاط:</strong> تعدد الطالبة أبرز صفات أبي بكر الصديق رضي الله عنه (الصدق، العفة، التواضع، الحلم)، وتستنتج أثر التحلي بالصدق والأمانة في بناء المواطن الصالح.<br>
+          <strong>خطوات التنفيذ:</strong> عرض بصري تمهيدي، توزيع بطاقات مواقف من سيرته (ص 25)، استخراج الصفة القيادية وربطها بالسلوك اليومي للطالبة وتوثيقها في منصة مدرستي.
+        `,
+        notes: "تم توثيق نماذج البطاقات الإثرائية ورصد تفاعل الطالبات في سجل المتابعة ومنصة مدرستي.",
+        signDate: "21 / 03 / 1448هـ"
+      },
+      {
+        weekKey: "5",
+        activityType: "مناسبات وأيام عالمية",
+        badge: "بطاقة برنامج نشاط متكامل — الأسبوع الخامس",
+        programName: "اليوم الوطني السعودي (الإرث والأمجاد)",
+        domain: "الأيام والمناسبات الوطنية — التاريخ والمواطنة",
+        sessionsCount: "4 حصص (تكامل منهجي للصفوف العليا)",
+        term: "الفصل الدراسي الأول 1448هـ",
+        startInfo: "اليوم: الأحد | الأسبوع: 5 | التاريخ: 09 / 04 / 1448هـ",
+        endInfo: "اليوم: الأربعاء | الأسبوع: 5 | التاريخ: 12 / 04 / 1448هـ",
+        grade: "طالبات الصفوف العليا (رابع – خامس – سادس)",
+        teacher: "أسماء ياسين الخيري",
+        studentsCount: "جميع طالبات الصفوف العليا المشاركات بالفعاليات",
+        disabledStudentsCount: "مشاركة شاملة وميسّرة",
+        parentsCount: "مشاركة وتفاعل الأسرة في الأعمال الوطنية",
+        selectedIcon: "قيمنا الغالية",
+        partnersCount: "0",
+        partnersNames: "مبادرات داخلية ومعرض أعمال الطالبات بالمدرسة",
+        mechanismType: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): 4 حصص لتوثيق أمجاد الوطن وتوحيده وربط درس (المؤرخ) لرابع بتدوين تاريخ المملكة العربية السعودية عبر منصة مدرستي والأنشطة الصفية.",
+        detailsHtml: `
+          <strong>أهداف البرنامج:</strong> تعزيز قيم الانتماء والولاء للوطن والقيادة الرشيدة، وربط درس (مفهوم التاريخ والمؤرخ للصف الرابع) بتوثيق أمجاد توحيد المملكة.<br>
+          <strong>مراحل التنفيذ:</strong> عروض مرئية حول توحيد المملكة، نشاط «توثيق أمجاد الوطن» للصف الرابع، ومسابقات ثقافية وتاريخية تفاعلية للصفين الخامس والسادس.
+        `,
+        notes: "تم توثيق ألبوم صور الفعاليات والمسابقات ونماذج من مطويات ولوحات الطالبات الوطنية.",
+        signDate: "12 / 04 / 1448هـ"
+      },
+      {
+        weekKey: "13",
+        activityType: "نشاط صفي",
+        badge: "بطاقة تنفيذ عن بُعد — الأسبوع الثالث عشر",
+        programName: "الاستدامة وجودة الحياة (كن واعياً) — المناطق الرملية وحركة البضائع",
+        domain: "العلوم والتقنية / الجغرافيا",
+        sessionsCount: "حسب دليل الخطط الدراسية / الإصدار السادس (حصة نشاط مدمجة)",
+        term: "الفصل الدراسي الأول 1448هـ",
+        startInfo: "اليوم: الاثنين | الأسبوع: 13 | التاريخ: 06 / 06 / 1448هـ",
+        endInfo: "اليوم: الخميس | الأسبوع: 13 | التاريخ: 09 / 06 / 1448هـ",
+        grade: "رابع (الثلاثاء ح4) | سادس (الاثنين ح4) | خامس (الخميس ح3)",
+        teacher: "أسماء ياسين الخيري",
+        studentsCount: "...... طالبة (من كشف حضور المنصة)",
+        disabledStudentsCount: "...... طالبة",
+        parentsCount: "...... ولي أمر",
+        selectedIcon: "بنك الإثراءات",
+        partnersCount: "0",
+        partnersNames: "لا يوجد (تنفيذ إلكتروني عبر منصة مدرستي)",
+        mechanismType: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): وصف صحراء الربع الخالي (ص93) ومشاريع الاستدامة فيها، وتتبع وسائل وخطوط نقل البضائع في المملكة للرابع عبر منصة مدرستي.",
+        detailsHtml: `
+          <strong>التنفيذ عن بُعد عبر منصة مدرستي:</strong><br>
+          • <strong>رابع:</strong> نشاط «رحلة البضائع في وطني» وتحديد وسائل النقل الآمنة وحماية البيئة.<br>
+          • <strong>خامس وسادس:</strong> استكشاف «صحراء الربع الخالي والمناطق الرملية» ومشاريع الاستدامة والطاقة الشمسية وحماية الغطاء النباتي.
+        `,
+        notes: "تم تنفيذ النشاط في شات الحصة الافتراضية وتوثيق مشاركات الطالبات بلقطات الشاشة.",
+        signDate: "09 / 06 / 1448هـ"
+      },
+      {
+        weekKey: "14",
+        activityType: "مناسبات وأيام عالمية",
+        badge: "بطاقة تنفيذ عن بُعد — الأسبوع الرابع عشر",
+        programName: "اليوم العالمي لذوي الإعاقة + الأودية والسلع الاستهلاكية",
+        domain: "الأيام والمناسبات والتقنية / الجغرافيا والاقتصاد",
+        sessionsCount: "حسب دليل الخطط الدراسية / الإصدار السادس (حصة نشاط مدمجة)",
+        term: "الفصل الدراسي الأول 1448هـ",
+        startInfo: "اليوم: الاثنين | الأسبوع: 14 | التاريخ: 13 / 06 / 1448هـ",
+        endInfo: "اليوم: الخميس | الأسبوع: 14 | التاريخ: 16 / 06 / 1448هـ",
+        grade: "رابع (الثلاثاء ح4) | سادس (الاثنين ح4) | خامس (الخميس ح3)",
+        teacher: "أسماء ياسين الخيري",
+        studentsCount: "...... طالبة (من كشف حضور المنصة)",
+        disabledStudentsCount: "...... طالبة",
+        parentsCount: "...... ولي أمر",
+        selectedIcon: "قيمنا الغالية",
+        partnersCount: "0",
+        partnersNames: "لا يوجد (تنفيذ إلكتروني عبر منصة مدرستي)",
+        mechanismType: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): تحديد أطول أودية المملكة (وادي الرمة ص97) وتصنيف السلع الاستهلاكية للرابع مع تعزيز دمج ذوي الإعاقة عبر منصة مدرستي.",
+        detailsHtml: `
+          <strong>التنفيذ عن بُعد عبر منصة مدرستي:</strong><br>
+          • <strong>رابع:</strong> تصنيف السلع الضرورية وغير الضرورية وكتابة عبارات ترحيب ودعم لزميلاتنا من ذوي الإعاقة.<br>
+          • <strong>خامس وسادس:</strong> تحديد أطول أودية المملكة (وادي الرمة ص97) والسلامة أثناء الأمطار واقتراح مبادرات لدمج ذوي الإعاقة.
+        `,
+        notes: "شهدت الحصص تفاعلاً إنسانياً وتربوياً مميزاً في تعزيز ثقافة دمج ذوي الإعاقة.",
+        signDate: "16 / 06 / 1448هـ"
+      },
+      {
+        weekKey: "15",
+        activityType: "نشاط إثرائي",
+        badge: "بطاقة تنفيذ عن بُعد — الأسبوع الخامس عشر",
+        programName: "النادي الثقافي والبيئي — المناطق الساحلية والجزر والتبادل التجاري",
+        domain: "النادي الثقافي / الجغرافيا والاقتصاد",
+        sessionsCount: "حسب دليل الخطط الدراسية / الإصدار السادس (حصة نشاط مدمجة)",
+        term: "الفصل الدراسي الأول 1448هـ",
+        startInfo: "اليوم: الاثنين | الأسبوع: 15 | التاريخ: 20 / 06 / 1448هـ",
+        endInfo: "اليوم: الخميس | الأسبوع: 15 | التاريخ: 23 / 06 / 1448هـ",
+        grade: "رابع (الثلاثاء ح4) | سادس (الاثنين ح4) | خامس (الخميس ح3)",
+        teacher: "أسماء ياسين الخيري",
+        studentsCount: "...... طالبة (من كشف حضور المنصة)",
+        disabledStudentsCount: "...... طالبة",
+        parentsCount: "...... ولي أمر",
+        selectedIcon: "بنك الإثراءات",
+        partnersCount: "0",
+        partnersNames: "لا يوجد (تنفيذ إلكتروني عبر منصة مدرستي)",
+        mechanismType: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): مقارنة بين التبادل التجاري قديماً وحديثاً للرابع واستكشاف جزر فرسان (ص93) والشعب المرجانية لخامس وسادس عبر منصة مدرستي.",
+        detailsHtml: `
+          <strong>التنفيذ عن بُعد عبر منصة مدرستي:</strong><br>
+          • <strong>رابع:</strong> مقارنة بين التبادل التجاري قديماً (المقايضة) وحديثاً (التسوق الإلكتروني الآمن).<br>
+          • <strong>خامس وسادس:</strong> رحلة افتراضية إلى جزر فرسان (ص93) والشعب المرجانية وتقديم نصائح لحماية البيئة البحرية.
+        `,
+        notes: "تم توثيق إجابات الطالبات في محادثة منصة مدرستي وإرفاق الشواهد في ملف الإنجاز.",
+        signDate: "23 / 06 / 1448هـ"
+      },
+      {
+        weekKey: "16",
+        activityType: "مناسبات وأيام عالمية",
+        badge: "بطاقة تنفيذ عن بُعد — الأسبوع السادس عشر",
+        programName: "اليوم العالمي للغة العربية وتحدي المناطق الإدارية الـ 13",
+        domain: "الأيام والمناسبات / الجغرافيا والمراجعة",
+        sessionsCount: "حسب دليل الخطط الدراسية / الإصدار السادس (حصة نشاط مدمجة)",
+        term: "الفصل الدراسي الأول 1448هـ",
+        startInfo: "اليوم: الاثنين | الأسبوع: 16 | التاريخ: 27 / 06 / 1448هـ",
+        endInfo: "اليوم: الخميس | الأسبوع: 16 | التاريخ: 01 / 07 / 1448هـ",
+        grade: "رابع (الثلاثاء ح4) | سادس (الاثنين ح4) | خامس (الخميس ح3)",
+        teacher: "أسماء ياسين الخيري",
+        studentsCount: "...... طالبة (من كشف حضور المنصة)",
+        disabledStudentsCount: "...... طالبة",
+        parentsCount: "...... ولي أمر",
+        selectedIcon: "نادي القراءة",
+        partnersCount: "0",
+        partnersNames: "لا يوجد (تنفيذ إلكتروني عبر منصة مدرستي)",
+        mechanismType: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): مسابقة تحديد المناطق الإدارية الـ 13 للمملكة (ص90) لخامس وتعزيز الهوية واللغة العربية في أنشطة المراجعة عبر منصة مدرستي.",
+        detailsHtml: `
+          <strong>التنفيذ عن بُعد عبر منصة مدرستي:</strong><br>
+          • <strong>رابع وسادس:</strong> صياغة جمل وتعريفات تاريخية وجغرافية بلغة عربية فصيحة احتفاءً باليوم العالمي للغة العربية.<br>
+          • <strong>خامس:</strong> مسابقة سريعة لتحديد المناطق الإدارية الـ 13 للمملكة (ص90) بلغة سليمة.
+        `,
+        notes: "أسهم النشاط في تعزيز الاعتزاز باللغة العربية الفصحى أثناء مراجعة المفاهيم الجغرافية.",
+        signDate: "01 / 07 / 1448هـ"
+      },
+      {
+        weekKey: "17",
+        activityType: "نشاط صفي",
+        badge: "بطاقة تنفيذ عن بُعد — الأسبوع السابع عشر",
+        programName: "المراجعة التفاعلية الشاملة (مسابقات إلكترونية لمقرر الفصل الأول)",
+        domain: "العلوم والتقنية / المراجعة الشاملة",
+        sessionsCount: "حسب دليل الخطط الدراسية / الإصدار السادس (حصة نشاط مدمجة)",
+        term: "الفصل الدراسي الأول 1448هـ",
+        startInfo: "اليوم: الاثنين | الأسبوع: 17 | التاريخ: 05 / 07 / 1448هـ",
+        endInfo: "اليوم: الخميس | الأسبوع: 17 | التاريخ: 08 / 07 / 1448هـ",
+        grade: "رابع (الثلاثاء ح4) | سادس (الاثنين ح4) | خامس (الخميس ح3)",
+        teacher: "أسماء ياسين الخيري",
+        studentsCount: "...... طالبة (من كشف حضور المنصة)",
+        disabledStudentsCount: "...... طالبة",
+        parentsCount: "...... ولي أمر",
+        selectedIcon: "التطوير الذاتي",
+        partnersCount: "0",
+        partnersNames: "لا يوجد (تنفيذ إلكتروني عبر منصة مدرستي)",
+        mechanismType: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): مسابقات إلكترونية وأسئلة تفاعلية شاملة لمقررات الفصل الدراسي الأول عبر منصة مدرستي.",
+        detailsHtml: `
+          <strong>التنفيذ عن بُعد عبر منصة مدرستي:</strong><br>
+          تنفيذ جولة تحدي ومسابقة إلكترونية سريعة شملت أبرز مفاهيم التاريخ والجغرافيا والمواطنة والاقتصاد للصفوف الرابع والخامس والسادس استعداداً للاختبارات النهائية.
+        `,
+        notes: "تفاعل مرتفع من الطالبات وسرعة استجابة عالية في أسئلة المراجعة التفاعلية.",
+        signDate: "08 / 07 / 1448هـ"
+      },
+      {
+        weekKey: "18",
+        activityType: "نشاط صفي",
+        badge: "بطاقة تنفيذ عن بُعد — الأسبوع الثامن عشر (الختام)",
+        programName: "الختام والتقويم — تقييم الأنشطة وتكريم المتميزات عن بُعد",
+        domain: "التقويم والختام / المواطنة والحياة",
+        sessionsCount: "حسب دليل الخطط الدراسية / الإصدار السادس (حصة نشاط مدمجة)",
+        term: "الفصل الدراسي الأول 1448هـ",
+        startInfo: "اليوم: الاثنين | الأسبوع: 18 | التاريخ: 19 / 07 / 1448هـ",
+        endInfo: "اليوم: الخميس | الأسبوع: 18 | التاريخ: 22 / 07 / 1448هـ",
+        grade: "رابع (الثلاثاء ح4) | سادس (الاثنين ح4) | خامس (الخميس ح3)",
+        teacher: "أسماء ياسين الخيري",
+        studentsCount: "...... طالبة (إجمالي المشاركات في الفصل الأول)",
+        disabledStudentsCount: "...... طالبة",
+        parentsCount: "...... ولي أمر",
+        selectedIcon: "قيمنا الغالية",
+        partnersCount: "0",
+        partnersNames: "لا يوجد (تنفيذ إلكتروني عبر منصة مدرستي)",
+        mechanismType: "آلية تنفيذ النشاط ونوعه (مدمج ومنصة): تكريم الطالبات المتفاعلات رقمياً، رصد الأنشطة والواجبات في منصة مدرستي والكتاب، وإعداد التقرير الختامي.",
+        detailsHtml: `
+          <strong>التنفيذ عن بُعد عبر منصة مدرستي:</strong><br>
+          رصد تفاعل الطالبات في الأنشطة الصفية والإثرائية والواجبات، وتقديم رسائل الشكر والتكريم الرقمي للمتميزات، وإغلاق ملف الأنشطة للفصل الدراسي الأول.
+        `,
+        notes: "اكتملت جميع متطلبات خطة النشاط وتم إعداد الشواهد والتقرير الختامي للاعتماد.",
+        signDate: "22 / 07 / 1448هـ"
+      }
+    ];
+
+    const ACTIVITIES_MODEL_STORAGE_KEY = "activities_active_model_v1";
+    let activeActivitiesModel = "primary";
+
+    function getActivePlanData() {
+      return activeActivitiesModel === "secondary" ? secondaryFullPlanData : primaryFullPlanData;
+    }
+
+    function getActiveCardsData() {
+      return activeActivitiesModel === "secondary" ? secondaryExecutionCardsData : primaryExecutionCardsData;
+    }
+
+    function applyPlanSectionTextsForModel() {
+      const modeCell = document.getElementById("planMechanismModeCell");
+      const sec3Banner = document.getElementById("planSec3BannerCell");
+      const sec3Lbl = document.getElementById("planSec3MechanismLbl");
+      if (activeActivitiesModel === "secondary") {
+        if (modeCell) modeCell.textContent = "آلية تنفيذ النشاط ونوعه (مدمج ومنصة) + الكتاب المدرسي";
+        if (sec3Banner) sec3Banner.textContent = "ثالثاً: المجالات المعتمدة وآلية تنفيذ النشاط ونوعه (مدمج ومنصة)";
+        if (sec3Lbl) sec3Lbl.textContent = "آلية تنفيذ النشاط ونوعه (مدمج ومنصة)";
+      } else {
+        if (modeCell) modeCell.textContent = "منصة مدرستي (عن بُعد) + الكتاب المدرسي";
+        if (sec3Banner) sec3Banner.textContent = "ثالثاً: المجالات المعتمدة وآلية التنفيذ عن بُعد عبر منصة مدرستي";
+        if (sec3Lbl) sec3Lbl.textContent = "خطوات التنفيذ في المنصة";
+      }
+      const pBtn = document.getElementById("btnActModelPrimary");
+      const sBtn = document.getElementById("btnActModelSecondary");
+      if (pBtn) pBtn.classList.toggle("active", activeActivitiesModel === "primary");
+      if (sBtn) sBtn.classList.toggle("active", activeActivitiesModel === "secondary");
+    }
+
+    function switchActivitiesModel(model, silent) {
+      const nextModel = model === "secondary" ? "secondary" : "primary";
+      activeActivitiesModel = nextModel;
+      notifyParentToolState({ model: activeActivitiesModel });
+      try { localStorage.setItem(ACTIVITIES_MODEL_STORAGE_KEY, activeActivitiesModel); } catch (e) {}
+      applyPlanSectionTextsForModel();
+      renderPlanTables();
+      renderExecutionCards();
+      applyCardFilters();
+      if (!silent) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+
+    function renderPlanTables() {
+      const planList = getActivePlanData();
+      const firstHalf = planList.slice(0, 10);
+      const secondHalf = planList.slice(10);
+
+      const mapRow = (row) => `
+        <tr>
+          <td class="val striped" contenteditable="true" style="text-align:center; font-weight:800; color:var(--primary-dark);">${row.week}</td>
+          <td class="val striped" contenteditable="true" style="font-weight:700; color:var(--primary);">${row.program}</td>
+          <td class="val striped" contenteditable="true">${row.lessons}</td>
+          <td class="val striped" contenteditable="true">${row.mechanism}</td>
+        </tr>
+      `;
+
+      const p1 = document.getElementById("planPart1Body");
+      const p2 = document.getElementById("planPart2Body");
+      if (p1) p1.innerHTML = firstHalf.map(mapRow).join("");
+      if (p2) p2.innerHTML = secondHalf.map(mapRow).join("");
+    }
+
+    const platformIcons = ["بنك الإثراءات", "التطوير الذاتي", "قيمنا الغالية", "نادي القراءة"];
+
+
+    function renderPlatformIcons(selected) {
+      return `
+        <div class="icons-grid">
+          ${platformIcons.map(name => {
+            const active = name === selected;
+            return `
+              <div class="icon-choice ${active ? 'checked' : ''}" onclick="togglePlatformIcon(this)">
+                <span class="chk-box">${active ? '✓' : ''}</span>
+                <span>${name}</span>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+    }
+
+    function togglePlatformIcon(el) {
+      const grid = el.closest(".icons-grid");
+      if (!grid) return;
+      grid.querySelectorAll(".icon-choice").forEach(choice => {
+        choice.classList.remove("checked");
+        const box = choice.querySelector(".chk-box");
+        if (box) box.textContent = "";
+      });
+      el.classList.add("checked");
+      const box = el.querySelector(".chk-box");
+      if (box) box.textContent = "✓";
+      markUserEdited();
+    }
+
+    const ACTIVITY_CATEGORIES = ["نشاط صفي", "نشاط إثرائي", "مناسبات وأيام عالمية"];
+
+    function renderCategorySelectOptions(selected) {
+      return ACTIVITY_CATEGORIES.map(cat =>
+        `<option value="${cat}" ${cat === selected ? "selected" : ""}>${cat}</option>`
+      ).join("");
+    }
+
+    function inferCardCategory(cardEl) {
+      if (!cardEl) return "نشاط صفي";
+      const existing = cardEl.dataset.category;
+      if (existing && ACTIVITY_CATEGORIES.includes(existing)) return existing;
+      const txt = (cardEl.textContent || "");
+      if (txt.includes("اليوم الوطني") || txt.includes("ذوي الإعاقة") || txt.includes("اللغة العربية")) {
+        return "مناسبات وأيام عالمية";
+      }
+      if (txt.includes("إثرائي") || txt.includes("النادي الثقافي")) {
+        return "نشاط إثرائي";
+      }
+      return "نشاط صفي";
+    }
+
+    function updateCardCategory(selectEl) {
+      const card = selectEl.closest(".exec-card");
+      if (!card) return;
+      const nextCat = selectEl.value || "نشاط صفي";
+      card.dataset.category = nextCat;
+      selectEl.querySelectorAll("option").forEach(opt => {
+        if (opt.value === nextCat) {
+          opt.setAttribute("selected", "selected");
+        } else {
+          opt.removeAttribute("selected");
+        }
+      });
+      const catLabelEl = card.querySelector(".card-cat-text");
+      if (catLabelEl) catLabelEl.textContent = nextCat;
+      markUserEdited();
+      applyCardFilters();
+      setStatus(`🏷️ تم تصنيف البطاقة إلى: ${nextCat}`);
+    }
+
+    function renderExecutionCards() {
+      const container = document.getElementById("cardsListContainer");
+      const cards = getActiveCardsData();
+      container.innerHTML = cards.map(card => {
+        const cat = card.activityType || "نشاط صفي";
+        return `
+        <article class="a4-sheet exec-card" data-wk="${card.weekKey}" data-category="${cat}">
+          <div>
+            <div class="card-meta-editbar edit-only">
+              <label class="card-cat-select-wrap">
+                <span>تصنيف النشاط:</span>
+                <select class="card-cat-select" onchange="updateCardCategory(this)">
+                  ${renderCategorySelectOptions(cat)}
+                </select>
+              </label>
+              <span>الأسبوع: ${card.weekKey}</span>
+            </div>
+            <div class="official-header">
+              <div class="official-top-bar">
+                <span>المملكة العربية السعودية — وزارة التعليم</span>
+                <span class="gold-tag">${card.badge || card.weekLabel || ""} | الصفوف العليا</span>
+              </div>
+              <div class="official-title-box">بطاقة تنفيذ نشاط</div>
+              <div class="official-meta-strip">
+                <span>المادة: الدراسات الاجتماعية</span>
+                <span>إدارة تعليم نجران — مدرسة آمنة بنت عفان</span>
+                <span>العام الدراسي 1448هـ</span>
+                <span class="card-cat-badge">التصنيف: <strong class="card-cat-text">${cat}</strong></span>
+              </div>
+            </div>
+
+            <table class="official-table">
+              <tbody>
+                <tr>
+                  <th class="lbl">اسم البرنامج</th>
+                  <td class="val" colspan="3" contenteditable="true">${card.programName}</td>
+                </tr>
+                <tr>
+                  <th class="lbl">المجال</th>
+                  <td class="val" contenteditable="true">${card.domain}</td>
+                  <th class="lbl">الفصل الدراسي</th>
+                  <td class="val" contenteditable="true">${card.term}</td>
+                </tr>
+                <tr>
+                  <th class="lbl">عدد حصص البرنامج</th>
+                  <td class="val" colspan="3" contenteditable="true">${card.sessionsCount}</td>
+                </tr>
+                <tr>
+                  <th class="lbl">بداية التنفيذ</th>
+                  <td class="val" contenteditable="true">${card.startInfo}</td>
+                  <th class="lbl">نهاية التنفيذ</th>
+                  <td class="val" contenteditable="true">${card.endInfo}</td>
+                </tr>
+                <tr>
+                  <th class="lbl">الصف</th>
+                  <td class="val" contenteditable="true">${card.grade}</td>
+                  <th class="lbl">المعلم/ة المنفذ/ة</th>
+                  <td class="val" contenteditable="true">${card.teacher}</td>
+                </tr>
+                ${card.mechanismType ? `
+                <tr>
+                  <th class="lbl">آلية تنفيذ النشاط ونوعه (مدمج ومنصة)</th>
+                  <td class="val" colspan="3" contenteditable="true">${card.mechanismType}</td>
+                </tr>` : ''}
+                <tr class="banner-row">
+                  <td colspan="4">بيانات المشاركة والتنفيذ عبر منصة مدرستي</td>
+                </tr>
+                <tr>
+                  <th class="lbl">عدد الطلبة المشاركين</th>
+                  <td class="val" contenteditable="true">${card.studentsCount}</td>
+                  <th class="lbl">عدد الطلبة المشاركين من ذوي الإعاقة</th>
+                  <td class="val" contenteditable="true">${card.disabledStudentsCount}</td>
+                </tr>
+                <tr>
+                  <th class="lbl">عدد أولياء الأمور المشاركين في البرنامج</th>
+                  <td class="val" contenteditable="true">${card.parentsCount}</td>
+                  <th class="lbl">عند تنفيذ المشاركة عبر منصة مدرستي ما هي أيقونة التنفيذ</th>
+                  <td class="val">${renderPlatformIcons(card.selectedIcon)}</td>
+                </tr>
+                <tr>
+                  <th class="lbl">عدد الشراكات المجتمعية</th>
+                  <td class="val" contenteditable="true">${card.partnersCount}</td>
+                  <th class="lbl">أسماء الشراكات المجتمعية</th>
+                  <td class="val" contenteditable="true">${card.partnersNames}</td>
+                </tr>
+                <tr>
+                  <th class="lbl">وصف التنفيذ والأثر</th>
+                  <td class="val" colspan="3">
+                    <div class="highlight-note" contenteditable="true">${card.detailsHtml}</div>
+                  </td>
+                </tr>
+                <tr>
+                  <th class="lbl">ملاحظات</th>
+                  <td class="val" colspan="3" contenteditable="true">${card.notes}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table class="sign-grid">
+              <thead>
+                <tr>
+                  <th>المعلم/ة المنفذ/ة</th>
+                  <th>رائد/ة النشاط</th>
+                  <th>مديرة المدرسة</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td contenteditable="true">
+                    <div><strong>الاسم:</strong> ${card.teacher}</div>
+                    <div><strong>التاريخ:</strong> ${card.signDate}</div>
+                    <div><strong>التوقيع:</strong> ....................................</div>
+                  </td>
+                  <td contenteditable="true">
+                    <div><strong>الاسم:</strong> ....................................</div>
+                    <div><strong>التاريخ:</strong> ..... / ..... / 1448هـ</div>
+                    <div><strong>التوقيع:</strong> ....................................</div>
+                  </td>
+                  <td contenteditable="true">
+                    <div><strong>الاسم:</strong> أ. البتول آل دويس</div>
+                    <div><strong>التاريخ:</strong> ..... / ..... / 1448هـ</div>
+                    <div><strong>التوقيع:</strong> ....................................</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <footer class="official-footer">
+            <span>• يتم تعبئة هذه البطاقة عند استكمال الحصص المخصصة للبرنامج وفق ما ورد للبرنامج من حصص في دليل الخطط الدراسية / الإصدار السادس.</span>
+            <span class="moe-badge">www.MOE.GOV.SA</span>
+          </footer>
+        </article>
+      `;
+      }).join("");
+      applyCardFilters();
+    }
+
+let currentActiveView = "plan";
+    let currentWeekFilter = "all";
+    let currentTypeFilter = "all";
+    let isExportingPdf = false;
+    let lastPdfBlobUrl = null;
+
+    /* ================= وظيفة التبديل بين الأيقونتين ================= */
+    function switchView(viewName, skipScroll) {
+      const planView = document.getElementById("planView");
+      const cardsView = document.getElementById("cardsView");
+      const tabPlanBtn = document.getElementById("tabPlanBtn");
+      const tabCardBtn = document.getElementById("tabCardBtn");
+
+      currentActiveView = (viewName === "cards") ? "cards" : "plan";
+
+      if (currentActiveView === "plan") {
+        planView.classList.remove("hidden");
+        cardsView.classList.add("hidden");
+        tabPlanBtn.classList.add("active");
+        tabCardBtn.classList.remove("active");
+      } else {
+        planView.classList.add("hidden");
+        cardsView.classList.remove("hidden");
+        tabPlanBtn.classList.remove("active");
+        tabCardBtn.classList.add("active");
+      }
+
+      closePdfReadyBanner();
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: "schoolActivitiesViewChanged", view: currentActiveView }, "*");
+        }
+      } catch (e) {}
+
+      if (!skipScroll) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+
+    /* ================= تصنيف وتصفية بطاقات التنفيذ حسب النوع والأسبوع ================= */
+    function applyCardFilters() {
+      const cards = Array.from(document.querySelectorAll("#cardsListContainer .exec-card"));
+      const counts = { all: cards.length };
+      ACTIVITY_CATEGORIES.forEach(c => { counts[c] = 0; });
+
+      let visibleCount = 0;
+      cards.forEach(card => {
+        const cat = inferCardCategory(card);
+        card.dataset.category = cat;
+        counts[cat] = (counts[cat] || 0) + 1;
+
+        const matchWeek = currentWeekFilter === "all" || card.dataset.wk === currentWeekFilter;
+        const matchType = currentTypeFilter === "all" || cat === currentTypeFilter;
+        if (matchWeek && matchType) {
+          card.classList.remove("hidden-card");
+          visibleCount++;
+        } else {
+          card.classList.add("hidden-card");
+        }
+      });
+
+      document.querySelectorAll("#cardTypeFilterBtns .type-btn").forEach(btn => {
+        const t = btn.dataset.type || "all";
+        btn.classList.toggle("active", t === currentTypeFilter);
+        const countEl = btn.querySelector(".cat-count");
+        if (countEl) {
+          countEl.textContent = `(${counts[t] || 0})`;
+        }
+      });
+
+      document.querySelectorAll("#cardWeekFilterBtns .wk-btn").forEach(btn => {
+        const w = btn.dataset.wk || "all";
+        btn.classList.toggle("active", w === currentWeekFilter);
+        if (w === "all") {
+          btn.textContent = `جميع الأسابيع (${cards.length})`;
+        }
+      });
+
+      const countBadge = document.getElementById("cardsFilterCount");
+      if (countBadge) {
+        countBadge.textContent = `عرض ${visibleCount} من أصل ${cards.length} بطاقات`;
+      }
+
+      const emptyNotice = document.getElementById("cardsEmptyFilterNotice");
+      if (emptyNotice) {
+        emptyNotice.classList.toggle("hidden", visibleCount > 0 || cards.length === 0);
+      }
+
+      if (typeof isPrintPreview !== "undefined" && isPrintPreview) {
+        renderPreviewBadges();
+        applyPreviewZoom();
+      }
+    }
+
+    function filterCardsByType(type, btn) {
+      currentTypeFilter = type || "all";
+      applyCardFilters();
+    }
+
+    function filterCards(wk, btn) {
+      currentWeekFilter = wk || "all";
+      applyCardFilters();
+    }
+
+    function resetCardFilters() {
+      currentTypeFilter = "all";
+      currentWeekFilter = "all";
+      applyCardFilters();
+    }
+
+    /* ================= الطباعة وتصدير PDF الموثوق ================= */
+    function getActivePrintableSheets() {
+      if (currentActiveView === "cards") {
+        return Array.from(document.querySelectorAll("#cardsView .exec-card:not(.hidden-card)"));
+      }
+      return Array.from(document.querySelectorAll("#planView .a4-sheet"));
+    }
+
+    function openLastPdfBlob() {
+      if (!lastPdfBlobUrl) return;
+      let w = null;
+      try {
+        w = window.open(lastPdfBlobUrl, "_blank", "noopener,noreferrer");
+      } catch (e) {
+        w = null;
+      }
+      if (!w) {
+        const a = document.getElementById("pdfDirectDownloadLink");
+        if (a) a.click();
+      }
+    }
+
+    function closePdfReadyBanner() {
+      document.getElementById("pdfReadyBanner")?.classList.remove("show");
+    }
+
+    function loadExternalScript(src) {
+      return new Promise((resolve, reject) => {
+        const s = document.createElement("script");
+        s.src = src;
+        s.async = true;
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+    }
+
+    async function ensurePdfLibrariesLoaded() {
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        await loadExternalScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
+      }
+      if (typeof window.html2canvas !== "function") {
+        await loadExternalScript("https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js");
+      }
+      if (!window.jspdf || !window.jspdf.jsPDF || typeof window.html2canvas !== "function") {
+        throw new Error("تعذر تحميل مكتبات PDF");
+      }
+    }
+
+    async function ensureExportFontsLoaded() {
+      try {
+        if (document.fonts && typeof document.fonts.load === "function") {
+          await Promise.allSettled([
+            document.fonts.load("400 14px Cairo"),
+            document.fonts.load("600 14px Cairo"),
+            document.fonts.load("700 14px Cairo"),
+            document.fonts.load("800 16px Cairo")
+          ]);
+        }
+        if (document.fonts && document.fonts.ready) {
+          await document.fonts.ready;
+        }
+      } catch (e) {}
+    }
+
+    function appendCanvasProportionalToPdf(pdf, canvas, isFirstPage) {
+      const pageWmm = 210;
+      const pageHmm = 297;
+      const maxAspectRatio = pageHmm / pageWmm;
+      const canvasRatio = canvas.height / Math.max(1, canvas.width);
+
+      if (canvasRatio <= maxAspectRatio + 0.03) {
+        if (!isFirstPage) pdf.addPage("a4", "p");
+        let renderW = pageWmm;
+        let renderH = canvasRatio * pageWmm;
+        if (renderH > pageHmm) {
+          renderH = pageHmm;
+          renderW = pageHmm / canvasRatio;
+        }
+        const offsetX = Math.max(0, (pageWmm - renderW) / 2);
+        const offsetY = Math.max(0, (pageHmm - renderH) / 2);
+        const imgData = canvas.toDataURL("image/jpeg", 0.9);
+        pdf.addImage(imgData, "JPEG", offsetX, offsetY, renderW, renderH, undefined, "FAST");
+        return;
+      }
+
+      const sliceMaxPxH = Math.floor(pageHmm * (canvas.width / pageWmm));
+      let yPx = 0;
+      let firstSlice = true;
+      while (yPx < canvas.height) {
+        const sliceH = Math.min(sliceMaxPxH, canvas.height - yPx);
+        if (sliceH <= 8) break;
+        const sliceCanvas = document.createElement("canvas");
+        sliceCanvas.width = canvas.width;
+        sliceCanvas.height = sliceMaxPxH;
+        const ctx = sliceCanvas.getContext("2d");
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
+        ctx.drawImage(canvas, 0, yPx, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+
+        if (!isFirstPage || !firstSlice) {
+          pdf.addPage("a4", "p");
+        }
+        const imgData = sliceCanvas.toDataURL("image/jpeg", 0.9);
+        pdf.addImage(imgData, "JPEG", 0, 0, pageWmm, pageHmm, undefined, "FAST");
+        yPx += sliceH;
+        firstSlice = false;
+      }
+    }
+
+    async function exportActivitiesPDF(fromPrintFallback) {
+      if (isExportingPdf) return;
+      isExportingPdf = true;
+
+      const overlay = document.getElementById("pdfProgressOverlay");
+      const titleEl = document.getElementById("pdfProgressTitle");
+      const subEl = document.getElementById("pdfProgressSub");
+      const fillEl = document.getElementById("pdfProgressFill");
+      const pctEl = document.getElementById("pdfProgressPct");
+
+      if (document.activeElement && typeof document.activeElement.blur === "function") {
+        document.activeElement.blur();
+      }
+      closePdfReadyBanner();
+
+      if (overlay) overlay.classList.add("show");
+      if (titleEl) {
+        titleEl.textContent = fromPrintFallback
+          ? "جاري تجهيز نسخة PDF جاهزة للطباعة..."
+          : (currentActiveView === "cards" ? "جاري تصدير بطاقات تنفيذ النشاط PDF..." : "جاري تصدير ملف الأنشطة المدرسية PDF...");
+      }
+      if (subEl) subEl.textContent = "يرجى الانتظار لحظات حتى تكتمل كل الصفحات";
+      if (fillEl) fillEl.style.width = "5%";
+      if (pctEl) pctEl.textContent = "5%";
+
+      document.documentElement.classList.add("pdf-exporting");
+      document.body.classList.add("pdf-exporting");
+
+      const pruneClone = (clonedDoc) => {
+        clonedDoc.querySelectorAll(".app-topbar, .sub-filter-bar, .pdf-overlay, .pdf-ready-banner").forEach(n => n.remove());
+        const target = clonedDoc.querySelector('[data-h2c-target="1"]');
+        if (target) {
+          target.style.width = "794px";
+          target.style.minWidth = "794px";
+          target.style.maxWidth = "794px";
+          target.style.margin = "0";
+          target.style.boxShadow = "none";
+          target.style.borderRadius = "0";
+        }
+      };
+
+      try {
+        await ensurePdfLibrariesLoaded();
+        await ensureExportFontsLoaded();
+        await new Promise(r => requestAnimationFrame(r));
+
+        const sheets = getActivePrintableSheets();
+        if (!sheets.length) throw new Error("لا توجد صفحات نشطة للتصدير");
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4", compress: true });
+        let isFirstPdfPage = true;
+
+        for (let i = 0; i < sheets.length; i++) {
+          const sheetEl = sheets[i];
+          const pct = Math.round(((i + 1) / sheets.length) * 94);
+          if (subEl) subEl.textContent = `جاري تجهيز الصفحة ${i + 1} من ${sheets.length}...`;
+          if (fillEl) fillEl.style.width = `${pct}%`;
+          if (pctEl) pctEl.textContent = `${pct}%`;
+
+          await new Promise(r => requestAnimationFrame(r));
+
+          const prevMinHeight = sheetEl.style.minHeight;
+          const prevHeight = sheetEl.style.height;
+          sheetEl.style.setProperty("height", "auto", "important");
+          sheetEl.style.setProperty("min-height", "1123px", "important");
+
+          const captureW = 794;
+          const captureH = Math.max(1123, sheetEl.scrollHeight);
+
+          sheetEl.setAttribute("data-h2c-target", "1");
+          let canvas;
+          try {
+            canvas = await window.html2canvas(sheetEl, {
+              scale: 1.5,
+              useCORS: true,
+              allowTaint: false,
+              backgroundColor: "#ffffff",
+              imageTimeout: 2500,
+              width: captureW,
+              height: captureH,
+              windowWidth: captureW,
+              windowHeight: captureH,
+              scrollX: 0,
+              scrollY: 0,
+              logging: false,
+              onclone: pruneClone
+            });
+          } finally {
+            sheetEl.removeAttribute("data-h2c-target");
+            sheetEl.style.minHeight = prevMinHeight;
+            sheetEl.style.height = prevHeight;
+          }
+
+          appendCanvasProportionalToPdf(pdf, canvas, isFirstPdfPage);
+          isFirstPdfPage = false;
+        }
+
+        if (subEl) subEl.textContent = "جاري حفظ ملف PDF...";
+        if (fillEl) fillEl.style.width = "100%";
+        if (pctEl) pctEl.textContent = "100%";
+
+        let filename = "ملف_الأنشطة_المدرسية.pdf";
+        if (currentActiveView === "cards") {
+          filename = (currentWeekFilter && currentWeekFilter !== "all")
+            ? `بطاقة_تنفيذ_نشاط_الأسبوع_${currentWeekFilter}.pdf`
+            : "بطاقات_تنفيذ_النشاط.pdf";
+        }
+
+        const pdfBlob = pdf.output("blob");
+        if (lastPdfBlobUrl) {
+          try { URL.revokeObjectURL(lastPdfBlobUrl); } catch (e) {}
+        }
+        lastPdfBlobUrl = URL.createObjectURL(pdfBlob);
+
+        const dlLink = document.getElementById("pdfDirectDownloadLink");
+        const readyLabel = document.getElementById("pdfReadyLabel");
+        if (dlLink) {
+          dlLink.href = lastPdfBlobUrl;
+          dlLink.download = filename;
+        }
+        if (readyLabel) {
+          readyLabel.textContent = `✅ جاهز للطباعة والحفظ (${sheets.length} صفحة):`;
+        }
+        document.getElementById("pdfReadyBanner")?.classList.add("show");
+
+        try {
+          pdf.save(filename);
+        } catch (saveErr) {
+          if (dlLink) dlLink.click();
+        }
+      } catch (err) {
+        const readyLabel = document.getElementById("pdfReadyLabel");
+        if (readyLabel) readyLabel.textContent = "❌ تعذر التصدير التلقائي، يرجى فتح الصفحة في تبويب مستقل للطباعة";
+        document.getElementById("pdfReadyBanner")?.classList.add("show");
+      } finally {
+        document.documentElement.classList.remove("pdf-exporting");
+        document.body.classList.remove("pdf-exporting");
+        if (overlay) overlay.classList.remove("show");
+        isExportingPdf = false;
+      }
+    }
+
+    function buildParentPrintPayload() {
+      const styleTags = Array.from(document.querySelectorAll("style"))
+        .map(s => s.outerHTML)
+        .join("\n");
+      const sheets = getActivePrintableSheets();
+      const viewClass = currentActiveView === "cards" ? "cards-print" : "plan-print";
+      const sheetsHtml = sheets.map(el => el.outerHTML).join("\n");
+      return {
+        stylesHtml: styleTags,
+        bodyHtml: `<div class="edu-direct-sheet-wrap ${viewClass}" dir="rtl">${sheetsHtml}</div>`
+      };
+    }
+
+    function printActivities() {
+      if (document.activeElement && typeof document.activeElement.blur === "function") {
+        document.activeElement.blur();
+      }
+      closePdfReadyBanner();
+
+      let nativePrintTriggered = false;
+      const markTriggered = () => { nativePrintTriggered = true; };
+      window.addEventListener("beforeprint", markTriggered, { once: true });
+
+      let mql = null;
+      const mqlHandler = (ev) => { if (ev.matches) nativePrintTriggered = true; };
+      try {
+        if (window.matchMedia) {
+          mql = window.matchMedia("print");
+          if (mql && typeof mql.addEventListener === "function") {
+            mql.addEventListener("change", mqlHandler);
+          }
+        }
+      } catch (e) {}
+
+      try {
+        window.focus();
+        window.print();
+      } catch (e) {}
+
+      setTimeout(() => {
+        try {
+          window.removeEventListener("beforeprint", markTriggered);
+          if (mql && typeof mql.removeEventListener === "function") {
+            mql.removeEventListener("change", mqlHandler);
+          }
+        } catch (e) {}
+
+        if (nativePrintTriggered) return;
+
+        try {
+          if (window.parent && window.parent !== window && typeof window.parent.printActivitiesViaParent === "function") {
+            const payload = buildParentPrintPayload();
+            window.parent.printActivitiesViaParent(payload.stylesHtml, payload.bodyHtml, () => {
+              exportActivitiesPDF(true);
+            });
+            return;
+          }
+        } catch (e) {}
+
+        exportActivitiesPDF(true);
+      }, 450);
+    }
+
+    renderPlanTables();
+    renderExecutionCards();
+
+    function goBackToDashboard() {
+      window.location.href = "/";
+    }
+
+
+    /* ================= حالة التعديل والحوار الداخلي وبريدج الواجهة الأم ================= */
+    const ACT_CONTENT_VERSION = "2026-11-25-act-v1";
+    const ACT_STORAGE_KEYS = {
+      primary: "activities_portfolio_data_primary_v1",
+      secondary: "activities_portfolio_data_secondary_v1"
+    };
+    let hasUserEdited = false;
+    let pendingConfirmCb = null;
+    let isPrintPreview = false;
+    let previewZoomMode = "fit";
+
+    function markUserEdited() {
+      hasUserEdited = true;
+    }
+
+    function notifyParentToolState(extra) {
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage(Object.assign({ type: "eduToolState", tool: "activities_portfolio" }, extra || {}), "*");
+        }
+      } catch (e) {}
+    }
+
+    function setStatus(msg) {
+      const el = document.getElementById("statusMsg");
+      if (el) el.textContent = msg;
+      notifyParentToolState({ status: msg });
+    }
+
+    function showAppConfirm(title, message, onConfirm) {
+      const modal = document.getElementById("appConfirmModal");
+      const titleEl = document.getElementById("appConfirmTitle");
+      const msgEl = document.getElementById("appConfirmMessage");
+      const okBtn = document.getElementById("appConfirmOkBtn");
+      if (!modal || !okBtn) {
+        if (onConfirm) onConfirm();
+        return;
+      }
+      if (titleEl) titleEl.textContent = title || "تأكيد";
+      if (msgEl) msgEl.textContent = message || "";
+      pendingConfirmCb = onConfirm;
+      okBtn.onclick = function() { closeAppConfirm(true); };
+      modal.classList.add("show");
+    }
+
+    function closeAppConfirm(confirmed) {
+      const modal = document.getElementById("appConfirmModal");
+      if (modal) modal.classList.remove("show");
+      const cb = pendingConfirmCb;
+      pendingConfirmCb = null;
+      if (confirmed && typeof cb === "function") cb();
+    }
+
+    function getActStorageKey(model = activeActivitiesModel) {
+      return ACT_STORAGE_KEYS[model] || ACT_STORAGE_KEYS.primary;
+    }
+
+    function getState() {
+      const planEl = document.getElementById("planView");
+      const cardsEl = document.getElementById("cardsListContainer");
+      return {
+        version: ACT_CONTENT_VERSION,
+        model: activeActivitiesModel,
+        view: currentActiveView,
+        weekFilter: currentWeekFilter,
+        typeFilter: currentTypeFilter,
+        planHTML: planEl ? planEl.innerHTML : "",
+        cardsHTML: cardsEl ? cardsEl.innerHTML : "",
+        activeCanvaTemplate: activeCanvaTemplate || null,
+        timestamp: new Date().toISOString()
+      };
+    }
+
+    function saveData() {
+      try {
+        const state = getState();
+        localStorage.setItem(getActStorageKey(), JSON.stringify(state));
+        hasUserEdited = false;
+        setStatus("✅ تم الحفظ بنجاح - " + new Date().toLocaleTimeString("ar-SA"));
+      } catch (e) {
+        setStatus("❌ فشل الحفظ: " + e.message);
+      }
+    }
+
+    function loadData() {
+      try {
+        const raw = localStorage.getItem(getActStorageKey());
+        if (!raw) {
+          setStatus("لا توجد بيانات محفوظة لهذا النموذج");
+          return;
+        }
+        const state = JSON.parse(raw);
+        const planEl = document.getElementById("planView");
+        const cardsEl = document.getElementById("cardsListContainer");
+        if (state.planHTML && planEl) planEl.innerHTML = state.planHTML;
+        if (state.cardsHTML && cardsEl) {
+          cardsEl.innerHTML = state.cardsHTML;
+          cardsEl.querySelectorAll(".exec-card").forEach(c => {
+            const cat = inferCardCategory(c);
+            c.dataset.category = cat;
+            const sel = c.querySelector(".card-cat-select");
+            if (sel) sel.value = cat;
+          });
+        }
+        currentWeekFilter = state.weekFilter || "all";
+        currentTypeFilter = state.typeFilter || "all";
+        applyCardFilters();
+        if (state.activeCanvaTemplate) {
+          applyCanvaTemplateToContent(state.activeCanvaTemplate, false);
+        }
+        hasUserEdited = false;
+        setStatus("✅ تم استرجاع البيانات المحفوظة");
+      } catch (e) {
+        setStatus("❌ خطأ في الاسترجاع: " + e.message);
+      }
+    }
+
+    function resetAll() {
+      showAppConfirm("إعادة تعيين النموذج", "هل أنت متأكد من حذف جميع التعديلات واستعادة النموذج الأصلي الثابت؟", () => {
+        localStorage.removeItem(ACT_STORAGE_KEYS.primary);
+        localStorage.removeItem(ACT_STORAGE_KEYS.secondary);
+        localStorage.removeItem(ACTIVITIES_MODEL_STORAGE_KEY);
+        localStorage.removeItem(CANVA_ACTIVE_STORAGE_KEY);
+        hasUserEdited = false;
+        location.reload();
+      });
+    }
+
+    function deleteCustomSheet(btn) {
+      const sheet = btn.closest(".a4-sheet");
+      if (!sheet) return;
+      showAppConfirm("حذف الصفحة / البطاقة", "هل تريد حذف هذه الصفحة الإضافية نهائياً؟", () => {
+        sheet.remove();
+        markUserEdited();
+        if (sheet.classList.contains("exec-card")) {
+          applyCardFilters();
+        } else if (isPrintPreview) {
+          renderPreviewBadges();
+          applyPreviewZoom();
+        }
+        setStatus("🗑️ تم حذف الصفحة الإضافية");
+      });
+    }
+
+    function addNewPage() {
+      if (currentActiveView === "cards") {
+        const container = document.getElementById("cardsListContainer");
+        if (!container) return;
+        const wkNum = container.querySelectorAll(".exec-card").length + 1;
+        const newCat = currentTypeFilter !== "all" ? currentTypeFilter : "نشاط صفي";
+        const card = document.createElement("article");
+        card.className = "a4-sheet exec-card";
+        card.dataset.wk = "custom";
+        card.dataset.category = newCat;
+        card.innerHTML = `
+          <div>
+            <div class="card-meta-editbar edit-only">
+              <label class="card-cat-select-wrap">
+                <span>تصنيف النشاط:</span>
+                <select class="card-cat-select" onchange="updateCardCategory(this)">
+                  ${renderCategorySelectOptions(newCat)}
+                </select>
+              </label>
+              <button type="button" class="custom-del-btn" onclick="deleteCustomSheet(this)">🗑️ حذف البطاقة</button>
+            </div>
+            <div class="official-header">
+              <div class="official-top-bar">
+                <span>المملكة العربية السعودية — وزارة التعليم</span>
+                <span class="gold-tag" contenteditable="true">بطاقة إضافية #${wkNum} | الصفوف العليا</span>
+              </div>
+              <div class="official-title-box" contenteditable="true">بطاقة تنفيذ نشاط</div>
+              <div class="official-meta-strip">
+                <span contenteditable="true">المادة: الدراسات الاجتماعية</span>
+                <span contenteditable="true">إدارة تعليم نجران — مدرسة آمنة بنت عفان</span>
+                <span contenteditable="true">العام الدراسي 1448هـ</span>
+                <span class="card-cat-badge">التصنيف: <strong class="card-cat-text">${newCat}</strong></span>
+              </div>
+            </div>
+            <table class="official-table">
+              <tbody>
+                <tr>
+                  <th class="lbl">اسم البرنامج</th>
+                  <td class="val" colspan="3" contenteditable="true">اسم البرنامج / النشاط الجديد</td>
+                </tr>
+                <tr>
+                  <th class="lbl">المجال</th>
+                  <td class="val" contenteditable="true">المواطنة والحياة</td>
+                  <th class="lbl">الفصل الدراسي</th>
+                  <td class="val" contenteditable="true">الأول</td>
+                </tr>
+                <tr>
+                  <th class="lbl">عدد حصص البرنامج</th>
+                  <td class="val" colspan="3" contenteditable="true">2</td>
+                </tr>
+                <tr>
+                  <th class="lbl">بداية التنفيذ</th>
+                  <td class="val" contenteditable="true">..... / ..... / 1448هـ</td>
+                  <th class="lbl">نهاية التنفيذ</th>
+                  <td class="val" contenteditable="true">..... / ..... / 1448هـ</td>
+                </tr>
+                <tr>
+                  <th class="lbl">الصف</th>
+                  <td class="val" contenteditable="true">الصفوف العليا (رابع – خامس – سادس)</td>
+                  <th class="lbl">المعلم/ة المنفذ/ة</th>
+                  <td class="val" contenteditable="true">أ. أسماء ياسين الخيري</td>
+                </tr>
+                ${activeActivitiesModel === "secondary" ? `
+                <tr>
+                  <th class="lbl">آلية تنفيذ النشاط ونوعه (مدمج ومنصة)</th>
+                  <td class="val" colspan="3" contenteditable="true">آلية تنفيذ النشاط ونوعه (مدمج ومنصة): توثيق النشاط والربط بالدرس</td>
+                </tr>` : ""}
+                <tr class="banner-row"><td colspan="4">بيانات المشاركة والتنفيذ عبر منصة مدرستي</td></tr>
+                <tr>
+                  <th class="lbl">عدد الطلبة المشاركين</th>
+                  <td class="val" contenteditable="true">30 طالبة</td>
+                  <th class="lbl">عدد الطلبة المشاركين من ذوي الإعاقة</th>
+                  <td class="val" contenteditable="true">0</td>
+                </tr>
+                <tr>
+                  <th class="lbl">عدد أولياء الأمور المشاركين في البرنامج</th>
+                  <td class="val" contenteditable="true">0</td>
+                  <th class="lbl">عند تنفيذ المشاركة عبر منصة مدرستي ما هي أيقونة التنفيذ</th>
+                  <td class="val">${renderPlatformIcons("التواصل التعليمي")}</td>
+                </tr>
+                <tr>
+                  <th class="lbl">عدد الشراكات المجتمعية</th>
+                  <td class="val" contenteditable="true">0</td>
+                  <th class="lbl">أسماء الشراكات المجتمعية</th>
+                  <td class="val" contenteditable="true">لا يوجد</td>
+                </tr>
+                <tr>
+                  <th class="lbl">وصف التنفيذ والأثر</th>
+                  <td class="val" colspan="3"><div class="highlight-note" contenteditable="true">اكتب وصف تنفيذ النشاط وأثره التعليمي هنا...</div></td>
+                </tr>
+                <tr>
+                  <th class="lbl">ملاحظات</th>
+                  <td class="val" colspan="3" contenteditable="true">لا يوجد</td>
+                </tr>
+              </tbody>
+            </table>
+            <table class="sign-grid">
+              <thead><tr><th>المعلم/ة المنفذ/ة</th><th>رائد/ة النشاط</th><th>مديرة المدرسة</th></tr></thead>
+              <tbody><tr>
+                <td contenteditable="true"><div><strong>الاسم:</strong> أ. أسماء ياسين الخيري</div><div><strong>التاريخ:</strong> ..... / ..... / 1448هـ</div><div><strong>التوقيع:</strong> ....................................</div></td>
+                <td contenteditable="true"><div><strong>الاسم:</strong> ....................................</div><div><strong>التاريخ:</strong> ..... / ..... / 1448هـ</div><div><strong>التوقيع:</strong> ....................................</div></td>
+                <td contenteditable="true"><div><strong>الاسم:</strong> أ. البتول آل دويس</div><div><strong>التاريخ:</strong> ..... / ..... / 1448هـ</div><div><strong>التوقيع:</strong> ....................................</div></td>
+              </tr></tbody>
+            </table>
+          </div>
+          <footer class="official-footer">
+            <span>• يتم تعبئة هذه البطاقة عند استكمال الحصص المخصصة للبرنامج وفق ما ورد للبرنامج من حصص في دليل الخطط الدراسية.</span>
+            <span class="moe-badge">www.MOE.GOV.SA</span>
+          </footer>
+        `;
+        container.appendChild(card);
+        if (currentWeekFilter !== "all") {
+          currentWeekFilter = "all";
+        }
+        applyCardFilters();
+        markUserEdited();
+        card.scrollIntoView({ behavior: "smooth", block: "start" });
+        setStatus("✅ تمت إضافة بطاقة تنفيذ نشاط جديدة");
+        return;
+      }
+
+      const planView = document.getElementById("planView");
+      if (!planView) return;
+      const pageNum = planView.querySelectorAll(".a4-sheet").length + 1;
+      const article = document.createElement("article");
+      article.className = "a4-sheet";
+      article.innerHTML = `
+        <div>
+          <div class="custom-sheet-bar edit-only">
+            <button type="button" class="custom-del-btn" onclick="deleteCustomSheet(this)">🗑️ حذف الصفحة</button>
+          </div>
+          <div class="official-header">
+            <div class="official-top-bar">
+              <span>المملكة العربية السعودية — وزارة التعليم</span>
+              <span class="gold-tag" contenteditable="true">صفحة إضافية ${pageNum} | 1448هـ</span>
+            </div>
+            <div class="official-title-box" contenteditable="true">ملحق خطة النشاط الطلابي والتكامل المنهجي</div>
+            <div class="official-meta-strip">
+              <span contenteditable="true">المادة: الدراسات الاجتماعية</span>
+              <span contenteditable="true">إدارة تعليم نجران — مدرسة آمنة بنت عفان</span>
+              <span contenteditable="true">توثيق إضافي</span>
+            </div>
+          </div>
+          <table class="official-table">
+            <tbody>
+              <tr class="banner-row"><td colspan="2" contenteditable="true">بيان النشاط والشواهد الإضافية</td></tr>
+              <tr>
+                <th class="lbl" style="width:24%;">عنوان النشاط / المحور</th>
+                <td class="val" contenteditable="true">اكتب عنوان المحور أو البرنامج المضاف هنا...</td>
+              </tr>
+              <tr>
+                <th class="lbl">الأهداف والمنفذ</th>
+                <td class="val" contenteditable="true">• الفئة المستهدفة: طالبات الصفوف العليا<br>• المعلمة المنفذة: أ. أسماء ياسين الخيري</td>
+              </tr>
+              <tr>
+                <th class="lbl">تفاصيل التنفيذ والتوثيق</th>
+                <td class="val" contenteditable="true" style="min-height:220px;">أضف وصف التنفيذ والشواهد والروابط أو التوصيات هنا...</td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="sign-grid">
+            <thead><tr><th>المعلم/ة المنفذ/ة</th><th>رائد/ة النشاط</th><th>مديرة المدرسة</th></tr></thead>
+            <tbody><tr>
+              <td contenteditable="true"><div><strong>الاسم:</strong> أ. أسماء ياسين الخيري</div><div><strong>التوقيع:</strong> ....................................</div></td>
+              <td contenteditable="true"><div><strong>الاسم:</strong> ....................................</div><div><strong>التوقيع:</strong> ....................................</div></td>
+              <td contenteditable="true"><div><strong>الاسم:</strong> أ. البتول آل دويس</div><div><strong>التوقيع:</strong> ....................................</div></td>
+            </tr></tbody>
+          </table>
+        </div>
+        <footer class="official-footer">
+          <span>ملف الأنشطة المدرسية — الدراسات الاجتماعية | مدرسة آمنة بنت عفان</span>
+          <span class="moe-badge">www.MOE.GOV.SA</span>
+        </footer>
+      `;
+      planView.appendChild(article);
+      markUserEdited();
+      article.scrollIntoView({ behavior: "smooth", block: "start" });
+      setStatus("✅ تمت إضافة صفحة جديدة لملف الأنشطة");
+    }
+
+    /* ================= معاينة قبل الطباعة ================= */
+    function removePreviewBadges() {
+      document.querySelectorAll(".preview-page-badge").forEach(b => b.remove());
+    }
+
+    function renderPreviewBadges() {
+      removePreviewBadges();
+      const sheets = getActivePrintableSheets();
+      const total = sheets.length;
+      sheets.forEach((p, idx) => {
+        const badge = document.createElement("div");
+        badge.className = "preview-page-badge";
+        badge.textContent = `صفحة ${idx + 1} من ${total}`;
+        p.parentNode.insertBefore(badge, p);
+      });
+      const counter = document.getElementById("previewPageCounter");
+      if (counter) counter.textContent = `إجمالي الصفحات: ${total} صفحة A4`;
+    }
+
+    function applyPreviewZoom() {
+      const sheets = getActivePrintableSheets();
+      document.querySelectorAll(".a4-sheet").forEach(p => {
+        p.style.transform = "";
+        p.style.marginBottom = "";
+      });
+      if (!isPrintPreview) return;
+      if (previewZoomMode === "fit") {
+        const availW = Math.max(280, window.innerWidth - 28);
+        sheets.forEach(p => {
+          const w = p.offsetWidth || 794;
+          const h = p.offsetHeight || 1123;
+          const scale = Math.min(1, availW / w);
+          if (scale < 0.99) {
+            p.style.transform = `scale(${scale.toFixed(4)})`;
+            p.style.marginBottom = `${Math.round(-(h * (1 - scale)) + 14)}px`;
+          }
+        });
+      }
+    }
+
+    function setPreviewZoom(mode) {
+      previewZoomMode = mode;
+      document.getElementById("btnZoomFit")?.classList.toggle("active", mode === "fit");
+      document.getElementById("btnZoomFull")?.classList.toggle("active", mode === "full");
+      applyPreviewZoom();
+    }
+
+    function togglePrintPreview(forceState) {
+      const next = typeof forceState === "boolean" ? forceState : !isPrintPreview;
+      isPrintPreview = next;
+      if (document.activeElement && typeof document.activeElement.blur === "function") {
+        document.activeElement.blur();
+      }
+      if (next) {
+        document.body.classList.add("print-preview-mode");
+        renderPreviewBadges();
+        applyPreviewZoom();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setStatus("👁️ وضع المعاينة قبل الطباعة");
+      } else {
+        document.body.classList.remove("print-preview-mode");
+        removePreviewBadges();
+        applyPreviewZoom();
+        setStatus("تمت العودة لوضع التعديل");
+      }
+      notifyParentToolState({ preview: isPrintPreview });
+    }
+
+    window.addEventListener("resize", () => {
+      if (isPrintPreview) applyPreviewZoom();
+    });
+
+    /* ================= استوديو قوالب كانفا التفاعلي ================= */
+    const CANVA_SELECTED_STORAGE_KEY = "activities_canva_selected_v1";
+    const CANVA_ACTIVE_STORAGE_KEY = "activities_canva_active_v1";
+    let canvaFetchedTemplates = [];
+    let canvaSelectedCategory = "all";
+    let canvaCheckedIds = new Set();
+    let livePreviewCanvaId = null;
+    let canvaCollectedTemplates = [];
+    let activeCanvaTemplate = null;
+    try { canvaCollectedTemplates = JSON.parse(localStorage.getItem(CANVA_SELECTED_STORAGE_KEY) || "[]") || []; } catch (e) { canvaCollectedTemplates = []; }
+    try { activeCanvaTemplate = JSON.parse(localStorage.getItem(CANVA_ACTIVE_STORAGE_KEY) || "null"); } catch (e) { activeCanvaTemplate = null; }
+
+    function escCanvaHtml(str) {
+      return String(str == null ? "" : str)
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function getActivitiesSnapshotForPreview() {
+      const sheets = getActivePrintableSheets();
+      const firstTitle = (sheets[0]?.querySelector(".official-title-box")?.textContent || "ملف الأنشطة المدرسية وبطاقات التنفيذ").trim();
+      const subMeta = (sheets[0]?.querySelector(".cover-hero h1")?.textContent || "التكامل المنهجي للأنشطة الصفية والإثرائية").trim();
+      const firstRows = Array.from(document.querySelectorAll("#planPart1Body tr")).slice(0, 3).map(tr => {
+        const tds = tr.querySelectorAll("td");
+        return tds[1] ? tds[1].textContent.trim().slice(0, 60) : tr.textContent.trim().slice(0, 60);
+      });
+      return { firstTitle, subMeta, firstRows };
+    }
+
+    async function fetchCanvaJson(url, options = {}, timeoutMs = 15000) {
+      const ctrl = typeof AbortController !== "undefined" ? new AbortController() : null;
+      const timer = ctrl ? setTimeout(() => ctrl.abort(), timeoutMs) : null;
+      try {
+        const res = await fetch(url, { ...options, signal: ctrl ? ctrl.signal : options.signal });
+        const text = await res.text();
+        let data = {};
+        try { data = text ? JSON.parse(text) : {}; } catch (e) {
+          throw new Error(res.ok ? "استجابة غير متوقعة من الخادم" : `خطأ من الخادم (${res.status})`);
+        }
+        return { res, data };
+      } catch (err) {
+        if (err && err.name === "AbortError") throw new Error("انتهت مهلة الاتصال بكانفا — يرجى المحاولة مرة أخرى");
+        throw err;
+      } finally {
+        if (timer) clearTimeout(timer);
+      }
+    }
+
+    const CANVA_CATALOG_CACHE_KEY = "edu_canva_catalog_cache_v1";
+
+    function openCanvaHubModal() {
+      document.getElementById("canvaTemplatesModal")?.classList.add("show");
+      renderCollectedCanvaTemplates();
+      if (!canvaFetchedTemplates.length) {
+        try {
+          const cached = JSON.parse(localStorage.getItem(CANVA_CATALOG_CACHE_KEY) || "null");
+          if (cached && Array.isArray(cached.templates) && cached.templates.length) {
+            canvaFetchedTemplates = cached.templates;
+            renderFetchedCanvaTemplates();
+            if (!livePreviewCanvaId && canvaFetchedTemplates[0]) {
+              previewCanvaTemplateInsideModal(canvaFetchedTemplates[0].id, false);
+            }
+            fetchCanvaInsideUI(false, true);
+            return;
+          }
+        } catch (e) {}
+        fetchCanvaInsideUI(false, false);
+      } else {
+        renderFetchedCanvaTemplates();
+        if (!livePreviewCanvaId && canvaFetchedTemplates[0]) {
+          previewCanvaTemplateInsideModal(canvaFetchedTemplates[0].id, false);
+        }
+      }
+    }
+
+    function closeCanvaHubModal() {
+      document.getElementById("canvaTemplatesModal")?.classList.remove("show");
+    }
+
+    function filterCanvaCategory(cat, btnEl) {
+      canvaSelectedCategory = cat || "all";
+      document.querySelectorAll("#canvaCategoryChips .canva-cat-chip").forEach(b => b.classList.toggle("active", b === btnEl));
+      renderFetchedCanvaTemplates();
+    }
+
+    async function fetchCanvaInsideUI(forceLive = true, silent = false) {
+      const btn = document.getElementById("btnFetchCanvaInside");
+      const statusEl = document.getElementById("canvaHubStatus");
+      const q = (document.getElementById("canvaSearchInput")?.value || "").trim();
+      const isLive = Boolean(forceLive);
+      const orig = btn ? btn.innerHTML : "";
+      if (!silent) {
+        if (btn) { btn.disabled = true; btn.innerHTML = isLive ? "⏳ جاري التحديث..." : "⏳ جاري التحميل..."; }
+        if (statusEl) statusEl.textContent = isLive ? "⏳ جاري تحديث قوالب كانفا داخل الواجهة..." : "⏳ جاري تحميل مكتبة قوالب كانفا السريعة...";
+      }
+      try {
+        const { res, data: d } = await fetchCanvaJson("/api/edu/canva/browse", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ q, query: q, category: isLive ? canvaSelectedCategory : "all", source: isLive ? "live" : "cached" })
+        }, isLive ? 15000 : 10000);
+        if (!res.ok || d.error) throw new Error(d.error || "تعذر جلب القوالب");
+        canvaFetchedTemplates = Array.isArray(d.templates) ? d.templates : [];
+        if (!q && (!isLive || canvaSelectedCategory === "all")) {
+          try {
+            const slim = canvaFetchedTemplates.slice(0, 40).map(item => ({
+              ...item,
+              safe_preview_data_url: (item.safe_preview_data_url && /^data:image\/(jpeg|jpg|png|webp|gif)/i.test(item.safe_preview_data_url)) ? item.safe_preview_data_url : "",
+              fallback_preview_data_url: ""
+            }));
+            localStorage.setItem(CANVA_CATALOG_CACHE_KEY, JSON.stringify({ ts: Date.now(), templates: slim }));
+          } catch (e) {}
+        }
+        const badge = document.getElementById("canvaGoogleActiveBadge");
+        if (badge && d.accounts) {
+          badge.textContent = d.accounts.active_email ? `حساب Google: ${d.accounts.active_email}` : "حساب Google: متصل تلقائياً";
+        }
+        renderFetchedCanvaTemplates();
+        if (canvaFetchedTemplates.length && !livePreviewCanvaId) {
+          previewCanvaTemplateInsideModal(canvaFetchedTemplates[0].id, false);
+        }
+        if (statusEl) {
+          statusEl.textContent = `✅ جاهز: ${canvaFetchedTemplates.length} قالب كانفا فعلي بالمعاينة المباشرة — اضغط على أي تصميم للمعاينة الكاملة أو حدده للتطبيق`;
+        }
+      } catch (e) {
+        if (!silent && statusEl) statusEl.textContent = "⚠️ " + e.message;
+      } finally {
+        if (!silent && btn) { btn.disabled = false; btn.innerHTML = orig; }
+      }
+    }
+
+    async function importCanvaLinkInsideUI() {
+      const url = (document.getElementById("canvaImportUrlInput")?.value || "").trim();
+      const name = (document.getElementById("canvaImportNameInput")?.value || "").trim();
+      const statusEl = document.getElementById("canvaHubStatus");
+      if (!url) { if (statusEl) statusEl.textContent = "⚠️ الصق رابط قالب أو تصميم من كانفا أولاً."; return; }
+      if (statusEl) statusEl.textContent = "⏳ جاري جلب القالب من الرابط داخل الواجهة...";
+      try {
+        const { res, data: d } = await fetchCanvaJson("/api/edu/canva/browse", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ canva_url: url, name, category: "تصاميمي المجلوبة", source: "cached" })
+        }, 18000);
+        if (!res.ok || d.error) throw new Error(d.error || "فشل جلب الرابط");
+        canvaFetchedTemplates = Array.isArray(d.templates) ? d.templates : [];
+        if (d.imported_template && d.imported_template.id) {
+          canvaCheckedIds.add(d.imported_template.id);
+          previewCanvaTemplateInsideModal(d.imported_template.id, true);
+        }
+        document.getElementById("canvaImportUrlInput").value = "";
+        document.getElementById("canvaImportNameInput").value = "";
+        renderFetchedCanvaTemplates();
+        if (statusEl) statusEl.textContent = "✅ تم جلب قالب كانفا وتحديده في القائمة أدناه.";
+      } catch (e) {
+        if (statusEl) statusEl.textContent = "❌ " + e.message;
+      }
+    }
+
+    async function syncCanvaTokenInsideUI() {
+      const token = (document.getElementById("canvaTokenInput")?.value || "").trim();
+      const statusEl = document.getElementById("canvaHubStatus");
+      if (!token) { if (statusEl) statusEl.textContent = "⚠️ أدخل Canva API Token أولاً."; return; }
+      if (statusEl) statusEl.textContent = "⏳ جاري جلب تصاميمك الشخصية من كانفا...";
+      try {
+        const { res, data: d } = await fetchCanvaJson("/api/edu/canva/browse", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ access_token: token, source: "live" })
+        }, 18000);
+        if (!res.ok || d.error) throw new Error(d.error || "تعذر المزامنة");
+        canvaFetchedTemplates = Array.isArray(d.templates) ? d.templates : [];
+        renderFetchedCanvaTemplates();
+        if (d.api_error) {
+          if (statusEl) statusEl.textContent = "⚠️ " + d.api_error;
+        } else {
+          if (statusEl) statusEl.textContent = `✅ تمت مزامنة ${d.live_count || ""} من تصاميم كانفا الخاصة بك داخل الواجهة.`;
+        }
+      } catch (e) {
+        if (statusEl) statusEl.textContent = "❌ " + e.message;
+      }
+    }
+
+    function getFilteredFetchedCanva() {
+      const q = (document.getElementById("canvaSearchInput")?.value || "").trim().toLowerCase();
+      return canvaFetchedTemplates.filter(t => {
+        if (canvaSelectedCategory && canvaSelectedCategory !== "all" && canvaSelectedCategory !== "الكل") {
+          if (canvaSelectedCategory === "تصاميمي المجلوبة" || canvaSelectedCategory === "تصاميمي") {
+            const isMine = (t.category && t.category.includes("تصاميمي")) ||
+              (t.source && (t.source.includes("مستورد") || t.source.includes("المتصل") || t.source.includes("مرفوع")));
+            if (!isMine) return false;
+          } else if (t.category !== canvaSelectedCategory && !(t.category || "").includes(canvaSelectedCategory)) {
+            return false;
+          }
+        }
+        if (q) {
+          const hay = `${t.name || ""} ${t.category || ""} ${t.description || ""} ${t.badge_text || ""} ${t.source || ""}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+    }
+
+    function toggleCheckCanvaCard(tid) {
+      if (canvaCheckedIds.has(tid)) canvaCheckedIds.delete(tid);
+      else canvaCheckedIds.add(tid);
+      renderFetchedCanvaTemplates();
+    }
+
+    function selectAllFetchedCanva(flag) {
+      getFilteredFetchedCanva().forEach(t => {
+        if (flag) canvaCheckedIds.add(t.id);
+        else canvaCheckedIds.delete(t.id);
+      });
+      renderFetchedCanvaTemplates();
+    }
+
+    function getSafeCanvaThumbUrl(t) {
+      if (!t) return "";
+      if (t.safe_preview_data_url && /^data:image\/(jpeg|jpg|png|webp|gif)/i.test(t.safe_preview_data_url)) return t.safe_preview_data_url;
+      if (t.preview_image && /^https?:\/\//i.test(t.preview_image)) {
+        const tidPart = t.id ? "&tid=" + encodeURIComponent(t.id) : "";
+        return "/api/edu/canva/proxy_img?url=" + encodeURIComponent(t.preview_image) + tidPart;
+      }
+      return t.fallback_preview_data_url || t.safe_preview_data_url || "";
+    }
+
+    function buildCanvaCardThumbHTML(t) {
+      const c = t.colors || {};
+      const p = c.primary || "#0f4c5c";
+      const s = c.secondary || "#09323d";
+      const a = c.accent || "#c89b3c";
+      const bg = c.bg || "#f8fafc";
+      const srcUrl = getSafeCanvaThumbUrl(t);
+      const fbUrl = t.fallback_preview_data_url || "";
+      const previewImg = srcUrl
+        ? `<img class="canva-tpl-img" loading="lazy" src="${escCanvaHtml(srcUrl)}" data-fb="${escCanvaHtml(fbUrl)}" onerror="if(this.dataset.fb&&this.src!==this.dataset.fb){this.src=this.dataset.fb;}else{this.style.display='none';}" alt="${escCanvaHtml(t.name)}">`
+        : `<div style="height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,${p},${s});color:#fff;font-weight:900;font-size:13px;padding:12px;text-align:center;">${escCanvaHtml(t.name)}</div>`;
+      return `<div class="canva-tpl-thumb" style="background:${bg};border-bottom:2px solid ${p};" onclick="event.stopPropagation(); previewCanvaTemplateInsideModal('${escCanvaHtml(t.id)}', true)">
+        ${previewImg}
+        <span style="position:absolute;top:8px;left:8px;z-index:3;background:rgba(15,23,42,0.82);color:#fff;font-size:10px;padding:2px 8px;border-radius:999px;font-weight:800;backdrop-filter:blur(4px);">${escCanvaHtml(t.badge_text || t.category || "Canva")}</span>
+        <div style="position:absolute;bottom:6px;right:8px;left:8px;z-index:3;display:flex;align-items:center;justify-content:space-between;pointer-events:none;">
+          <span style="background:rgba(255,255,255,0.92);color:#0f172a;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:6px;box-shadow:0 2px 6px rgba(0,0,0,0.18);">👁️ اضغط للمعاينة</span>
+          <span style="display:inline-flex;gap:3px;background:rgba(255,255,255,0.92);padding:3px 6px;border-radius:999px;box-shadow:0 2px 6px rgba(0,0,0,0.15);">
+            <i style="width:9px;height:9px;border-radius:50%;background:${p};display:block;"></i>
+            <i style="width:9px;height:9px;border-radius:50%;background:${s};display:block;"></i>
+            <i style="width:9px;height:9px;border-radius:50%;background:${a};display:block;"></i>
+          </span>
+        </div>
+      </div>`;
+    }
+
+    function previewCanvaTemplateInsideModal(tid, scrollIntoView = true) {
+      const tpl = canvaFetchedTemplates.find(x => x.id === tid) || canvaCollectedTemplates.find(x => x.id === tid);
+      if (!tpl) return;
+      livePreviewCanvaId = tpl.id;
+      const stage = document.getElementById("canvaLivePreviewStage");
+      const body = document.getElementById("canvaLivePreviewBody");
+      const meta = document.getElementById("canvaLivePreviewMeta");
+      const btnCollect = document.getElementById("btnLiveCollectTpl");
+      const btnApply = document.getElementById("btnLiveApplyTpl");
+      const btnPrint = document.getElementById("btnLivePrintTpl");
+      if (!stage || !body) return;
+
+      const c = tpl.colors || {};
+      const p = c.primary || "#0f4c5c";
+      const s = c.secondary || "#09323d";
+      const a = c.accent || "#c89b3c";
+      const bg = c.bg || "#f8fafc";
+      const snap = getActivitiesSnapshotForPreview();
+      const realImgUrl = getSafeCanvaThumbUrl(tpl);
+      const fbImgUrl = tpl.fallback_preview_data_url || "";
+
+      if (meta) {
+        const externalLink = tpl.canva_url
+          ? ` <a href="${escCanvaHtml(tpl.canva_url)}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:4px;background:#00c4cc;color:#0f172a;text-decoration:none;padding:2px 9px;border-radius:6px;font-size:11px;font-weight:800;margin-right:6px;">🔗 فتح القالب في كانفا</a>`
+          : "";
+        meta.innerHTML = `<strong>${escCanvaHtml(tpl.name)}</strong> — <span style="color:#5b21b6;font-weight:800;">${escCanvaHtml(tpl.category || "Canva")}</span> | الألوان: <span style="display:inline-flex;gap:4px;vertical-align:middle;"><i style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${p};border:1px solid #fff;"></i><i style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${s};border:1px solid #fff;"></i><i style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${a};border:1px solid #fff;"></i></span>${externalLink}`;
+      }
+      const rowsHtml = (snap.firstRows.length ? snap.firstRows : ["خطة النشاط الطلابي", "بطاقات تنفيذ النشاط"]).map(r => `
+        <tr><td style="border:1px solid ${p}55;padding:5px;font-size:10.5px;font-weight:700;color:#1e293b;">${escCanvaHtml(r)}</td></tr>
+      `).join("");
+
+      body.innerHTML = `
+        <div class="canva-mini-a4" style="border:2px solid #cbd5e1;background:#f8fafc;padding:10px;gap:8px;align-items:center;justify-content:center;">
+          <div style="width:100%;display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:900;color:#0f172a;">
+            <span>🖼️ التصميم الفعلي للقالب من كانفا</span>
+            <span style="color:${p};">${escCanvaHtml(tpl.canva_id || "A4")}</span>
+          </div>
+          ${realImgUrl ? `<img src="${escCanvaHtml(realImgUrl)}" data-fb="${escCanvaHtml(fbImgUrl)}" onerror="if(this.dataset.fb&&this.src!==this.dataset.fb){this.src=this.dataset.fb;}" alt="${escCanvaHtml(tpl.name)}" style="width:100%;max-height:310px;object-fit:contain;border-radius:8px;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,0.12);">` : ""}
+          <div style="width:100%;font-size:10.5px;color:#475569;text-align:center;font-weight:700;">${escCanvaHtml(tpl.description || "")}</div>
+        </div>
+        <div class="canva-mini-a4" style="border:2px solid ${p};background:linear-gradient(160deg,${bg} 0%,#ffffff 65%);">
+          <div style="background:linear-gradient(135deg,${p},${s});color:#fff;padding:10px;border-radius:8px;border-bottom:3px solid ${a};text-align:center;">
+            <div style="font-size:14px;font-weight:900;">${escCanvaHtml(snap.firstTitle)}</div>
+            <div style="font-size:10px;color:#fef3c7;margin-top:3px;">${escCanvaHtml(snap.subMeta)}</div>
+          </div>
+          <div style="margin:10px 0;font-size:11px;color:#334155;font-weight:700;text-align:center;">مدرسة آمنة بنت عفان — إدارة تعليم نجران</div>
+        </div>
+        <div class="canva-mini-a4" style="border:2px solid ${p};border-top:6px solid ${p};border-bottom:5px solid ${a};">
+          <table style="width:100%;border-collapse:collapse;">
+            <thead><tr><th style="background:linear-gradient(135deg,${p},${s});color:#fff;padding:6px;font-size:11px;">البرنامج والأنشطة</th></tr></thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+          <div style="font-size:10px;font-weight:800;color:${p};display:flex;justify-content:space-between;">
+            <span>🎨 معاينة تطبيق ألوان كانفا على ملف الأنشطة والبطاقات</span><span>A4</span>
+          </div>
+        </div>
+      `;
+
+      if (btnCollect) btnCollect.onclick = () => {
+        if (!canvaCollectedTemplates.some(x => x.id === tpl.id)) {
+          canvaCollectedTemplates.unshift(tpl);
+          try { localStorage.setItem(CANVA_SELECTED_STORAGE_KEY, JSON.stringify(canvaCollectedTemplates)); } catch (e) {}
+          renderCollectedCanvaTemplates();
+        }
+        setStatus(`✅ تم حفظ قالب "${tpl.name}" في القوالب المحددة`);
+      };
+      if (btnApply) btnApply.onclick = () => quickCollectAndPreview(tpl.id);
+      if (btnPrint) btnPrint.onclick = () => applyCollectedCanvaById(tpl.id, true, true);
+
+      stage.style.display = "flex";
+      renderFetchedCanvaTemplates();
+      if (scrollIntoView) stage.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function closeCanvaLivePreview() {
+      livePreviewCanvaId = null;
+      const stage = document.getElementById("canvaLivePreviewStage");
+      if (stage) stage.style.display = "none";
+      renderFetchedCanvaTemplates();
+    }
+
+    function renderFetchedCanvaTemplates() {
+      const grid = document.getElementById("canvaFetchedGrid");
+      const countEl = document.getElementById("canvaCheckedCount");
+      if (countEl) countEl.textContent = String(canvaCheckedIds.size);
+      if (!grid) return;
+      const list = getFilteredFetchedCanva();
+      if (!list.length) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#64748b;padding:22px;font-size:13px;">لا توجد قوالب مطابقة لهذا التصنيف أو البحث — <button type="button" onclick="document.getElementById(\'canvaSearchInput\').value=\'\';filterCanvaCategory(\'all\', document.querySelector(\'#canvaCategoryChips .canva-cat-chip\'));" style="background:#5b21b6;color:#fff;border:none;padding:4px 12px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:700;">عرض جميع القوالب</button></div>';
+        return;
+      }
+      grid.innerHTML = list.map(t => {
+        const isChecked = canvaCheckedIds.has(t.id);
+        const isPreviewing = livePreviewCanvaId === t.id;
+        return `<div class="canva-tpl-card ${isChecked ? "checked" : ""} ${isPreviewing ? "previewing" : ""}" onclick="toggleCheckCanvaCard('${escCanvaHtml(t.id)}')">
+          <label class="canva-tpl-check" onclick="event.stopPropagation()">
+            <input type="checkbox" ${isChecked ? "checked" : ""} onchange="toggleCheckCanvaCard('${escCanvaHtml(t.id)}')">
+            <span>${isChecked ? "محدد ✓" : "تحديد"}</span>
+          </label>
+          ${buildCanvaCardThumbHTML(t)}
+          <div class="canva-tpl-body">
+            <div>
+              <div style="font-size:13px;font-weight:800;color:#0f172a;">${escCanvaHtml(t.name)}</div>
+              <div style="font-size:11px;color:#64748b;margin-top:3px;">${escCanvaHtml(t.description || "")}</div>
+            </div>
+            <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;">
+              <button type="button" onclick="event.stopPropagation(); previewCanvaTemplateInsideModal('${escCanvaHtml(t.id)}', true)" style="background:#0f766e;color:#fff;border:none;padding:6px 8px;border-radius:7px;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;">👁️ معاينة حية</button>
+              <button type="button" onclick="event.stopPropagation(); quickCollectAndPreview('${escCanvaHtml(t.id)}')" style="flex:1;background:#5b21b6;color:#fff;border:none;padding:6px 8px;border-radius:7px;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;">✨ جلب وتطبيق</button>
+            </div>
+          </div>
+        </div>`;
+      }).join("");
+    }
+
+    function collectSelectedCanvaTemplates() {
+      if (!canvaCheckedIds.size) {
+        setStatus("⚠️ حدّد قالباً واحداً على الأقل من قوالب كانفا");
+        return;
+      }
+      const existingMap = new Map(canvaCollectedTemplates.map(x => [x.id, x]));
+      canvaFetchedTemplates.forEach(t => { if (canvaCheckedIds.has(t.id)) existingMap.set(t.id, t); });
+      canvaCollectedTemplates = Array.from(existingMap.values());
+      try { localStorage.setItem(CANVA_SELECTED_STORAGE_KEY, JSON.stringify(canvaCollectedTemplates)); } catch (e) {}
+      renderCollectedCanvaTemplates();
+      setStatus(`✅ تم جلب ${canvaCheckedIds.size} قالب من كانفا`);
+    }
+
+    function quickCollectAndPreview(tid) {
+      const tpl = canvaFetchedTemplates.find(x => x.id === tid) || canvaCollectedTemplates.find(x => x.id === tid);
+      if (!tpl) return;
+      if (!canvaCollectedTemplates.some(x => x.id === tpl.id)) {
+        canvaCollectedTemplates.unshift(tpl);
+        try { localStorage.setItem(CANVA_SELECTED_STORAGE_KEY, JSON.stringify(canvaCollectedTemplates)); } catch (e) {}
+      }
+      applyCanvaTemplateToContent(tpl, true);
+    }
+
+    function removeCollectedCanvaTemplate(tid) {
+      canvaCollectedTemplates = canvaCollectedTemplates.filter(x => x.id !== tid);
+      try { localStorage.setItem(CANVA_SELECTED_STORAGE_KEY, JSON.stringify(canvaCollectedTemplates)); } catch (e) {}
+      renderCollectedCanvaTemplates();
+    }
+
+    function renderCollectedCanvaTemplates() {
+      const grid = document.getElementById("canvaSelectedGrid");
+      const counter = document.getElementById("canvaSelectedCounter");
+      if (counter) counter.textContent = `${canvaCollectedTemplates.length} قالب جاهز للتطبيق`;
+      if (!grid) return;
+      if (!canvaCollectedTemplates.length) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#64748b;padding:18px;font-size:13px;">حدد القوالب أعلاه واضغط «جلب القوالب المحددة» لتطبيقها هنا.</div>';
+        return;
+      }
+      grid.innerHTML = canvaCollectedTemplates.map(t => {
+        const isApplied = activeCanvaTemplate && activeCanvaTemplate.id === t.id;
+        return `<div class="canva-tpl-card ${isApplied ? "applied" : ""}">
+          <button type="button" onclick="removeCollectedCanvaTemplate('${escCanvaHtml(t.id)}')" title="إزالة" style="position:absolute;top:8px;left:8px;z-index:4;background:#ef4444;color:#fff;border:none;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:11px;font-weight:900;">✕</button>
+          ${buildCanvaCardThumbHTML(t)}
+          <div class="canva-tpl-body">
+            <div><div style="font-size:13px;font-weight:800;color:#0f172a;">${escCanvaHtml(t.name)} ${isApplied ? '<span style="color:#d97706;">(مطبق)</span>' : ""}</div></div>
+            <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;">
+              <button type="button" onclick="applyCollectedCanvaById('${escCanvaHtml(t.id)}', true, false)" style="flex:1;background:#0f766e;color:#fff;border:none;padding:7px 8px;border-radius:7px;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;">✨ تطبيق ومعاينة</button>
+              <button type="button" onclick="applyCollectedCanvaById('${escCanvaHtml(t.id)}', true, true)" style="background:#1e3a8a;color:#fff;border:none;padding:7px 10px;border-radius:7px;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;">🖨️ طباعة</button>
+            </div>
+          </div>
+        </div>`;
+      }).join("");
+    }
+
+    function applyCollectedCanvaById(tid, openPreview, triggerPrint) {
+      const tpl = canvaCollectedTemplates.find(x => x.id === tid) || canvaFetchedTemplates.find(x => x.id === tid);
+      if (!tpl) return;
+      applyCanvaTemplateToContent(tpl, openPreview);
+      if (triggerPrint) setTimeout(() => printActivities(), 380);
+    }
+
+    function applyCanvaTemplateToContent(tpl, openPreview = true) {
+      if (!tpl || !tpl.colors) return;
+      activeCanvaTemplate = tpl;
+      try { localStorage.setItem(CANVA_ACTIVE_STORAGE_KEY, JSON.stringify(tpl)); } catch (e) {}
+
+      const c = tpl.colors;
+      const p = c.primary || "#0f4c5c";
+      const s = c.secondary || "#09323d";
+      const a = c.accent || "#c89b3c";
+      const bg = c.bg || "#eef6f8";
+      const cardBg = c.card_bg || "#ffffff";
+      const textDark = (bg === "#0F172A" || bg === "#0f172a") ? "#1e293b" : (c.text_dark || "#1b262c");
+      const softTint = `${p}14`;
+
+      const styleEl = document.getElementById("canvaDynamicThemeCss");
+      if (styleEl) {
+        styleEl.textContent = `
+          :root {
+            --primary: ${p};
+            --primary-dark: ${s};
+            --primary-light: ${p};
+            --accent: ${a};
+            --accent-soft: ${a}1a;
+            --teal-soft: ${softTint};
+            --border: ${p}66;
+            --border-strong: ${p};
+            --text: ${textDark};
+          }
+          .a4-sheet {
+            background: linear-gradient(180deg, ${bg} 0%, ${cardBg} 16%, ${cardBg} 88%, ${bg} 100%) !important;
+            border-top: 6px solid ${p} !important;
+            border-bottom: 5px solid ${a} !important;
+          }
+          .official-top-bar { background: linear-gradient(135deg, ${p}, ${s}) !important; }
+          .official-title-box { background: linear-gradient(135deg, ${s}, ${p}) !important; border-bottom: 3px solid ${a} !important; }
+          .cover-hero { background: linear-gradient(135deg, ${softTint}, ${cardBg}) !important; border-color: ${p} !important; }
+          .official-table tr.banner-row td { background: linear-gradient(135deg, ${p}, ${s}) !important; color: #ffffff !important; }
+          .official-table th.lbl { background: ${softTint} !important; color: ${s} !important; }
+          .sign-grid th { background: ${a}22 !important; color: ${s} !important; }
+          .gold-tag { background: ${a} !important; color: #ffffff !important; }
+          .moe-badge { background: ${s} !important; color: #ffffff !important; }
+          .highlight-note { border-color: ${p} !important; border-right-color: ${a} !important; background: ${softTint} !important; }
+          .wk-btn.active { background: ${p} !important; border-color: ${s} !important; }
+          .icon-choice.checked { border-color: ${a} !important; background: ${a}1a !important; }
+          .icon-choice.checked .chk-box { background: ${p} !important; }
+        `;
+      }
+
+      const tbBadge = document.getElementById("toolbarCanvaBadge");
+      const tbName = document.getElementById("toolbarCanvaName");
+      const pvBadge = document.getElementById("previewCanvaBadge");
+      const pvName = document.getElementById("previewCanvaName");
+      const resetPvBtn = document.getElementById("btnResetCanvaPreview");
+      if (tbBadge && tbName) { tbName.textContent = tpl.name; tbBadge.classList.add("show"); }
+      if (pvBadge && pvName) { pvName.textContent = tpl.name; pvBadge.classList.add("show"); }
+      if (resetPvBtn) resetPvBtn.style.display = "inline-block";
+
+      renderCollectedCanvaTemplates();
+      if (openPreview) {
+        closeCanvaHubModal();
+        togglePrintPreview(true);
+      }
+      setStatus(`🎨 تم تطبيق قالب كانفا: ${tpl.name}`);
+    }
+
+    function resetCanvaTemplate() {
+      activeCanvaTemplate = null;
+      try { localStorage.removeItem(CANVA_ACTIVE_STORAGE_KEY); } catch (e) {}
+      const styleEl = document.getElementById("canvaDynamicThemeCss");
+      if (styleEl) styleEl.textContent = "";
+      document.getElementById("toolbarCanvaBadge")?.classList.remove("show");
+      document.getElementById("previewCanvaBadge")?.classList.remove("show");
+      const resetPvBtn = document.getElementById("btnResetCanvaPreview");
+      if (resetPvBtn) resetPvBtn.style.display = "none";
+      renderCollectedCanvaTemplates();
+      setStatus("↩️ تم استعادة التصميم الأصلي");
+    }
+
+    setInterval(() => {
+      if (!hasUserEdited) return;
+      try {
+        localStorage.setItem(getActStorageKey(), JSON.stringify(getState()));
+        hasUserEdited = false;
+      } catch (e) {}
+    }, 30000);
+
+    window.exportPDF = function() {
+      return exportActivitiesPDF(false);
+    };
+
+    (function initViewFromUrl() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const isStandalone = window.self === window.top || params.get("standalone") === "1";
+        const backBtn = document.getElementById("btnBackHome");
+        if (backBtn && isStandalone) {
+          backBtn.style.display = "inline-flex";
+        }
+        const modelParam = params.get("model");
+        const savedModel = modelParam || localStorage.getItem(ACTIVITIES_MODEL_STORAGE_KEY) || "primary";
+        if (savedModel === "secondary") {
+          switchActivitiesModel("secondary", true);
+        } else {
+          applyPlanSectionTextsForModel();
+        }
+        const viewParam = params.get("view") || params.get("tab");
+        if (viewParam === "cards" || viewParam === "plan") {
+          switchView(viewParam, true);
+        }
+        const wsEl = document.querySelector(".workspace");
+        if (wsEl) {
+          wsEl.addEventListener("input", markUserEdited);
+          wsEl.addEventListener("change", markUserEdited);
+        }
+        try {
+          if (activeCanvaTemplate) applyCanvaTemplateToContent(activeCanvaTemplate, false);
+        } catch (e) {}
+        try {
+          const savedRaw = localStorage.getItem(getActStorageKey());
+          if (savedRaw) {
+            const parsed = JSON.parse(savedRaw);
+            if (parsed && parsed.version === ACT_CONTENT_VERSION) {
+              showAppConfirm("يوجد حفظ سابق", "يوجد تعديلات محفوظة مسبقاً في المتصفح. هل تريد استرجاعها؟", () => {
+                loadData();
+              });
+            }
+          }
+        } catch (e) {}
+        notifyParentToolState({ model: activeActivitiesModel, view: currentActiveView, preview: false, status: "جاهز للتعديل" });
+        if (params.get("autoprint") === "1") {
+          setTimeout(() => printActivities(), 500);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</body>
+</html>

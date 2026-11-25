@@ -12,11 +12,11 @@
 <meta property="og:description" content="تطبيق لإنشاء وتعديل الاختبارات المدرسية وحفظها PDF ومشاركتها - تصميم وبرمجة الأستاذ أنور سيف">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="manifest" href="/manifest.json">
-<link rel="icon" type="image/svg+xml" href="/icon.svg">
-<link rel="icon" type="image/png" sizes="192x192" href="/pwa-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/pwa-512x512.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/exam_editor/manifest.json">
+<link rel="icon" type="image/svg+xml" href="/exam_editor/icon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="/exam_editor/pwa-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/exam_editor/pwa-512x512.png">
+<link rel="apple-touch-icon" href="/exam_editor/apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1820,6 +1820,7 @@ body.layout-canva #tab-analysis .summary-row.q-grades-row td {
 }
 
 </style>
+  <script type="module" crossorigin src="/exam_editor/assets/index-0g7NXSRf.js"></script>
 </head>
 <body>
 
@@ -2332,7 +2333,7 @@ body.layout-canva #tab-analysis .summary-row.q-grades-row td {
 <!-- إشعار تثبيت التطبيق PWA (AI Studio Floating Notification) -->
 <div class="pwa-notify-card" id="pwaNotifyCard" role="dialog" aria-labelledby="pwaTitle">
   <div class="pwa-notify-body">
-    <img src="pwa-192x192.png" alt="شعار التطبيق" class="pwa-notify-logo">
+    <img src="data:image/png;base64,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" alt="شعار التطبيق" class="pwa-notify-logo">
     <div class="pwa-notify-info">
       <h3 id="pwaTitle">تثبيت تطبيق محرر الاختبارات</h3>
       <p>ثبّت التطبيق على شاشة هاتفك للعمل بسرعة وفورياً بدون الحاجة للإنترنت.</p>
@@ -4281,18 +4282,18 @@ async function triggerInstall(sourceBtn, event){
   const setupOffline = async () => {
     try {
       if('serviceWorker' in navigator && location.protocol !== 'file:'){
-        await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+        await navigator.serviceWorker.register('/exam_editor/sw.js', { scope: '/exam_editor/' });
       }
       if('caches' in window){
         const cache = await caches.open('anwer-exam-v20-pwa');
         await cache.addAll([
-          '/',
-          '/index.html',
-          '/manifest.json',
-          '/icon.svg',
-          '/pwa-192x192.png',
-          '/pwa-512x512.png',
-          '/apple-touch-icon.png'
+          '/exam_editor/',
+          '/exam_editor/index.html',
+          '/exam_editor/manifest.json',
+          '/exam_editor/icon.svg',
+          '/exam_editor/pwa-192x192.png',
+          '/exam_editor/pwa-512x512.png',
+          '/exam_editor/apple-touch-icon.png'
         ]);
       }
     } catch(err) {
@@ -4403,7 +4404,7 @@ $('#btnForceRefresh')?.addEventListener('click', async (e) => {
 // تسجيل Service Worker بهدوء دون إجبار الصفحة على إعادة التحميل المفاجئ
 if('serviceWorker' in navigator && location.protocol !== 'file:'){
   window.addEventListener('load', ()=>{
-    navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(reg => {
+    navigator.serviceWorker.register('/exam_editor/sw.js', { scope: '/exam_editor/' }).then(reg => {
       // فحص التحديثات في الخلفية دون قطع جلسة المستخدم
       reg.addEventListener('updatefound', () => {
         const newWorker = reg.installing;
@@ -5957,6 +5958,5 @@ function init(){
 }
 init();
 </script>
-  <script type="module" src="/src/chart.tsx"></script>
 </body>
 </html>

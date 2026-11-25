@@ -1,13 +1,13 @@
 /* محرر الاختبارات أنور الصبري - Service Worker (Network-First) */
 const CACHE_NAME = 'anwer-exam-v20-pwa';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon.svg',
-  '/pwa-192x192.png',
-  '/pwa-512x512.png',
-  '/apple-touch-icon.png',
+  '/exam_editor/',
+  '/exam_editor/index.html',
+  '/exam_editor/manifest.json',
+  '/exam_editor/icon.svg',
+  '/exam_editor/pwa-192x192.png',
+  '/exam_editor/pwa-512x512.png',
+  '/exam_editor/apple-touch-icon.png',
   'https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap',
   'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
@@ -50,7 +50,7 @@ self.addEventListener('fetch', event => {
         return caches.match(event.request).then(cached => {
           if (cached) return cached;
           if (event.request.mode === 'navigate') {
-            return caches.match('/index.html') || caches.match('/');
+            return caches.match('/exam_editor/index.html') || caches.match('/exam_editor/');
           }
           return null;
         });

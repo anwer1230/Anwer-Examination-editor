@@ -1,8 +1,6 @@
 {
-  "name": "محرر الاختبارات أنور الصبري",
-  "description": "تطبيق لإنشاء وتعديل الاختبارات المدرسية وحفظها PDF ومشاركتها - تصميم وبرمجة الأستاذ أنور سيف",
+  "name": "بوابة الخدمات التعليمية والأنشطة المدرسية",
+  "description": "منصة الخدمات التعليمية المتكاملة: ملف الأداء الوظيفي، شواهد الأداء، التقارير والشواهد المدرسية، محرر الاختبارات، وملف الأنشطة المدرسية وبطاقات التنفيذ.",
   "requestFramePermissions": [],
-  "majorCapabilities": [
-    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
-  ]
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

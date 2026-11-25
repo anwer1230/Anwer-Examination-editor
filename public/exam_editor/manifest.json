@@ -1,10 +1,10 @@
 {
-  "id": "/",
+  "id": "/exam_editor/",
   "name": "محرر الاختبارات أنور الصبري",
   "short_name": "محرر اختبار",
   "description": "تطبيق لإنشاء وتعديل الاختبارات المدرسية وحفظها PDF ومشاركتها - تصميم وبرمجة الأستاذ أنور سيف",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/exam_editor/",
+  "scope": "/exam_editor/",
   "display": "standalone",
   "orientation": "any",
   "theme_color": "#1a5276",
@@ -13,25 +13,25 @@
   "dir": "rtl",
   "icons": [
     {
-      "src": "/pwa-192x192.png",
+      "src": "/exam_editor/pwa-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/pwa-512x512.png",
+      "src": "/exam_editor/pwa-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/pwa-512x512.png",
+      "src": "/exam_editor/pwa-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/icon.svg",
+      "src": "/exam_editor/icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"

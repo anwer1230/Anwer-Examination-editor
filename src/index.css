@@ -1,1 +1,51 @@
 @import "tailwindcss";
+
+#eduDirectPrintHost {
+  display: none;
+}
+
+@media print {
+  body.edu-direct-printing > *:not(#eduDirectPrintHost) {
+    display: none !important;
+  }
+  body.edu-direct-printing > #eduDirectPrintHost {
+    display: block !important;
+    width: 100% !important;
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  body.edu-direct-printing .edu-direct-sheet-wrap .a4-sheet {
+    width: 100% !important;
+    min-height: auto !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 4mm 5mm !important;
+  }
+  body.edu-direct-printing .edu-direct-sheet-wrap .a4-sheet ~ .a4-sheet {
+    page-break-before: always;
+    break-before: page;
+  }
+}
+
+
+@layer base {
+  :root {
+    --font-display: 'Cairo', 'Amiri', Tahoma, Arial, sans-serif;
+    --font-sans: 'Cairo', Tahoma, Arial, sans-serif;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #f8fafc;
+    color: #0f172a;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+}
