@@ -2695,15 +2695,23 @@ let currentActiveView = "plan";
     }
 
     function buildParentPrintPayload() {
-      const styleTags = Array.from(document.querySelectorAll("style"))
+      const styleTags = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))
         .map(s => s.outerHTML)
         .join("\n");
       const sheets = getActivePrintableSheets();
       const viewClass = currentActiveView === "cards" ? "cards-print" : "plan-print";
-      const sheetsHtml = sheets.map(el => el.outerHTML).join("\n");
+      const sheetsHtml = sheets.map(el => {
+        const clone = el.cloneNode(true);
+        clone.style.transform = "";
+        clone.style.marginBottom = "";
+        clone.querySelectorAll(".edit-only, .custom-sheet-bar, .card-meta-editbar, .preview-page-badge").forEach(n => n.remove());
+        clone.querySelectorAll("[contenteditable]").forEach(n => n.removeAttribute("contenteditable"));
+        return clone.outerHTML;
+      }).join("\n");
       return {
         stylesHtml: styleTags,
-        bodyHtml: `<div class="edu-direct-sheet-wrap ${viewClass}" dir="rtl">${sheetsHtml}</div>`
+        bodyHtml: `<div class="edu-direct-sheet-wrap ${viewClass}" dir="rtl">${sheetsHtml}</div>`,
+        rootCssText: document.documentElement.style.cssText || ""
       };
     }
 
@@ -2712,6 +2720,11 @@ let currentActiveView = "plan";
         document.activeElement.blur();
       }
       closePdfReadyBanner();
+
+      document.querySelectorAll(".a4-sheet").forEach(s => {
+        s.style.transform = "";
+        s.style.marginBottom = "";
+      });
 
       let nativePrintTriggered = false;
       const markTriggered = () => { nativePrintTriggered = true; };
@@ -2741,14 +2754,21 @@ let currentActiveView = "plan";
           }
         } catch (e) {}
 
+        if (isPrintPreview && typeof applyPreviewZoom === "function") {
+          applyPreviewZoom();
+        }
+
         if (nativePrintTriggered) return;
 
         try {
           if (window.parent && window.parent !== window && typeof window.parent.printActivitiesViaParent === "function") {
             const payload = buildParentPrintPayload();
-            window.parent.printActivitiesViaParent(payload.stylesHtml, payload.bodyHtml, () => {
-              exportActivitiesPDF(true);
-            });
+            window.parent.printActivitiesViaParent(
+              payload.stylesHtml,
+              payload.bodyHtml,
+              () => { exportActivitiesPDF(true); },
+              { rootCssText: payload.rootCssText }
+            );
             return;
           }
         } catch (e) {}
@@ -3631,9 +3651,55 @@ let currentActiveView = "plan";
       const textDark = (bg === "#0F172A" || bg === "#0f172a") ? "#1e293b" : (c.text_dark || "#1b262c");
       const softTint = `${p}14`;
 
-      const styleEl = document.getElementById("canvaDynamicThemeCss");
-      if (styleEl) {
-        styleEl.textContent = `
+      const rootEl = document.documentElement;
+      rootEl.style.setProperty("--primary", p);
+      rootEl.style.setProperty("--primary-dark", s);
+      rootEl.style.setProperty("--primary-light", p);
+      rootEl.style.setProperty("--accent", a);
+      rootEl.style.setProperty("--accent-soft", `${a}1a`);
+      rootEl.style.setProperty("--teal-soft", softTint);
+      rootEl.style.setProperty("--border", `${p}66`);
+      rootEl.style.setProperty("--border-strong", p);
+      rootEl.style.setProperty("--text", textDark);
+
+      const themeRules = `
+          .a4-sheet {
+            background: linear-gradient(180deg, ${bg} 0%, ${cardBg} 16%, ${cardBg} 88%, ${bg} 100%) !important;
+            border-top: 6px solid ${p} !important;
+            border-bottom: 5px solid ${a} !important;
+            color: ${textDark} !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          .official-header { border-color: ${p} !important; }
+          .official-top-bar { background: linear-gradient(135deg, ${p}, ${s}) !important; color: #ffffff !important; }
+          .official-title-box { background: linear-gradient(135deg, ${s}, ${p}) !important; color: #ffffff !important; border-bottom: 3px solid ${a} !important; }
+          .official-meta-strip { background: ${softTint} !important; color: ${s} !important; border-top-color: ${p}55 !important; }
+          .cover-frame { border-color: ${p} !important; }
+          .cover-hero { background: linear-gradient(135deg, ${softTint}, ${cardBg}) !important; border-color: ${p} !important; }
+          table.official-table, table.sign-grid { border-color: ${p} !important; }
+          table.official-table th, table.official-table td, table.sign-grid th, table.sign-grid td { border-color: ${p}66 !important; }
+          .official-table tr.banner-row td { background: linear-gradient(135deg, ${p}, ${s}) !important; color: #ffffff !important; }
+          .official-table th.lbl { background: ${softTint} !important; color: ${s} !important; }
+          table.official-table thead th { background: linear-gradient(135deg, ${p}, ${s}) !important; color: #ffffff !important; }
+          .sign-grid th { background: ${a}22 !important; color: ${s} !important; }
+          .gold-tag { background: ${a} !important; color: #ffffff !important; }
+          .moe-badge { background: ${s} !important; color: #ffffff !important; }
+          .badge-pill, .card-cat-badge { background: ${a}22 !important; color: ${s} !important; border-color: ${a} !important; }
+          .official-footer { border-top-color: ${p} !important; }
+          .highlight-note { border-color: ${p} !important; border-right-color: ${a} !important; background: ${softTint} !important; }
+          .wk-btn.active { background: ${p} !important; border-color: ${s} !important; }
+          .icon-choice.checked { border-color: ${a} !important; background: ${a}1a !important; color: ${s} !important; }
+          .icon-choice.checked .chk-box { background: ${p} !important; color: #ffffff !important; }
+      `;
+
+      let styleEl = document.getElementById("canvaDynamicThemeCss");
+      if (!styleEl) {
+        styleEl = document.createElement("style");
+        styleEl.id = "canvaDynamicThemeCss";
+      }
+      document.head.appendChild(styleEl);
+      styleEl.textContent = `
           :root {
             --primary: ${p};
             --primary-dark: ${s};
@@ -3645,25 +3711,23 @@ let currentActiveView = "plan";
             --border-strong: ${p};
             --text: ${textDark};
           }
-          .a4-sheet {
-            background: linear-gradient(180deg, ${bg} 0%, ${cardBg} 16%, ${cardBg} 88%, ${bg} 100%) !important;
-            border-top: 6px solid ${p} !important;
-            border-bottom: 5px solid ${a} !important;
+          ${themeRules}
+          @media print {
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            ${themeRules}
           }
-          .official-top-bar { background: linear-gradient(135deg, ${p}, ${s}) !important; }
-          .official-title-box { background: linear-gradient(135deg, ${s}, ${p}) !important; border-bottom: 3px solid ${a} !important; }
-          .cover-hero { background: linear-gradient(135deg, ${softTint}, ${cardBg}) !important; border-color: ${p} !important; }
-          .official-table tr.banner-row td { background: linear-gradient(135deg, ${p}, ${s}) !important; color: #ffffff !important; }
-          .official-table th.lbl { background: ${softTint} !important; color: ${s} !important; }
-          .sign-grid th { background: ${a}22 !important; color: ${s} !important; }
-          .gold-tag { background: ${a} !important; color: #ffffff !important; }
-          .moe-badge { background: ${s} !important; color: #ffffff !important; }
-          .highlight-note { border-color: ${p} !important; border-right-color: ${a} !important; background: ${softTint} !important; }
-          .wk-btn.active { background: ${p} !important; border-color: ${s} !important; }
-          .icon-choice.checked { border-color: ${a} !important; background: ${a}1a !important; }
-          .icon-choice.checked .chk-box { background: ${p} !important; }
-        `;
-      }
+          body.pdf-exporting {
+            --primary: ${p};
+            --primary-dark: ${s};
+            --primary-light: ${p};
+            --accent: ${a};
+            --accent-soft: ${a}1a;
+            --teal-soft: ${softTint};
+            --border: ${p}66;
+            --border-strong: ${p};
+            --text: ${textDark};
+          }
+      `;
 
       const tbBadge = document.getElementById("toolbarCanvaBadge");
       const tbName = document.getElementById("toolbarCanvaName");
@@ -3685,6 +3749,10 @@ let currentActiveView = "plan";
     function resetCanvaTemplate() {
       activeCanvaTemplate = null;
       try { localStorage.removeItem(CANVA_ACTIVE_STORAGE_KEY); } catch (e) {}
+      const rootEl = document.documentElement;
+      ["--primary", "--primary-dark", "--primary-light", "--accent", "--accent-soft", "--teal-soft", "--border", "--border-strong", "--text"].forEach(v => {
+        rootEl.style.removeProperty(v);
+      });
       const styleEl = document.getElementById("canvaDynamicThemeCss");
       if (styleEl) styleEl.textContent = "";
       document.getElementById("toolbarCanvaBadge")?.classList.remove("show");

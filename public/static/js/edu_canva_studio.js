@@ -45,6 +45,21 @@
     return /^#[0-9a-fA-F]{3,8}$/.test(s) ? s : fallback;
   }
 
+  function hexToRgba(hex, alpha) {
+    const h = safeHex(hex, '#1e3a8a').replace('#', '');
+    let r = 30, g = 58, b = 138;
+    if (h.length === 3) {
+      r = parseInt(h[0] + h[0], 16);
+      g = parseInt(h[1] + h[1], 16);
+      b = parseInt(h[2] + h[2], 16);
+    } else if (h.length >= 6) {
+      r = parseInt(h.slice(0, 2), 16);
+      g = parseInt(h.slice(2, 4), 16);
+      b = parseInt(h.slice(4, 6), 16);
+    }
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+
   function buildLocalSvgThumb(tpl) {
     const c = (tpl && tpl.colors) || {};
     const p = safeHex(c.primary, '#0f766e');
@@ -1517,6 +1532,33 @@
     });
   }
 
+  function serializePrintRootQRs(rootEl) {
+    if (!rootEl) return;
+    rootEl.querySelectorAll('canvas').forEach(cv => {
+      try {
+        const dataUrl = cv.toDataURL('image/png');
+        const img = document.createElement('img');
+        img.src = dataUrl;
+        img.alt = 'QR';
+        img.style.cssText = cv.style.cssText || 'width:56px;height:56px;display:block;';
+        if (cv.parentNode) cv.parentNode.replaceChild(img, cv);
+      } catch (_) {}
+    });
+  }
+
+  function buildCanvaPreviewPrintPayload(printRoot) {
+    serializePrintRootQRs(printRoot);
+    const stylesHtml = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))
+      .map(el => el.outerHTML)
+      .join('\n');
+    const bodyHtml = `<div id="${PRINT_ROOT_ID}" dir="rtl">${printRoot.innerHTML}</div>`;
+    return {
+      stylesHtml,
+      bodyHtml,
+      rootCssText: document.documentElement.style.cssText || '',
+    };
+  }
+
   function printActivePreview() {
     const item = appliedPreviews.find(x => x.template.id === activeAppliedId);
     const printRoot = document.getElementById(PRINT_ROOT_ID);
@@ -1524,19 +1566,70 @@
     printRoot.innerHTML = item.pagesHtml;
     hydrateQrInside(printRoot);
     document.body.classList.add('printing-canva-preview');
+
+    let nativePrintStarted = false;
+    let fallbackTimer = null;
+    let safetyTimer = null;
+    const mql = typeof window.matchMedia === 'function' ? window.matchMedia('print') : null;
+    const onBeforePrint = () => {
+      nativePrintStarted = true;
+      if (fallbackTimer) {
+        clearTimeout(fallbackTimer);
+        fallbackTimer = null;
+      }
+      if (!safetyTimer) safetyTimer = setTimeout(cleanup, 60000);
+    };
+    const onMqlChange = (ev) => {
+      if (ev && ev.matches) onBeforePrint();
+    };
     const cleanup = () => {
+      if (fallbackTimer) { clearTimeout(fallbackTimer); fallbackTimer = null; }
+      if (safetyTimer) { clearTimeout(safetyTimer); safetyTimer = null; }
       document.body.classList.remove('printing-canva-preview');
       printRoot.innerHTML = '';
+      window.removeEventListener('beforeprint', onBeforePrint);
       window.removeEventListener('afterprint', cleanup);
+      if (mql && typeof mql.removeEventListener === 'function') mql.removeEventListener('change', onMqlChange);
     };
+
+    window.addEventListener('beforeprint', onBeforePrint);
     window.addEventListener('afterprint', cleanup);
+    if (mql && typeof mql.addEventListener === 'function') mql.addEventListener('change', onMqlChange);
+
     setTimeout(() => {
+      let parentCanPrint = false;
+      try {
+        parentCanPrint = Boolean(
+          window.parent &&
+          window.parent !== window &&
+          typeof window.parent.printActivitiesViaParent === 'function'
+        );
+      } catch (_) {}
+
+      if (parentCanPrint) {
+        const payload = buildCanvaPreviewPrintPayload(printRoot);
+        cleanup();
+        window.parent.printActivitiesViaParent(
+          payload.stylesHtml,
+          payload.bodyHtml,
+          () => exportActivePreviewPdf(),
+          { rootCssText: payload.rootCssText, hostClassName: 'printing-canva-preview' }
+        );
+        return;
+      }
+
       try {
         window.focus();
         window.print();
       } catch (_) {}
-      setTimeout(cleanup, 1800);
-    }, 250);
+
+      fallbackTimer = setTimeout(() => {
+        if (!nativePrintStarted) {
+          cleanup();
+          exportActivePreviewPdf();
+        }
+      }, 650);
+    }, 180);
   }
 
   async function exportActivePreviewPdf() {
@@ -1944,18 +2037,46 @@
     if (!cssEl) {
       cssEl = document.createElement('style');
       cssEl.id = 'ecsMergedThemeCss';
-      document.head.appendChild(cssEl);
     }
+    document.head.appendChild(cssEl);
+
+    const softP = hexToRgba(p, 0.08);
+    const softP2 = hexToRgba(p, 0.14);
+    const softA = hexToRgba(a, 0.16);
     const layout = readyTpl.layout || 'gradient_arch';
-    let layoutAccentCss = `.page:not(.canva-embedded-page), .report-container { border-top: 6px solid ${p} !important; }`;
+
+    let layoutAccentCss = `
+      .page:not(.canva-embedded-page), .report-container { border-top: 6px solid ${p} !important; }
+      .single-page-report:not(.canva-embedded-page), .index-section:not(.canva-embedded-page), .footer-section:not(.canva-embedded-page), .report { border-top: 5px solid ${p} !important; }
+    `;
     if (layout === 'royal_double') {
-      layoutAccentCss = `.page:not(.canva-embedded-page), .report-container { box-shadow: inset 0 0 0 3px ${p}, inset 0 0 0 7px ${a} !important; }`;
+      layoutAccentCss = `
+        .page:not(.canva-embedded-page), .report-container,
+        .single-page-report:not(.canva-embedded-page), .index-section:not(.canva-embedded-page), .footer-section:not(.canva-embedded-page) {
+          box-shadow: inset 0 0 0 3px ${p}, inset 0 0 0 7px ${a} !important;
+        }
+      `;
     } else if (layout === 'botanical_frame') {
-      layoutAccentCss = `.page:not(.canva-embedded-page), .report-container { border: 2px solid ${p} !important; border-radius: 14px !important; box-shadow: inset 0 0 0 5px ${a}24 !important; }`;
+      layoutAccentCss = `
+        .page:not(.canva-embedded-page), .report-container,
+        .single-page-report:not(.canva-embedded-page), .index-section:not(.canva-embedded-page), .footer-section:not(.canva-embedded-page) {
+          border: 2px solid ${p} !important; border-radius: 14px !important; box-shadow: inset 0 0 0 5px ${softA} !important;
+        }
+      `;
     } else if (layout === 'clean_stripe') {
-      layoutAccentCss = `.page:not(.canva-embedded-page), .report-container { border-right: 12px solid ${p} !important; }`;
+      layoutAccentCss = `
+        .page:not(.canva-embedded-page), .report-container,
+        .single-page-report:not(.canva-embedded-page), .index-section:not(.canva-embedded-page), .footer-section:not(.canva-embedded-page), .report {
+          border-right: 10px solid ${p} !important;
+        }
+      `;
     } else if (layout === 'modern_ribbon') {
-      layoutAccentCss = `.page:not(.canva-embedded-page), .report-container { border-top: 8px solid ${a} !important; border-bottom: 8px solid ${p} !important; }`;
+      layoutAccentCss = `
+        .page:not(.canva-embedded-page), .report-container,
+        .single-page-report:not(.canva-embedded-page), .index-section:not(.canva-embedded-page), .footer-section:not(.canva-embedded-page) {
+          border-top: 8px solid ${a} !important; border-bottom: 8px solid ${p} !important;
+        }
+      `;
     }
 
     const embeddedSheetCss = `
@@ -1968,11 +2089,20 @@
         position: relative;
         z-index: 2;
       }
+      .canva-bg-layer {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
       @media print {
         #ecsMergedStatusBanner, #${MODAL_ID}, .canva-embedded-controls { display: none !important; }
         .page.canva-embedded-page, .single-page-report.canva-embedded-page {
-          width: 210mm !important; height: 297mm !important; padding: 0 !important;
-          margin: 0 !important; box-shadow: none !important; page-break-after: always; break-after: page;
+          width: 210mm !important; min-width: 210mm !important; max-width: 210mm !important;
+          height: 297mm !important; min-height: 297mm !important; max-height: 297mm !important;
+          padding: 0 !important; margin: 0 !important; box-shadow: none !important;
+          page-break-after: always; break-after: page; overflow: hidden !important;
+        }
+        .page.canva-embedded-page img, .single-page-report.canva-embedded-page img {
+          width: 100% !important; height: 100% !important; object-fit: contain !important;
         }
       }
       body.pdf-exporting .page.canva-embedded-page,
@@ -1981,23 +2111,166 @@
         height: 1120px !important; min-height: 1120px !important; max-height: 1120px !important;
         padding: 0 !important; margin: 0 !important; box-shadow: none !important; overflow: hidden !important;
       }
+      body.pdf-exporting .page.canva-embedded-page img,
+      body.pdf-exporting .single-page-report.canva-embedded-page img {
+        width: 100% !important; height: 100% !important; object-fit: contain !important;
+      }
+    `;
+
+    const themeCoreRules = `
+      ${layoutAccentCss}
+      .cover {
+        background: linear-gradient(135deg, ${p} 0%, ${s} 68%, ${a} 100%) !important;
+        color: #ffffff !important;
+      }
+      .cover .file-title {
+        border-color: ${a} !important;
+        background: rgba(255, 255, 255, 0.16) !important;
+        color: #ffffff !important;
+      }
+      .cover .year, .cover .info-box {
+        border-color: ${a} !important;
+        background: rgba(255, 255, 255, 0.16) !important;
+        color: #ffffff !important;
+      }
+      .single-page-report:not(.canva-embedded-page) {
+        background-color: ${bg} !important;
+      }
+      .portrait-image {
+        border-color: ${a} !important;
+      }
+      .quote-box {
+        background: linear-gradient(135deg, ${bg} 0%, ${softP} 100%) !important;
+        border-right-color: ${p} !important;
+        color: ${s} !important;
+      }
+      .framing-data-item .f-label {
+        background: linear-gradient(135deg, ${p} 0%, ${s} 100%) !important;
+        color: #ffffff !important;
+      }
+      .framing-data-item .f-val {
+        color: ${s} !important;
+      }
+      .framing-card, .framing-card.teal, .framing-card.purple {
+        background: linear-gradient(135deg, #ffffff 0%, ${softP} 100%) !important;
+        border-color: ${softP2} !important;
+        border-right-color: ${p} !important;
+      }
+      .framing-card h3, .framing-card.teal h3, .framing-card.purple h3 {
+        color: ${p} !important;
+      }
+      .framing-index-note {
+        border-color: ${softP2} !important;
+        border-right-color: ${p} !important;
+        color: ${s} !important;
+      }
+      .index-section {
+        background: linear-gradient(135deg, ${bg} 0%, ${softP} 100%) !important;
+      }
+      .index-section h2 {
+        color: ${p} !important;
+        border-bottom-color: ${a} !important;
+      }
+      .index-item {
+        border-right-color: ${p} !important;
+      }
+      .index-number {
+        background: ${p} !important;
+        color: #ffffff !important;
+      }
+      .page:not(.canva-embedded-page) .banner,
+      .page:not(.canva-embedded-page) .cover-banner,
+      .report-header, .text-page-header,
+      .section-header, .section-header.teal, .section-header.purple, .section-header.orange, .section-header.pink {
+        background: linear-gradient(135deg, ${p} 0%, ${s} 100%) !important;
+        border-color: ${a} !important;
+        color: #ffffff !important;
+      }
+      .report {
+        background-color: ${bg} !important;
+      }
+      .report-title, .report-title.blue, .report-title.teal, .report-title.purple, .report-title.orange, .report-title.pink {
+        background: linear-gradient(135deg, ${p} 0%, ${s} 100%) !important;
+        border-right: 6px solid ${a} !important;
+        color: #ffffff !important;
+      }
+      .report-title .num {
+        background: #ffffff !important;
+        color: ${p} !important;
+      }
+      .sub-heading, .sub-heading.teal, .sub-heading.purple, .sub-heading.orange, .sub-heading.green, .sub-heading.pink {
+        color: ${s} !important;
+        background: linear-gradient(90deg, ${softP} 0%, #ffffff 100%) !important;
+        border-right-color: ${p} !important;
+      }
+      table th, table thead th, .edu-table th, .info-table th, .eval-table th, .checklist-table th {
+        background: linear-gradient(135deg, ${p} 0%, ${s} 100%) !important;
+        color: #ffffff !important;
+      }
+      .eval-table td:first-child {
+        background: ${softP} !important;
+        color: ${s} !important;
+      }
+      .goals-list li, .content-list li, .pros-list li, .cons-list li {
+        border-right-color: ${p} !important;
+      }
+      .goals-list li::before {
+        background: ${p} !important;
+        color: #ffffff !important;
+      }
+      .evidence-box.photo-box, .evidence-box.qr-only-box {
+        border-color: ${p} !important;
+      }
+      .step-card {
+        background: linear-gradient(135deg, ${softP} 0%, #ffffff 100%) !important;
+        border-color: ${softP2} !important;
+        border-right-color: ${a} !important;
+      }
+      .step-card .step-num {
+        background: ${p} !important;
+        color: #ffffff !important;
+      }
+      .step-card .step-title {
+        color: ${s} !important;
+      }
+      .footer-section {
+        background: linear-gradient(135deg, ${bg} 0%, ${softP} 100%) !important;
+        border-top-color: ${p} !important;
+      }
+      .footer-section h2 {
+        color: ${p} !important;
+        border-bottom-color: ${a} !important;
+      }
+      .signature-box {
+        background: linear-gradient(135deg, #ffffff 0%, ${softP} 100%) !important;
+        border-color: ${softP2} !important;
+      }
+      .signature-box .label {
+        color: ${p} !important;
+      }
+      .percentage-box {
+        background: linear-gradient(135deg, ${softP} 0%, ${softA} 100%) !important;
+        border-color: ${p} !important;
+        color: ${s} !important;
+      }
+      .percentage-box .value {
+        background: ${p} !important;
+        color: #ffffff !important;
+      }
+      .table-title, .cv-card h3, .vision-card h3 { color: ${p} !important; border-color: ${a} !important; }
+      .page:not(.canva-embedded-page) { background-color: ${bg} !important; }
     `;
 
     cssEl.textContent = (mergeMode === 'embedded_pages_only')
       ? embeddedSheetCss
       : `
         ${embeddedSheetCss}
-        ${layoutAccentCss}
-        .page:not(.canva-embedded-page) .banner,
-        .page:not(.canva-embedded-page) .cover-banner,
-        .report-header, .text-page-header, .section-header {
-          background: linear-gradient(135deg, ${p}, ${s}) !important;
-          border-color: ${a} !important;
-          color: #ffffff !important;
+        ${themeCoreRules}
+        @media print {
+          * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+          ${themeCoreRules}
         }
-        .table-title, .cv-card h3, .vision-card h3 { color: ${p} !important; border-color: ${a} !important; }
-        table thead th, .edu-table th { background: ${p} !important; color: #ffffff !important; }
-        .page:not(.canva-embedded-page) { background-color: ${bg} !important; }
+        body.pdf-exporting * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
       `;
 
     injectEmbeddedCanvaPages(readyTpl, mode);
@@ -2226,5 +2499,9 @@
     clearMergedTemplate,
     checkPendingMerge,
     previewMergedDocument,
+    printActivePreview,
+    exportActivePreviewPdf,
+    hasOpenPreview: () => Boolean(document.getElementById(MODAL_ID)?.classList.contains('show') && activeTab === 'preview' && activeAppliedId),
+    getActiveMergedTemplate: () => currentMergedTpl,
   };
 })(window);

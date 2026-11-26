@@ -6412,6 +6412,7 @@ function switchReportsModel(targetModel, silent = false) {
     captureDefaultWitnessSnapshot();
     initPageControls();
     renderAllWitnesses();
+    window.dispatchEvent(new CustomEvent('eduCanvaReapply'));
     if (!silent) {
         setStatus(activeReportsModel === 'secondary' ? '✅ تم التبديل إلى النموذج الثانوي' : '✅ تم التبديل إلى النموذج الأساسي');
     }
@@ -6516,28 +6517,110 @@ window.addEventListener('resize', () => {
 });
 
 /* ============ طباعة مباشرة ============ */
+function buildReportsParentPrintPayload() {
+    const container = document.getElementById('mainContainer');
+    if (!container) return null;
+    const stylesHtml = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))
+        .map(el => el.outerHTML)
+        .join('\n');
+
+    // مزامنة QR كـ img قبل الاستنساخ لأن canvas قد يفقد محتواه عند استنساخ DOM
+    const clone = container.cloneNode(true);
+    const liveCanvases = Array.from(container.querySelectorAll('canvas'));
+    const clonedCanvases = Array.from(clone.querySelectorAll('canvas'));
+    liveCanvases.forEach((cv, idx) => {
+        const clonedCv = clonedCanvases[idx];
+        if (!clonedCv || !clonedCv.parentNode) return;
+        try {
+            const dataUrl = cv.toDataURL('image/png');
+            const img = document.createElement('img');
+            img.src = dataUrl;
+            img.alt = 'QR';
+            img.style.cssText = clonedCv.style.cssText || 'width:132px;height:132px;display:block;';
+            clonedCv.parentNode.replaceChild(img, clonedCv);
+        } catch (_) {}
+    });
+
+    clone.style.transform = '';
+    clone.style.marginBottom = '';
+    clone.querySelectorAll(
+        '.toolbar, .preview-bar, .fmt-bar, .modal-overlay, .witness-actions, .witness-box-tools, .page-ctrl-bar, .witness-del-btn, .edit-only, .no-print, .canva-embedded-controls, .evidence-box.evidence-placeholder, .evidence-box.no-actual-image, .evidence-grid.evidence-grid-empty, .sub-heading.witness-heading-empty'
+    ).forEach(el => el.remove());
+    clone.querySelectorAll('.evidence-grid:empty').forEach(el => el.remove());
+    clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+
+    return {
+        stylesHtml,
+        bodyHtml: `<div class="container" dir="rtl">${clone.innerHTML}</div>`,
+        rootCssText: document.documentElement.style.cssText || ''
+    };
+}
+
 function printDocument() {
     if (document.activeElement && typeof document.activeElement.blur === 'function') {
         document.activeElement.blur();
     }
     fmtBar.classList.remove('show');
+    if (window.EduCanvaStudio && typeof window.EduCanvaStudio.hasOpenPreview === 'function' && window.EduCanvaStudio.hasOpenPreview()) {
+        window.EduCanvaStudio.printActivePreview();
+        return;
+    }
+
     renderAllWitnesses();
     const container = document.getElementById('mainContainer');
     if (container) {
         container.style.transform = '';
         container.style.marginBottom = '';
     }
+
+    let parentCanPrint = false;
+    try {
+        parentCanPrint = Boolean(
+            window.parent &&
+            window.parent !== window &&
+            typeof window.parent.printActivitiesViaParent === 'function'
+        );
+    } catch (_) {}
+
+    if (parentCanPrint) {
+        const payload = buildReportsParentPrintPayload();
+        if (payload) {
+            setStatus('🖨️ جاري فتح الطباعة بالقالب المحدد...');
+            window.parent.printActivitiesViaParent(
+                payload.stylesHtml,
+                payload.bodyHtml,
+                () => exportPDF(),
+                { rootCssText: payload.rootCssText }
+            );
+            setTimeout(() => {
+                if (isPrintPreview) applyPreviewZoom();
+            }, 300);
+            return;
+        }
+    }
+
     setStatus('جارٍ إرسال الملف للطباعة...');
+    let printTriggered = false;
+    const onBefore = () => { printTriggered = true; };
+    const mql = typeof window.matchMedia === 'function' ? window.matchMedia('print') : null;
+    const onMql = (ev) => { if (ev && ev.matches) printTriggered = true; };
+    window.addEventListener('beforeprint', onBefore, { once: true });
+    if (mql && typeof mql.addEventListener === 'function') mql.addEventListener('change', onMql);
+
     setTimeout(() => {
         try {
             window.focus();
             window.print();
         } catch (e) {}
         setTimeout(() => {
+            window.removeEventListener('beforeprint', onBefore);
+            if (mql && typeof mql.removeEventListener === 'function') mql.removeEventListener('change', onMql);
             if (isPrintPreview) applyPreviewZoom();
-        }, 250);
-        setStatus('💡 إذا حجب المتصفح نافذة الطباعة استخدم زر "📄 تصدير PDF"');
-    }, 40);
+            if (!printTriggered) {
+                setStatus('💡 إذا حجب المتصفح نافذة الطباعة استخدم زر "📄 تصدير PDF"');
+            }
+        }, 450);
+    }, 50);
 }
 
 /* ============ التصدير إلى PDF متعدد الصفحات A4 ============ */
@@ -6802,13 +6885,18 @@ async function captureElementSafe(el) {
     const captureH = Math.max(1, el.offsetHeight || 0, el.scrollHeight || 0);
     el.setAttribute('data-h2c-target', '1');
     const pruneClonedDom = (clonedDoc) => {
+        try {
+            if (document.documentElement && document.documentElement.style && document.documentElement.style.cssText) {
+                clonedDoc.documentElement.style.cssText = document.documentElement.style.cssText;
+            }
+        } catch (_) {}
         const target = clonedDoc.querySelector('[data-h2c-target="1"]');
         if (target) {
             clonedDoc.querySelectorAll('#mainContainer > *').forEach(node => {
                 if (node !== target && !node.contains(target) && !target.contains(node)) node.remove();
             });
         }
-        clonedDoc.querySelectorAll('.toolbar, .preview-bar, .fmt-bar, .modal-overlay, #pdfProgressOverlay, #pdfReadyBanner, #imgLightboxModal, .canva-hub-modal, .cropper-modal').forEach(n => n.remove());
+        clonedDoc.querySelectorAll('.toolbar, .preview-bar, .fmt-bar, .modal-overlay, #pdfProgressOverlay, #pdfReadyBanner, #imgLightboxModal, .canva-hub-modal, #eduCanvaStudioInline, #ecsMergedStatusBanner, .cropper-modal').forEach(n => n.remove());
     };
     try {
         return await html2canvas(el, {
@@ -6889,6 +6977,9 @@ function appendCanvasSlicedToPdf(pdf, canvas, isFirstPdfPage) {
 
 async function exportPDF() {
     if (isExportingPdf) return;
+    if (window.EduCanvaStudio && typeof window.EduCanvaStudio.hasOpenPreview === 'function' && window.EduCanvaStudio.hasOpenPreview()) {
+        return window.EduCanvaStudio.exportActivePreviewPdf();
+    }
     if (!window.jspdf || !window.jspdf.jsPDF || typeof window.html2canvas !== 'function') {
         setStatus('❌ مكتبة تصدير PDF غير محملة، جرب الطباعة المباشرة');
         printDocument();
@@ -6960,7 +7051,7 @@ async function exportPDF() {
             try {
                 if (group.length === 1) {
                     const blk = group[0];
-                    if (blk.classList.contains('report') || blk.classList.contains('index-section') || blk.classList.contains('footer-section') || blk.classList.contains('framing-page')) {
+                    if (!blk.classList.contains('canva-embedded-page') && (blk.classList.contains('report') || blk.classList.contains('index-section') || blk.classList.contains('footer-section') || blk.classList.contains('framing-page'))) {
                         restorePag = paginateExportUnitForA4(blk, 0);
                     }
                     targetCanvas = await captureElementSafe(blk);

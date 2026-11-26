@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<style id="canvaDynamicThemeCss">
+<style id="baseLayoutCss">
     .app-confirm-overlay {
         display: none; position: fixed; inset: 0; z-index: 260000;
         background: rgba(15, 23, 42, 0.72); backdrop-filter: blur(4px);
@@ -528,6 +528,7 @@
         gap: 7px;
     }
 </style>
+<style id="canvaDynamicThemeCss"></style>
 </head>
 <body>
 
@@ -3530,6 +3531,28 @@ window.addEventListener('resize', () => {
 });
 
 /* ============ طباعة مباشرة ============ */
+function buildPortfolioParentPrintPayload() {
+    const styleTags = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))
+        .map(s => s.outerHTML)
+        .join('\n');
+    const pagesWrap = document.getElementById('pagesWrap');
+    if (!pagesWrap) return { stylesHtml: styleTags, bodyHtml: '' };
+    const clone = pagesWrap.cloneNode(true);
+    clone.querySelectorAll('.edit-only, .table-controls, .row-del-btn, td.action-cell, .add-page-bar, .fmt-bar, .preview-page-badge, .canva-hub-modal').forEach(n => n.remove());
+    clone.querySelectorAll('.page').forEach(p => {
+        p.style.transform = '';
+        p.style.marginBottom = '';
+    });
+    clone.querySelectorAll('.editable-area, .cell-content').forEach(el => {
+        el.removeAttribute('contenteditable');
+    });
+    return {
+        stylesHtml: styleTags,
+        bodyHtml: clone.outerHTML,
+        rootCssText: document.documentElement.style.cssText || ''
+    };
+}
+
 function printDocument() {
     if (document.activeElement && typeof document.activeElement.blur === 'function') {
         document.activeElement.blur();
@@ -3541,15 +3564,54 @@ function printDocument() {
         p.style.marginBottom = '';
     });
     setStatus('جارٍ إرسال الملف للطباعة...');
+
+    let nativePrintTriggered = false;
+    const markTriggered = () => { nativePrintTriggered = true; };
+    window.addEventListener('beforeprint', markTriggered, { once: true });
+
+    let mql = null;
+    const mqlHandler = (ev) => { if (ev.matches) nativePrintTriggered = true; };
+    try {
+        if (window.matchMedia) {
+            mql = window.matchMedia('print');
+            if (mql && typeof mql.addEventListener === 'function') {
+                mql.addEventListener('change', mqlHandler);
+            }
+        }
+    } catch (e) {}
+
     setTimeout(() => {
         try {
             window.focus();
             window.print();
         } catch (e) {}
         setTimeout(() => {
+            try {
+                window.removeEventListener('beforeprint', markTriggered);
+                if (mql && typeof mql.removeEventListener === 'function') {
+                    mql.removeEventListener('change', mqlHandler);
+                }
+            } catch (e) {}
+
             if (isPrintPreview) applyPreviewZoom();
-        }, 250);
-        setStatus('💡 إذا لم تظهر نافذة الطباعة استخدم زر "📄 تصدير PDF"');
+
+            if (nativePrintTriggered) return;
+
+            try {
+                if (window.parent && window.parent !== window && typeof window.parent.printActivitiesViaParent === 'function') {
+                    const payload = buildPortfolioParentPrintPayload();
+                    window.parent.printActivitiesViaParent(
+                        payload.stylesHtml,
+                        payload.bodyHtml,
+                        () => { exportPDF(); },
+                        { rootCssText: payload.rootCssText }
+                    );
+                    return;
+                }
+            } catch (e) {}
+
+            setStatus('💡 إذا لم تظهر نافذة الطباعة استخدم زر "📄 تصدير PDF"');
+        }, 450);
     }, 40);
 }
 
@@ -4312,21 +4374,22 @@ function applyCanvaTemplateToContent(tpl, openPreview = true) {
     const textDark = (bg === '#0F172A' || bg === '#0f172a') ? '#1e293b' : (c.text_dark || '#1a1a1a');
     const softTint = `${p}14`;
 
-    const styleEl = document.getElementById('canvaDynamicThemeCss');
-    if (styleEl) {
-        styleEl.textContent = `
-            :root {
-                --primary-teal: ${p};
-                --dark-teal: ${s};
-                --light-teal: ${a};
-                --border-color: ${p};
-                --text-color: ${textDark};
-                --check-color: ${a};
-            }
-            #pagesWrap > .page {
+    const rootEl = document.documentElement;
+    rootEl.style.setProperty('--primary-teal', p);
+    rootEl.style.setProperty('--dark-teal', s);
+    rootEl.style.setProperty('--light-teal', a);
+    rootEl.style.setProperty('--border-color', p);
+    rootEl.style.setProperty('--text-color', textDark);
+    rootEl.style.setProperty('--check-color', a);
+
+    const themeRules = `
+            #pagesWrap > .page,
+            .pages-wrap > .page {
                 background: linear-gradient(180deg, ${bg} 0%, #ffffff 16%, #ffffff 86%, ${bg} 100%) !important;
                 border-top: 8px solid ${p} !important;
                 border-bottom: 6px solid ${a} !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
             .cover-page {
                 border-color: ${p} !important;
@@ -4334,6 +4397,7 @@ function applyCanvaTemplateToContent(tpl, openPreview = true) {
             }
             .cover-header-text { color: ${textDark} !important; }
             .logo-moe, .logo-moe h3 { color: ${p} !important; }
+            .logo-moe p { color: ${s} !important; }
             .banner {
                 background: linear-gradient(135deg, ${p} 0%, ${s} 100%) !important;
                 color: #ffffff !important;
@@ -4392,6 +4456,7 @@ function applyCanvaTemplateToContent(tpl, openPreview = true) {
                 background: linear-gradient(135deg, ${p} 0%, ${s} 100%) !important;
                 color: #ffffff !important;
             }
+            .check-mark, .check-cell.checked { color: ${a} !important; }
             .table-controls button { background: ${p} !important; color: #ffffff !important; }
             .data-cell { border-color: ${p} !important; color: ${textDark} !important; }
             .data-cell.label { background: ${softTint} !important; color: ${s} !important; }
@@ -4406,13 +4471,60 @@ function applyCanvaTemplateToContent(tpl, openPreview = true) {
                 background: #ffffff !important;
             }
             .tape { background-color: ${a}66 !important; }
+            .strip-heading {
+                color: ${s} !important;
+                border-right-color: ${p} !important;
+                background: ${softTint} !important;
+            }
+            .linked-report-card {
+                border-color: ${p} !important;
+                background: linear-gradient(135deg, #ffffff 0%, ${softTint} 100%) !important;
+            }
+            .linked-report-head { border-bottom-color: ${a}66 !important; }
+            .linked-report-title { color: ${s} !important; }
+            .linked-report-badge { background: ${p} !important; color: #ffffff !important; }
+            .linked-report-thumbs img { border-color: ${p} !important; }
+            .linked-report-link {
+                color: ${s} !important;
+                background: ${softTint} !important;
+                border-color: ${p}66 !important;
+            }
             .conclusion-page {
                 background: radial-gradient(circle at center, #ffffff 0%, ${bg} 100%) !important;
                 color: ${textDark} !important;
             }
             .conclusion-title { color: ${p} !important; }
-        `;
+    `;
+
+    let styleEl = document.getElementById('canvaDynamicThemeCss');
+    if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = 'canvaDynamicThemeCss';
     }
+    document.head.appendChild(styleEl);
+    styleEl.textContent = `
+        :root {
+            --primary-teal: ${p};
+            --dark-teal: ${s};
+            --light-teal: ${a};
+            --border-color: ${p};
+            --text-color: ${textDark};
+            --check-color: ${a};
+        }
+        ${themeRules}
+        @media print {
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            ${themeRules}
+        }
+        body.pdf-exporting {
+            --primary-teal: ${p};
+            --dark-teal: ${s};
+            --light-teal: ${a};
+            --border-color: ${p};
+            --text-color: ${textDark};
+            --check-color: ${a};
+        }
+    `;
 
     const tbBadge = document.getElementById('toolbarCanvaBadge');
     const tbName = document.getElementById('toolbarCanvaName');
@@ -4434,6 +4546,10 @@ function applyCanvaTemplateToContent(tpl, openPreview = true) {
 function resetCanvaTemplate() {
     activeCanvaTemplate = null;
     try { localStorage.removeItem(CANVA_ACTIVE_STORAGE_KEY); } catch (e) {}
+    const rootEl = document.documentElement;
+    ['--primary-teal', '--dark-teal', '--light-teal', '--border-color', '--text-color', '--check-color'].forEach(v => {
+        rootEl.style.removeProperty(v);
+    });
     const styleEl = document.getElementById('canvaDynamicThemeCss');
     if (styleEl) styleEl.textContent = '';
     document.getElementById('toolbarCanvaBadge')?.classList.remove('show');

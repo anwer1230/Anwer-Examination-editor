@@ -258,10 +258,11 @@ export default function App() {
     window.addEventListener('message', handleMessage);
 
     const win = window as unknown as Record<string, unknown>;
-    win.printActivitiesViaParent = (
+    const printViaParentHost = (
       stylesHtml: string,
       bodyHtml: string,
-      onUnavailable?: () => void
+      onUnavailable?: () => void,
+      options?: { rootCssText?: string; hostClassName?: string }
     ) => {
       const host = document.getElementById('eduDirectPrintHost');
       if (!host) {
@@ -270,11 +271,17 @@ export default function App() {
       }
       const scopedStyles = String(stylesHtml || '')
         .replace(/:root\b/g, '#eduDirectPrintHost')
-        .replace(/html\s*,\s*body/g, '#eduDirectPrintHost')
-        .replace(/\bbody\b/g, '#eduDirectPrintHost')
-        .replace(/(^|\n)\s*\*\s*\{/g, '$1#eduDirectPrintHost, #eduDirectPrintHost * {');
+        .replace(/html\.embedded-mode/gi, '#eduDirectPrintHost')
+        .replace(/html\s*,\s*body/gi, '#eduDirectPrintHost')
+        .replace(/\bhtml\b(?![\w-])/gi, '#eduDirectPrintHost')
+        .replace(/\bbody\b(?![\w-])/gi, '#eduDirectPrintHost')
+        .replace(/(^|[}\n;>])\s*\*\s*\{/g, '$1#eduDirectPrintHost, #eduDirectPrintHost * {');
+
+      host.className = options?.hostClassName ? String(options.hostClassName) : '';
+      host.style.cssText = options?.rootCssText ? String(options.rootCssText) : '';
       host.innerHTML = scopedStyles + String(bodyHtml || '');
       document.body.classList.add('edu-direct-printing');
+
       let topBeforePrintFired = false;
       let safetyTimer: ReturnType<typeof setTimeout> | null = null;
       const cleanup = () => {
@@ -283,6 +290,8 @@ export default function App() {
           safetyTimer = null;
         }
         document.body.classList.remove('edu-direct-printing');
+        host.className = '';
+        host.style.cssText = '';
         host.innerHTML = '';
         window.removeEventListener('beforeprint', onTopBeforePrint);
         window.removeEventListener('afterprint', cleanup);
@@ -292,25 +301,32 @@ export default function App() {
       };
       window.addEventListener('beforeprint', onTopBeforePrint, { once: true });
       window.addEventListener('afterprint', cleanup, { once: true });
-      try {
-        window.focus();
-        window.print();
-      } catch {
-        // Ignore blocked print
-      }
-      setTimeout(() => {
-        if (!topBeforePrintFired) {
-          cleanup();
-          if (typeof onUnavailable === 'function') onUnavailable();
-        } else {
-          safetyTimer = setTimeout(cleanup, 60000);
+
+      requestAnimationFrame(() => {
+        try {
+          window.focus();
+          window.print();
+        } catch {
+          // Ignore blocked print
         }
-      }, 450);
+        setTimeout(() => {
+          if (!topBeforePrintFired) {
+            cleanup();
+            if (typeof onUnavailable === 'function') onUnavailable();
+          } else {
+            safetyTimer = setTimeout(cleanup, 60000);
+          }
+        }, 500);
+      });
     };
+
+    win.printActivitiesViaParent = printViaParentHost;
+    win.printEduHtmlViaParent = printViaParentHost;
 
     return () => {
       window.removeEventListener('message', handleMessage);
       delete win.printActivitiesViaParent;
+      delete win.printEduHtmlViaParent;
     };
   }, []);
 

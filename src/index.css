@@ -14,6 +14,13 @@
     background: #ffffff !important;
     margin: 0 !important;
     padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  body.edu-direct-printing > #eduDirectPrintHost,
+  body.edu-direct-printing > #eduDirectPrintHost * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
   body.edu-direct-printing .edu-direct-sheet-wrap .a4-sheet {
     width: 100% !important;
@@ -22,10 +29,36 @@
     border-radius: 0 !important;
     margin: 0 !important;
     padding: 4mm 5mm !important;
+    transform: none !important;
   }
   body.edu-direct-printing .edu-direct-sheet-wrap .a4-sheet ~ .a4-sheet {
     page-break-before: always;
     break-before: page;
+  }
+  body.edu-direct-printing #eduDirectPrintHost .pages-wrap {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 210mm !important;
+  }
+  body.edu-direct-printing #eduDirectPrintHost .page,
+  body.edu-direct-printing #eduDirectPrintHost .canva-a4-sheet {
+    width: 210mm !important;
+    min-width: 210mm !important;
+    max-width: 210mm !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    transform: none !important;
+    page-break-after: always;
+    break-after: page;
+  }
+  body.edu-direct-printing #eduDirectPrintHost .container {
+    width: 210mm !important;
+    min-width: 210mm !important;
+    max-width: 210mm !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
   }
 }
 
