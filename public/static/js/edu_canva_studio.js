@@ -507,6 +507,7 @@
               <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
                 <button type="button" class="ecs-btn green" id="ecsPrintActiveBtn">🖨️ طباعة هذا القالب</button>
                 <button type="button" class="ecs-btn amber" id="ecsPdfActiveBtn">📄 تصدير هذا القالب PDF</button>
+                <button type="button" class="ecs-btn" id="ecsHtmlActiveBtn" style="background:#0284c7;color:#fff;">🌐 تصدير هذا القالب HTML</button>
                 <button type="button" class="ecs-btn outline" id="ecsLivePreviewDocBtn">👁️ معاينة حية على صفحات الملف</button>
                 <button type="button" class="ecs-btn teal" id="ecsApplyThemeToDocBtn">✅ معالجة (PNG/PDF) ودمج مباشر في الملف</button>
               </div>
@@ -571,6 +572,7 @@
     modal.querySelector('#ecsApplyAllFetchedBtn').onclick = () => applyContentToTemplates(fetchedTemplates);
     modal.querySelector('#ecsPrintActiveBtn').onclick = printActivePreview;
     modal.querySelector('#ecsPdfActiveBtn').onclick = exportActivePreviewPdf;
+    modal.querySelector('#ecsHtmlActiveBtn').onclick = exportActivePreviewHtml;
     modal.querySelector('#ecsLivePreviewDocBtn').onclick = () => {
       const item = appliedPreviews.find(x => x.template.id === activeAppliedId);
       if (item && item.template) livePreviewOnDoc(item.template.id);
@@ -1715,6 +1717,95 @@
     }
   }
 
+  async function exportActivePreviewHtml() {
+    const item = appliedPreviews.find(x => x.template.id === activeAppliedId);
+    if (!item) {
+      showStatus('⚠️ اختر قالباً من المعاينة أولاً لتصديره كملف HTML.', true);
+      return;
+    }
+    showStatus(`⏳ جاري تجهيز وتحميل ملف HTML للقالب "${item.template.name}"...`);
+    const tempWrap = document.createElement('div');
+    tempWrap.id = PRINT_ROOT_ID;
+    tempWrap.setAttribute('dir', 'rtl');
+    tempWrap.style.cssText = 'position:fixed;left:-99999px;top:0;width:794px;z-index:-1;';
+    tempWrap.innerHTML = item.pagesHtml;
+    document.body.appendChild(tempWrap);
+    hydrateQrInside(tempWrap);
+
+    try {
+      await new Promise(r => setTimeout(r, 120));
+      const cleanRoot = document.createElement('div');
+      cleanRoot.className = 'canva-standalone-pages';
+      cleanRoot.setAttribute('dir', 'rtl');
+      cleanRoot.innerHTML = tempWrap.innerHTML;
+      serializePrintRootQRs(cleanRoot);
+
+      const safeTitle = (item.template.name || 'canva_template').replace(/[^\u0600-\u06FFa-zA-Z0-9_-]+/g, '_');
+      const extraCss = `
+        body {
+          margin: 0 !important;
+          padding: 20px 12px !important;
+          background: #1e293b !important;
+          font-family: 'Cairo', sans-serif !important;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .canva-standalone-pages {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 18px;
+          width: 100%;
+        }
+        .canva-a4-sheet {
+          margin: 0 auto !important;
+          transform: none !important;
+        }
+        @media print {
+          body { background: #ffffff !important; padding: 0 !important; display: block !important; }
+          .canva-standalone-pages { display: block !important; gap: 0 !important; }
+          .canva-a4-sheet {
+            width: 210mm !important; min-width: 210mm !important; max-width: 210mm !important;
+            min-height: 297mm !important; height: auto !important;
+            box-shadow: none !important; margin: 0 auto !important;
+            page-break-after: always; break-after: page; overflow: visible !important;
+          }
+          @page { size: A4 portrait; margin: 0; }
+        }
+      `;
+
+      if (global.EduHtmlExporter && typeof global.EduHtmlExporter.exportHtmlDocument === 'function') {
+        await global.EduHtmlExporter.exportHtmlDocument({
+          title: item.template.name || 'قالب_كانفا',
+          filename: safeTitle,
+          buildContainer: () => cleanRoot,
+          extraCss,
+          bodyClass: '',
+          onStatus: (msg) => showStatus(msg)
+        });
+      } else {
+        const stylesHtml = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))
+          .map(el => el.outerHTML)
+          .join('\n');
+        const fullHtml = `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${escHtml(item.template.name || 'قالب كانفا')}</title>${stylesHtml}<style>${extraCss}</style></head><body>${cleanRoot.outerHTML}</body></html>`;
+        const blob = new Blob(['\uFEFF' + fullHtml], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${safeTitle}.html`;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => { a.remove(); URL.revokeObjectURL(url); }, 8000);
+        showStatus('🌐 تم تصدير القالب كملف HTML احترافي!');
+      }
+    } catch (e) {
+      showStatus('❌ تعذر تصدير HTML: ' + (e.message || e), true);
+    } finally {
+      tempWrap.remove();
+    }
+  }
+
   function getSelectedMergeOptions() {
     const mSel = document.getElementById('ecsMergeModeSelect');
     const pSel = document.getElementById('ecsEmbedPosSelect');
@@ -1964,6 +2055,7 @@
         ${isLivePreviewUnsaved ? `<button type="button" id="ecsBannerConfirmSave" style="background:#22c55e;color:#fff;border:none;padding:5px 12px;border-radius:7px;font-family:inherit;font-size:12px;font-weight:900;cursor:pointer;">✅ تثبيت وحفظ الدمج بالملف</button>` : ''}
         ${tpl.processed_pdf_url ? `<a href="${escHtml(tpl.processed_pdf_url)}?download=1" download style="background:${a};color:#fff;text-decoration:none;padding:5px 10px;border-radius:7px;font-family:inherit;font-size:12px;font-weight:800;">📥 القالب PDF</a>` : ''}
         <button type="button" id="ecsBannerExportFullPdf" style="background:#ffffff;color:#0f172a;border:none;padding:5px 11px;border-radius:7px;font-family:inherit;font-size:12px;font-weight:800;cursor:pointer;">📄 تصدير الملف المدمج PDF</button>
+        <button type="button" id="ecsBannerExportFullHtml" style="background:#0284c7;color:#ffffff;border:none;padding:5px 11px;border-radius:7px;font-family:inherit;font-size:12px;font-weight:800;cursor:pointer;">🌐 تصدير HTML</button>
         <button type="button" onclick="EduCanvaStudio.previewMergedDocument()" style="background:rgba(255,255,255,0.22);color:#fff;border:1px solid rgba(255,255,255,0.45);padding:5px 10px;border-radius:7px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">🖨️ معاينة قالب A4</button>
         <button type="button" onclick="EduCanvaStudio.open('${mode}')" style="background:rgba(255,255,255,0.18);color:#fff;border:1px solid rgba(255,255,255,0.4);padding:5px 10px;border-radius:7px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">🔄 اختيار قالب آخر</button>
         <button type="button" onclick="EduCanvaStudio.clearMergedTemplate()" style="background:#ef4444;color:#fff;border:none;padding:5px 10px;border-radius:7px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">✖ إلغاء الدمج</button>
@@ -1984,6 +2076,10 @@
     banner.querySelector('#ecsBannerExportFullPdf')?.addEventListener('click', () => {
       if (typeof global.exportPDF === 'function') global.exportPDF();
       else previewMergedDocument();
+    });
+    banner.querySelector('#ecsBannerExportFullHtml')?.addEventListener('click', () => {
+      if (typeof global.exportHTML === 'function') global.exportHTML();
+      else exportActivePreviewHtml();
     });
   }
 
@@ -2501,6 +2597,7 @@
     previewMergedDocument,
     printActivePreview,
     exportActivePreviewPdf,
+    exportActivePreviewHtml,
     hasOpenPreview: () => Boolean(document.getElementById(MODAL_ID)?.classList.contains('show') && activeTab === 'preview' && activeAppliedId),
     getActiveMergedTemplate: () => currentMergedTpl,
   };

@@ -835,6 +835,7 @@
     <button type="button" onclick="saveData()" class="success">💾 حفظ</button>
     <button type="button" id="btnPreviewToggle" class="preview-btn" onclick="togglePrintPreview(true)">👁️ معاينة قبل الطباعة</button>
     <button type="button" onclick="exportPDF()" class="warning">📄 تصدير PDF</button>
+    <button type="button" onclick="exportHTML()" style="background:#0284c7;color:#fff;">🌐 تصدير HTML</button>
     <button type="button" onclick="EduCanvaStudio.toggle('reports')" style="background:linear-gradient(135deg,#00c4cc,#7c3aed);color:#fff;">🎨 قوالب كانفا</button>
     <button type="button" onclick="loadData()">🔄 استرجاع</button>
     <button type="button" onclick="addNewPage()" class="teal-btn">➕ إضافة صفحة</button>
@@ -849,6 +850,7 @@
     <span class="preview-title">👁️ وضع المعاينة قبل الطباعة</span>
     <button type="button" class="exit-btn" onclick="togglePrintPreview(false)">⬅️ العودة للتعديل</button>
     <button type="button" class="pdf-btn" onclick="exportPDF()">📄 تنزيل PDF</button>
+    <button type="button" onclick="exportHTML()" style="background:#0284c7;color:#fff;">🌐 تصدير HTML</button>
     <button type="button" onclick="printDocument()">🖨️ طباعة مباشرة</button>
     <button type="button" id="btnZoomFit" class="zoom-btn active" onclick="setPreviewZoom('fit')">🔍 ملائمة للشاشة</button>
     <button type="button" id="btnZoomFull" class="zoom-btn" onclick="setPreviewZoom('full')">🔍 100% A4</button>
@@ -6556,6 +6558,55 @@ function buildReportsParentPrintPayload() {
     };
 }
 
+async function exportHTML() {
+    if (window.EduCanvaStudio && typeof window.EduCanvaStudio.hasOpenPreview === 'function' && window.EduCanvaStudio.hasOpenPreview()) {
+        return window.EduCanvaStudio.exportActivePreviewHtml();
+    }
+    const container = document.getElementById('mainContainer');
+    if (!container || !window.EduHtmlExporter) {
+        setStatus('❌ أداة تصدير HTML غير متوفرة حالياً');
+        return;
+    }
+    setStatus('⏳ جاري تجهيز ملف HTML للتقارير والشواهد...');
+    try {
+        renderAllWitnesses();
+        await new Promise(r => setTimeout(r, 80));
+        const activeMerged = (window.EduCanvaStudio && typeof window.EduCanvaStudio.getActiveMergedTemplate === 'function')
+            ? window.EduCanvaStudio.getActiveMergedTemplate()
+            : null;
+        const modelLabel = activeReportsModel === 'secondary' ? 'النموذج_الثانوي' : 'النموذج_الأساسي';
+        await window.EduHtmlExporter.exportHtmlDocument({
+            title: `ملف_التقارير_والبرامج_التربوية_${modelLabel}`,
+            canvaName: activeMerged && activeMerged.name ? activeMerged.name : '',
+            targetEl: container,
+            removeSelectors: [
+                '.evidence-box.evidence-placeholder',
+                '.evidence-box.no-actual-image',
+                '.evidence-grid.evidence-grid-empty',
+                '.sub-heading.witness-heading-empty',
+                '#secondaryReportsTemplate'
+            ],
+            extraCss: `
+                body { padding: 18px 12px 32px 12px !important; }
+                .container { transform: none !important; margin: 0 auto !important; }
+                @media print {
+                    body { padding: 0 !important; background: #ffffff !important; }
+                    .container { box-shadow: none !important; margin: 0 auto !important; max-width: 100% !important; }
+                }
+            `,
+            onAfterClone: (clone) => {
+                clone.style.transform = '';
+                clone.style.marginBottom = '';
+                clone.querySelectorAll('.evidence-grid:empty').forEach(el => el.remove());
+            },
+            onStatus: (msg) => setStatus(msg)
+        });
+    } catch (e) {
+        setStatus('❌ تعذر تصدير HTML: ' + (e && e.message ? e.message : e));
+    }
+}
+window.exportHTML = exportHTML;
+
 function printDocument() {
     if (document.activeElement && typeof document.activeElement.blur === 'function') {
         document.activeElement.blur();
@@ -7192,6 +7243,7 @@ window.addEventListener('load', () => {
 });
 </script>
 <script src="/static/js/edu_image_cropper.js"></script>
+<script src="/static/js/edu_html_exporter.js"></script>
 <script src="/static/js/edu_canva_studio.js"></script>
 <script>
 window.openEduCanvaStudio = function() {

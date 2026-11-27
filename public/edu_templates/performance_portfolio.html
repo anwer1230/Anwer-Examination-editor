@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="/static/js/edu_html_exporter.js"></script>
 <style id="baseLayoutCss">
     .app-confirm-overlay {
         display: none; position: fixed; inset: 0; z-index: 260000;
@@ -543,6 +544,7 @@
     <button type="button" onclick="saveData()" class="success">💾 حفظ</button>
     <button type="button" id="btnPreviewToggle" class="preview-btn" onclick="togglePrintPreview(true)">👁️ معاينة قبل الطباعة</button>
     <button type="button" onclick="exportPDF()" class="gold">📄 تصدير PDF</button>
+    <button type="button" onclick="exportHTML()" style="background:#0284c7;color:#fff;">🌐 تصدير HTML</button>
     <button type="button" onclick="loadData()">🔄 استرجاع</button>
     <button type="button" onclick="addNewPage()">➕ صفحة جديدة</button>
     <button type="button" onclick="openCanvaHubModal()" style="background:linear-gradient(135deg,#00c4cc,#7d2ae8);">🎨 قوالب كانفا</button>
@@ -560,6 +562,7 @@
     <button type="button" onclick="openCanvaHubModal()" style="background:linear-gradient(135deg,#00c4cc,#7d2ae8);">🎨 تبديل قالب كانفا</button>
     <button type="button" id="btnResetCanvaPreview" onclick="resetCanvaTemplate()" style="background:#64748b;display:none;">↩️ التصميم الأصلي</button>
     <button type="button" class="pdf-btn" onclick="exportPDF()">📄 تنزيل PDF</button>
+    <button type="button" onclick="exportHTML()" style="background:#0284c7;color:#fff;">🌐 تصدير HTML</button>
     <button type="button" onclick="printDocument()">🖨️ طباعة مباشرة</button>
     <button type="button" id="btnZoomFit" class="zoom-btn active" onclick="setPreviewZoom('fit')">🔍 ملائمة للشاشة</button>
     <button type="button" id="btnZoomFull" class="zoom-btn" onclick="setPreviewZoom('full')">🔍 100% A4</button>
@@ -3650,6 +3653,41 @@ function buildPortfolioParentPrintPayload() {
         rootCssText: document.documentElement.style.cssText || ''
     };
 }
+
+async function exportHTML() {
+    const pagesWrap = document.getElementById('pagesWrap');
+    if (!pagesWrap || !window.EduHtmlExporter) {
+        setStatus('❌ أداة تصدير HTML غير متوفرة حالياً');
+        return;
+    }
+    setStatus('⏳ جاري تجهيز ملف HTML بنفس التصميم والألوان...');
+    try {
+        const modelLabel = activePortfolioModel === 'secondary' ? 'النموذج_الثانوي' : 'النموذج_الأساسي';
+        await window.EduHtmlExporter.exportHtmlDocument({
+            title: `ملف_الأداء_الوظيفي_${modelLabel}`,
+            canvaName: activeCanvaTemplate && activeCanvaTemplate.name ? activeCanvaTemplate.name : '',
+            targetEl: pagesWrap,
+            extraCss: `
+                body { padding: 18px 0 32px 0 !important; }
+                .pages-wrap { margin-top: 0 !important; }
+                @media print {
+                    body { padding: 0 !important; background: #ffffff !important; }
+                    .pages-wrap { margin-top: 0 !important; }
+                }
+            `,
+            onAfterClone: (clone) => {
+                clone.querySelectorAll('.page').forEach(p => {
+                    p.style.transform = '';
+                    p.style.marginBottom = '';
+                });
+            },
+            onStatus: (msg) => setStatus(msg)
+        });
+    } catch (e) {
+        setStatus('❌ تعذر تصدير HTML: ' + (e && e.message ? e.message : e));
+    }
+}
+window.exportHTML = exportHTML;
 
 function printDocument() {
     if (document.activeElement && typeof document.activeElement.blur === 'function') {

@@ -6,6 +6,7 @@ import {
   ClipboardList,
   ExternalLink,
   Eye,
+  FileCode2,
   FileDown,
   FilePlus2,
   FileSignature,
@@ -375,6 +376,8 @@ export default function App() {
     | 'togglePrintPreview'
     | 'exportPDF'
     | 'exportActivitiesPDF'
+    | 'exportHTML'
+    | 'exportActivitiesHTML'
     | 'printDocument'
     | 'printActivities'
     | 'resetAll'
@@ -1077,6 +1080,21 @@ export default function App() {
                   >
                     <FileDown className="w-3.5 h-3.5" />
                     <span>تصدير PDF</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      callFrameAction(
+                        activeTool.id === 'activities_portfolio'
+                          ? 'exportActivitiesHTML'
+                          : 'exportHTML'
+                      )
+                    }
+                    className="px-2.5 py-1.5 rounded-md bg-sky-600 hover:bg-sky-500 text-white text-xs font-extrabold inline-flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
+                  >
+                    <FileCode2 className="w-3.5 h-3.5" />
+                    <span>تصدير HTML</span>
                   </button>
 
                   <button

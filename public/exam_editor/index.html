@@ -26,6 +26,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="/static/js/edu_html_exporter.js"></script>
 <style>
 :root{
   --primary:#1a5276; --primary2:#2874a6; --accent:#f1c40f;
@@ -2022,6 +2023,7 @@ body.layout-canva #tab-analysis .summary-row.q-grades-row td {
     <div class="toolbar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
       <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
         <button type="button" id="btnSavePdf" class="btn primary" style="font-size:13px;padding:7px 14px;">💾 حفظ PDF</button>
+        <button type="button" id="btnExportExamHtml" onclick="exportExamHTML()" class="btn" style="background:#0284c7;color:#fff;font-size:13px;padding:7px 14px;">🌐 تصدير HTML</button>
         <button type="button" id="btnShare" class="btn success" style="font-size:13px;padding:7px 14px;">📤 مشاركة</button>
         <button type="button" id="btnPrint" class="btn ghost" style="font-size:13px;padding:7px 14px;">🖨️ طباعة</button>
         <button type="button" class="btn" onclick="switchToTab('edit')" style="background:#eef3f7;color:#1a5276;font-size:12px;padding:6px 12px;border:1px solid #c3d4e0;cursor:pointer;">✏️ العودة للمحرر</button>
@@ -2168,6 +2170,9 @@ body.layout-canva #tab-analysis .summary-row.q-grades-row td {
           </button>
           <button type="button" class="btn success" id="btnExportAnalysisPdf" onclick="exportAnalysisToPdf()" style="background:linear-gradient(135deg,#1e8449,#27ae60);color:#fff;font-size:14px;padding:8px 16px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(30,132,73,0.3);border:none;cursor:pointer;">
             <span>💾</span> <b>تصدير كشف التحليل PDF</b>
+          </button>
+          <button type="button" class="btn" id="btnExportAnalysisHtml" onclick="exportAnalysisToHtml()" style="background:#0284c7;color:#fff;font-size:14px;padding:8px 16px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(2,132,199,0.28);border:none;cursor:pointer;">
+            <span>🌐</span> <b>تصدير كشف التحليل HTML</b>
           </button>
           <button type="button" class="btn primary" onclick="printAnalysisReport()" style="background:#2980b9;font-size:14px;padding:8px 18px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 8px rgba(41,128,185,0.3);">
             <span>🖨️</span> <b>طباعة كشف التحليل</b>
@@ -4211,6 +4216,41 @@ $('#mShare').addEventListener('click', async ()=>{
   }
 });
 
+/* ============ تصدير HTML لورقة الاختبار ============ */
+async function exportExamHTML(){
+  if(!window.EduHtmlExporter){
+    toast('أداة تصدير HTML غير متوفرة حالياً', 'err');
+    return;
+  }
+  try{
+    const tpl = state.paperTemplate || 'academic';
+    const isCanva = document.body.classList.contains('layout-canva');
+    const wrap = document.createElement('div');
+    wrap.id = 'previewPaper';
+    wrap.className = 'tpl-' + tpl;
+    wrap.innerHTML = paperHTML('capture');
+    const baseName = defaultFileName() || 'ورقة_الاختبار';
+    await window.EduHtmlExporter.exportHtmlDocument({
+      title: state.meta.examTitle || 'ورقة الاختبار',
+      filename: isCanva ? `${baseName}_كانفا` : baseName,
+      buildContainer: () => wrap,
+      bodyClass: isCanva ? 'layout-canva' : '',
+      extraCss: `
+        body { margin: 0 !important; padding: 20px 12px !important; background: ${isCanva ? '#f1f4f9' : '#eef3f7'} !important; }
+        #previewPaper { max-width: 900px; margin: 0 auto !important; }
+        @media print {
+          body { background: #ffffff !important; padding: 0 !important; }
+          #previewPaper { padding: 0 !important; border: none !important; background: #ffffff !important; max-width: 100% !important; }
+          #previewPaper .paper { box-shadow: none !important; transform: none !important; margin: 0 auto !important; }
+        }
+      `,
+      onStatus: (msg) => toast(msg, 'ok')
+    });
+  }catch(err){
+    toast('تعذر تصدير HTML: ' + (err && err.message ? err.message : err), 'err');
+  }
+}
+
 /* ============ الطباعة ============ */
 $('#btnPrint').addEventListener('click', ()=>{
   $('#printRoot').innerHTML = paperHTML('capture');
@@ -5304,6 +5344,43 @@ async function exportAnalysisToPdf(){
   }
 }
 
+async function exportAnalysisToHtml(){
+  if(!window.EduHtmlExporter){
+    toast('أداة تصدير HTML غير متوفرة حالياً', 'err');
+    return;
+  }
+  try{
+    calculateAll();
+    const isCanva = document.body.classList.contains('layout-canva');
+    const subject = ($('#an-subject')?.value || '').trim();
+    const className = ($('#an-class')?.value || '').trim();
+    const fileName = `تحليل_نتائج_${subject || 'الاختبار'}${className ? '_' + className : ''}`.replace(/\s+/g, '_');
+
+    const wrap = document.createElement('div');
+    wrap.className = 'paper-container';
+    wrap.style.cssText = 'max-width:1180px;margin:0 auto;background:#ffffff;padding:18px;border-radius:12px;';
+    wrap.innerHTML = generateAnalysisReportHTML();
+
+    await window.EduHtmlExporter.exportHtmlDocument({
+      title: `كشف تحليل نتائج ${subject || 'الاختبار'}`,
+      filename: isCanva ? `${fileName}_كانفا` : fileName,
+      buildContainer: () => wrap,
+      bodyClass: isCanva ? 'layout-canva' : '',
+      extraCss: `
+        body { margin: 0 !important; padding: 20px 12px !important; background: ${isCanva ? '#f1f4f9' : '#eef3f7'} !important; }
+        @media print {
+          body { background: #ffffff !important; padding: 0 !important; }
+          .paper-container { box-shadow: none !important; border: none !important; padding: 0 !important; max-width: 100% !important; }
+          @page { size: A4 landscape; margin: 8mm; }
+        }
+      `,
+      onStatus: (msg) => toast(msg, 'ok')
+    });
+  }catch(err){
+    toast('تعذر تصدير كشف التحليل HTML: ' + (err && err.message ? err.message : err), 'err');
+  }
+}
+
 /* ربط أحداث الإدخال والحذف التلقائي لكشف التحليل */
 document.addEventListener('input', e => {
   if(e.target && e.target.closest('#tab-analysis')){
@@ -5872,6 +5949,8 @@ window.syncAnalysisHeaderFromMeta = syncAnalysisHeaderFromMeta;
 window.clearAnalysisData = clearAnalysisData;
 window.printAnalysisReport = printAnalysisReport;
 window.exportAnalysisToPdf = exportAnalysisToPdf;
+window.exportAnalysisToHtml = exportAnalysisToHtml;
+window.exportExamHTML = exportExamHTML;
 window.generateAnalysisReportHTML = generateAnalysisReportHTML;
 window.toggleAnalysisSettings = toggleAnalysisSettings;
 window.switchToAnalysisTab = switchToAnalysisTab;

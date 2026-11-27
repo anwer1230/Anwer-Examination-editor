@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="/static/js/edu_html_exporter.js"></script>
   <style>
     :root {
       --primary: #0f4c5c;
@@ -1028,6 +1029,7 @@
       <button type="button" class="tb-tool-btn canva-btn" onclick="openCanvaHubModal()">🎨 قوالب كانفا</button>
       <button type="button" class="tb-tool-btn preview-btn" onclick="togglePrintPreview(true)">👁️ معاينة قبل الطباعة</button>
       <button type="button" class="tb-tool-btn pdf-btn" onclick="exportActivitiesPDF()">📄 تصدير PDF</button>
+      <button type="button" class="tb-tool-btn" style="background:#0284c7;color:#fff;" onclick="exportActivitiesHTML()">🌐 تصدير HTML</button>
       <button type="button" class="tb-tool-btn print-btn" onclick="printActivities()">🖨️ طباعة</button>
       <button type="button" class="tb-tool-btn danger" onclick="resetAll()">🗑️ إعادة تعيين</button>
       <span class="canva-active-banner" id="toolbarCanvaBadge">🎨 قالب: <span id="toolbarCanvaName"></span></span>
@@ -1043,6 +1045,7 @@
     <button type="button" onclick="openCanvaHubModal()" style="background:linear-gradient(135deg,#00c4cc,#7d2ae8);">🎨 تبديل قالب كانفا</button>
     <button type="button" id="btnResetCanvaPreview" onclick="resetCanvaTemplate()" style="background:#64748b;display:none;">↩️ التصميم الأصلي</button>
     <button type="button" class="pdf-btn" onclick="exportActivitiesPDF()">📄 تنزيل PDF</button>
+    <button type="button" onclick="exportActivitiesHTML()" style="background:#0284c7;color:#fff;">🌐 تصدير HTML</button>
     <button type="button" onclick="printActivities()">🖨️ طباعة مباشرة</button>
     <button type="button" id="btnZoomFit" class="zoom-btn active" onclick="setPreviewZoom('fit')">🔍 ملائمة للشاشة</button>
     <button type="button" id="btnZoomFull" class="zoom-btn" onclick="setPreviewZoom('full')">🔍 100% A4</button>
@@ -2714,6 +2717,74 @@ let currentActiveView = "plan";
         rootCssText: document.documentElement.style.cssText || ""
       };
     }
+
+    async function exportActivitiesHTML() {
+      if (!window.EduHtmlExporter) {
+        setStatus("❌ أداة تصدير HTML غير متوفرة حالياً");
+        return;
+      }
+      const sheets = getActivePrintableSheets();
+      if (!sheets.length) {
+        setStatus("⚠️ لا توجد صفحات نشطة للتصدير");
+        return;
+      }
+      setStatus("⏳ جاري تجهيز ملف HTML للأنشطة بالتصميم والألوان المختارة...");
+      try {
+        const modelLabel = activeActivitiesModel === "secondary" ? "النموذج_الثانوي" : "النموذج_الأساسي";
+        let titleBase = `ملف_الأنشطة_المدرسية_${modelLabel}`;
+        if (currentActiveView === "cards") {
+          titleBase = (currentWeekFilter && currentWeekFilter !== "all")
+            ? `بطاقة_تنفيذ_نشاط_الأسبوع_${currentWeekFilter}_${modelLabel}`
+            : `بطاقات_تنفيذ_النشاط_${modelLabel}`;
+        }
+
+        const buildContainer = () => {
+          const ws = document.createElement("div");
+          ws.className = "workspace";
+          ws.setAttribute("dir", "rtl");
+          const panel = document.createElement("div");
+          panel.className = "view-panel";
+          sheets.forEach(srcEl => {
+            const clone = srcEl.cloneNode(true);
+            window.EduHtmlExporter.syncFormValuesToDom(srcEl, clone);
+            window.EduHtmlExporter.replaceCanvasesWithImages(srcEl, clone);
+            clone.style.transform = "";
+            clone.style.marginBottom = "";
+            panel.appendChild(clone);
+          });
+          ws.appendChild(panel);
+          return ws;
+        };
+
+        await window.EduHtmlExporter.exportHtmlDocument({
+          title: titleBase,
+          canvaName: activeCanvaTemplate && activeCanvaTemplate.name ? activeCanvaTemplate.name : "",
+          buildContainer,
+          extraCss: `
+            body { padding: 0 !important; }
+            .workspace { padding: 18px 12px 32px 12px !important; }
+            .view-panel { display: flex !important; flex-direction: column; align-items: center; gap: 18px; width: 100%; }
+            .a4-sheet { transform: none !important; margin: 0 auto !important; }
+            @media print {
+              body { background: #ffffff !important; padding: 0 !important; }
+              .workspace { padding: 0 !important; margin: 0 !important; gap: 0 !important; }
+              .view-panel { display: block !important; }
+              .a4-sheet {
+                width: 100% !important; min-height: auto !important;
+                box-shadow: none !important; border-radius: 0 !important;
+                margin: 0 !important; padding: 4mm 5mm !important;
+              }
+              .a4-sheet ~ .a4-sheet { page-break-before: always; break-before: page; }
+            }
+          `,
+          onStatus: (msg) => setStatus(msg)
+        });
+      } catch (e) {
+        setStatus("❌ تعذر تصدير HTML: " + (e && e.message ? e.message : e));
+      }
+    }
+    window.exportActivitiesHTML = exportActivitiesHTML;
+    window.exportHTML = exportActivitiesHTML;
 
     function printActivities() {
       if (document.activeElement && typeof document.activeElement.blur === "function") {
