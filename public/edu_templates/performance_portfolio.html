@@ -1077,45 +1077,52 @@
         </thead>
         <tbody>
             <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">سجل حاضري / الدوام</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">سجل الدوام الرسمي والانضباط بالحضور والانصراف</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">سجل متابعة وتقرير</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">سجل متابعة إنجاز المنهج وتقرير انتظام الحصص الدراسية وفق الجدول</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #2 + صور</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">المشاركة في المناسبات الوطنية (تقرير تنفيذ برنامج اليوم الوطني 95)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">المشاركة في المناسبات الوطنية والفعاليات الرسمية (تقرير اليوم الوطني 95)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">جدول رسمي</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">سجل الدوام الرسمي</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">جدول المناوبة الشهري المعتمد</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">جدول إشراف</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">جدول المناوبة الشهري</div></td>
-                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
-            </tr>
-            <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">جدول الإشراف اليومي</div></td>
-                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
-            </tr>
-            <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">خطة #13 (9–19)</div></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">خطة توزيع المنهج</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">جدول الإشراف اليومي وسجل متابعته</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #15 + سجل</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">سجل الانتظار (تقرير تفعيل حصة الانتظار — 6 حصص موثقة)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">سجل الانتظار (تقرير تفعيل وتسديد ٦ حصص انتظار موثقة)</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">سجل متابعة الدروس</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">سجل متابعة إعداد الدروس وتصحيح الواجبات والاختبارات</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -1172,38 +1179,52 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #2 + صور</div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #1 + صور</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">تقرير تنفيذ برنامج اليوم الوطني 95</div></td>
-                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
-            </tr>
-            <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #1</div></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">تقرير تنفيذ برنامج الأسبوع التمهيدي</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير تنفيذ برنامج الأسبوع التمهيدي لاستقبال الطالبات المستجدات</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #3 + شكر</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">تقرير تفعيل يوم المعلم</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير تفعيل يوم المعلم (الاحتفاء بالمعلمات وتكريمهن)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #4</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">تقرير تنفيذ برنامج أسبوع الفضاء (ربط الدراسات الاجتماعية)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير تنفيذ برنامج أسبوع الفضاء العالمي</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #2 + صور</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير احتفاء اليوم الوطني للمملكة العربية السعودية (95)</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير فعالية</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير وتوثيق تفعيل اليوم العالمي للغة العربية</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير فعالية</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير وتوثيق المشاركة في اليوم الخليجي للمرأة</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #10 + صور</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">تقرير تفعيل برنامج التسامح (كوكبنا يزهر بالتسامح)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير تفعيل برنامج التسامح (كوكبنا يزهر بالتسامح)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -1269,31 +1290,52 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">استمارة + تقرير #19</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">تبادل الزيارات</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير واستمارة تبادل الزيارات الصفية وتبادل الخبرات مع المعلمات</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #27</div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">شهادات حضور</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">المشاركة في المجتمعات المهنية (تقرير تنفيذ ورشة عمل)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">شهادات حضور المؤتمرات والندوات التعليمية</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">سجل مهني</div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #27 + شهادات</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">التفاعل المهني</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">المشاركة في المجتمعات المهنية وورش العمل التدريبية (تقرير #27)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #18 + تطوع</div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">سجل استشارات</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">إطلاق مبادرات تعليمية (تقرير تنفيذ مبادرة الانضباط المدرسي ومبادرة وعي رقمي)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">سجل تقديم استشارات تربوية وتوجيه مهني للمعلمات الجدد</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير مبادرة</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير إطلاق مبادرات تعليمية وتطوعية (مبادرة وعي رقمي)</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">شهادات + تقارير</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">شهادة مشاركة في لجنة الانضباط المدرسي وتقرير تفعيل دور الإرشاد الطلابي</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">شهادات معتمدة</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">شهادات الالتحاق ببرامج تدريبية حديثة والحصول على شهادات مهنية معتمدة</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -1303,18 +1345,18 @@
         <div class="strip-heading">📎 تقارير المجتمع المهني والمبادرات</div>
         <div class="linked-report-card">
             <div class="linked-report-head">
-                <span class="linked-report-title editable-area" contenteditable="true">تقرير #19: تبادل الزيارات</span>
-                <span class="linked-report-badge">بند: تبادل الزيارات</span>
+                <span class="linked-report-title editable-area" contenteditable="true">تقرير واستمارة #19: تبادل الزيارات الصفية</span>
+                <span class="linked-report-badge">بند: تبادل الزيارات الصفية</span>
             </div>
             <div class="linked-report-summary editable-area" contenteditable="true">استمارة تبادل زيارات صفية تتضمن 10 معايير تقييم (الأهداف، المحتوى، الاستراتيجيات، إشراك الطالبات، الانضباط، الوسائل، التقويم القبلي/البنائي/الختامي) مع نقاط التميز والتوصيات واعتماد الإدارة.</div>
         </div>
         <div class="linked-report-card">
             <div class="linked-report-head">
-                <span class="linked-report-title editable-area" contenteditable="true">تقرير #18: تنفيذ مبادرة الانضباط المدرسي (+ الفرصة التطوعية: وعي رقمي)</span>
-                <span class="linked-report-badge">بند: إطلاق مبادرات تعليمية</span>
+                <span class="linked-report-title editable-area" contenteditable="true">شهادة لجنة الانضباط المدرسي وتفعيل دور الإرشاد الطلابي + مبادرة وعي رقمي (#18)</span>
+                <span class="linked-report-badge">عمل لجان ومبادرات</span>
             </div>
-            <div class="linked-report-meta editable-area" contenteditable="true">الفترة: أسبوعان من 7/11/2026 | الفريق: الإدارة والكادر التعليمي ومجلس الطلاب | التحقق: 100%</div>
-            <div class="linked-report-summary editable-area" contenteditable="true">تكامل جهود الفريق المدرسي والمجالس الطلابية لتعزيز الانضباط، وتكريم الفصول المنضبطة، وإطلاق فرصة تطوعية رقمية «وعي رقمي» لتوعية الطالبات والأسر بالمواطنة الرقمية.</div>
+            <div class="linked-report-meta editable-area" contenteditable="true">الفترة: أسبوعان من 7/11/2026 | الفريق: لجنة الانضباط والإرشاد الطلابي | التحقق: 100%</div>
+            <div class="linked-report-summary editable-area" contenteditable="true">المشاركة في أعمال لجنة الانضباط المدرسي وتفعيل دور الإرشاد الطلابي بالتكامل مع الكادر التعليمي، وإطلاق فرصة تطوعية رقمية «وعي رقمي» لتطوير المهارات التربوية.</div>
         </div>
     </div>
 </div>
@@ -1340,45 +1382,45 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">محاضر اجتماعات</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">خطابات إحالة الطالب إلى وكيل المدرسة</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تنظيم اجتماعات الجمعية العمومية والاجتماعات الدورية مع أولياء الأمور</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">تقرير اجتماع مع ولي أمر</div></td>
-                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
-            </tr>
-            <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">سجل زيارات أولياء الأمور</div></td>
-                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
-            </tr>
-            <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #13</div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #13 + كشوف</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">الخطة الأسبوعية</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">إرسال تقارير منتظمة عن أداء الطالبات والخطة الأسبوعية لأولياء الأمور</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">الجمعية العمومية واجتماع أولياء الأمور</div></td>
-                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
-            </tr>
-            <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #18</div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">توثيق تواصل رقمي</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">الشراكة والتواصل مع الأسرة لدعم الانضباط (تقرير تنفيذ مبادرة الانضباط المدرسي)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">استخدام وسائل التواصل الحديثة والمنصات الرقمية في التفاعل مع الأسرة (وعي رقمي)</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">سجل زيارات وملاحظات</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">سجل الاستماع لملاحظات أولياء الأمور وزياراتهم وتقارير الاجتماعات الفردية</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">خطابات إحالة</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">خطابات إحالة الطالبة وإشعارات المتابعة الأسرية بالتنسيق مع وكيل المدرسة</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #18 (أسري)</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير تواصل مع أولياء الأمور بشأن انتظام الطالبات</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -1388,10 +1430,10 @@
         <div class="strip-heading">📎 شاهد تواصل الأسرة والشراكة المجتمعية</div>
         <div class="linked-report-card">
             <div class="linked-report-head">
-                <span class="linked-report-title editable-area" contenteditable="true">تقرير #18: مبادرة الانضباط المدرسي (محور التواصل مع الأسرة والمبادرة التطوعية)</span>
+                <span class="linked-report-title editable-area" contenteditable="true">تقرير #18: تواصل مع أولياء الأمور بشأن انتظام الطالبات والشراكة الأسرية</span>
                 <span class="linked-report-badge">شراكة أسرية 100%</span>
             </div>
-            <div class="linked-report-summary editable-area" contenteditable="true">تعزيز التواصل المستمر بين المدرسة والأسرة لدعم الانتظام والانضباط المدرسي، وإطلاق مبادرة «وعي رقمي» الموجهة للطالبات وأولياء الأمور للتوعية بالاستخدام الآمن للإنترنت، والتي لاقت تفاعلاً وموافقة إيجابية من أولياء الأمور.</div>
+            <div class="linked-report-summary editable-area" contenteditable="true">تعزيز التواصل المستمر بين المدرسة والأسرة عبر رسائل المتابعة وتقارير الانتظام الدورية وإطلاق مبادرة «وعي رقمي» الموجهة لأولياء الأمور لدعم انتظام الطالبات ومتابعتهن.</div>
         </div>
     </div>
 </div>
@@ -1421,14 +1463,42 @@
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقارير #5 إلى #9</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">تقرير تنفيذ استراتيجية (البطاقات الملونة #5، العصف الذهني #6، الدقيقة الواحدة #7، بطاقة الخروج 3-2-1 والتفكير العليا والربط بالوطن #8، استراتيجية 1-2-3 #9)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير تنفيذ استراتيجية تعليمية (البطاقات الملونة #5، العصف الذهني #6، الدقيقة الواحدة #7، بطاقة الخروج 3-2-1 #8، 1-2-3 #9)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">شهادة شكر</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">شهادة شكر وتقدير حول تفعيل الاستراتيجية</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">شهادة شكر وتقدير حول تفعيل الاستراتيجية</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">أوراق عمل وأنشطة</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">نماذج من أوراق العمل والأنشطة الصفية المتنوعة</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">بطاقات ومجموعات</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تطبيق استراتيجيات التعلم النشط (التعلم التعاوني، العصف الذهني، خرائط المفاهيم، لعب الأدوار، التعلم باللعب)</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">مشاريع واستقصاء</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">استراتيجيات التفكير العليا والمشاريع (حل المشكلات، التعلم بالاستقصاء، المشاريع، الفصل المقلوب)</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">درس تطبيقي + صور</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير تنفيذ درس تطبيقي يربط الهوية الوطنية بالمنهج وصور من نشاط طلابي (فنون/رسم) عن اليوم الوطني</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -1504,31 +1574,31 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">خطط علاجية</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">خطط علاجية للطلاب الضعاف</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">إعداد وتنفيذ الخطط العلاجية للطلاب الضعاف</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">خطط إثرائية</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">خطط إثرائية للطلاب المتميزين</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">إعداد وتنفيذ الخطط الإثرائية للطلاب المتميزين</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">صور تكريم</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تكريم الطلاب</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">صور تكريم الطالبات المتفوقات في الطابور الصباحي</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #22</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">اختبار قبلي واختبار بعدي (تقرير برنامج تحسين نتائج أداء المتعلمين #22)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">اختبار قبلي واختبار بعدي لقياس تحسن النواتج (تقرير #22)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
@@ -1542,14 +1612,7 @@
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #10 + صور</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">السلوك والقيم الداعمة للنتائج (تقرير برنامج التسامح #10 — كوكبنا يزهر بالتسامح)</div></td>
-                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
-            </tr>
-            <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #25</div></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تعزيز الانضباط والسلوك الإيجابي لدى المتعلمين (تقرير تفعيل السلوك الإيجابي #25)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">برامج تعزيز القيم الداعمة للدافعية والتحصيل (تقرير التسامح #10)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -1563,14 +1626,14 @@
                     <span class="linked-report-title editable-area" contenteditable="true">تقرير #22: برنامج تحسين نتائج أداء المتعلمين</span>
                     <span class="linked-report-badge">تحقق 99%</span>
                 </div>
-                <div class="linked-report-summary editable-area" contenteditable="true">تطبيق اختبارات قبلية وبعدية لقياس مدى التحسن في نواتج التعلم، وتفعيل التعلم النشط والتقويم البنائي لرفع متوسط الأداء الأكاديمي.</div>
+                <div class="linked-report-summary editable-area" contenteditable="true">تطبيق اختبارات قبلية وبعدية لقياس مدى التحسن في نواتج التعلم، وتفعيل الخطط العلاجية والإثرائية والتقويم البنائي لرفع متوسط الأداء الأكاديمي.</div>
             </div>
             <div class="linked-report-card">
                 <div class="linked-report-head">
-                    <span class="linked-report-title editable-area" contenteditable="true">تقرير #10 و#25: القيم والسلوك الإيجابي</span>
-                    <span class="linked-report-badge">دعم قيمي وسلوكي</span>
+                    <span class="linked-report-title editable-area" contenteditable="true">تقرير #10: القيم الداعمة للدافعية والتعلم</span>
+                    <span class="linked-report-badge">دعم قيمي وتحفيزي</span>
                 </div>
-                <div class="linked-report-summary editable-area" contenteditable="true">غرس قيمة التسامح والاحترام وتعزيز الانضباط السلوكي داخل البيئة الصفية عبر أنشطة حوارية وفنية تدعم استقرار التحصيل الدراسي.</div>
+                <div class="linked-report-summary editable-area" contenteditable="true">غرس قيمة التسامح والتعاون وتكريم الطالبات المتميزات عبر أنشطة حوارية وتربوية ترفع الدافعية وتستقر معها نواتج التعلم.</div>
             </div>
         </div>
         <div class="linked-report-thumbs" style="padding: 4px 2px;">
@@ -1606,28 +1669,28 @@
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #13 (9–19)</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">خطة توزيع المنهج</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">خطة توزيع المنهج الدراسي المعتمدة (تقرير #13)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">سجل الدروس #13</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">إعداد الدروس اليومية</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">سجل إعداد الدروس اليومية والتحضير الإلكتروني عبر منصة مدرستي</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">منصة مدرستي</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">نماذج من الواجبات والاختبارات</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">نماذج من الواجبات المنزلية والاختبارات الدورية المخططة</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #4</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">تفعيل البرامج الداعمة للمنهج (تقرير أسبوع الفضاء وربطه بالدراسات الاجتماعية)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">تقرير تنفيذ برنامج أسبوع الفضاء وربط الدراسات الاجتماعية بمخرجات خطة التعلم (#4)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -1685,14 +1748,14 @@
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">عروض #17 و#14</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">نماذج من عروض الدروس (عروض PowerPoint وCanva التفاعلية في #14 و#17)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">نماذج من عروض الدروس التفاعلية (PowerPoint وCanva في #14 و#17)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">صور شواهد</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">صور من الوسائل التعليمية</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">صور من الوسائل التعليمية الرقمية واللوحات التفاعلية</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
@@ -1706,7 +1769,7 @@
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">Wordwall / Teams</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">نماذج من الاختبارات الالكترونية (تطبيقات Teams وWordwall في #14 و#17)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">لقطات شاشة من منصة الاختبار الإلكتروني أثناء التطبيق ونماذج الاختبارات الإلكترونية (Teams وWordwall)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -1765,35 +1828,35 @@
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #26</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">تعريف الطالب حسب الأنماط التعليمية (تقرير تصنيف الطلاب وفق أنماط التعلم #26)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تصنيف الطالبات وفق أنماط التعلم لتهيئة الفصل وتوزيع المقاعد (#26)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">شاهد #16</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">توفر متطلبات الدرس</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">سجل توفير متطلبات الدرس والأدوات التعليمية (#16)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">شاهد #16 و#25</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">التعزيز المادي والمعنوي</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">التعزيز المادي والمعنوي وتوزيع الحوافز للبيئة الداعمة (#16 و#25)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #1</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">تهيئة البيئة المدرسية للطالبات المستجدات (تقرير الأسبوع التمهيدي #1)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تهيئة البيئة المدرسية للطالبات المستجدات (تقرير الأسبوع التمهيدي #1)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #16 + صور</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">تهيئة البيئة الصفية وتنظيم المقاعد (تقرير إدارة الصف والأنشطة الصفية والإثرائية #16)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تهيئة البيئة الصفية وتنظيم المقاعد للتعلم التعاوني (#16)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -1842,31 +1905,31 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #12</div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #12 + ميثاق</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">القوانين الصفية (تقرير تفعيل القوانين الصفية والانضباط #12)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">نسخة من القوانين الصفية المعلقة واستمارة توقيع الطالبات على ميثاق القوانين الصفية (#12)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">سجل #16 و#25</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">كشف المتابعة اليومي</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">كشف المتابعة اليومي (#16 و#25)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #16 + صور</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">تنفيذ برنامج إدارة الصف والأنشطة الصفية والإثرائية (تقرير #16)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تنفيذ برنامج إدارة الصف وتنظيم التفاعل الصفي (#16)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #25</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">تفعيل السلوك الإيجابي والانضباط السلوكي (تقرير #25)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تفعيل السلوك الإيجابي والانضباط المدرسي داخل الفصول الدراسية (#25)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -1927,34 +1990,41 @@
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقريرا #22 و#24</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">تحليل نتائج الاختبارات (الاختبار القبلي والبعدي وتقارير #22 و#24)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تحليل نتائج الاختبارات القبلية والبعدية والفترية (#22 و#24)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقريرا #20 و#24</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">معالجة الفقد التعليمي (تقرير الخطة العلاجية للضعاف #20 + تقرير متابعة البرامج العلاجية #24)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">نتائج اختبارات تحديد المستوى وتقرير تشخيص الفاقد التعليمي (#20 و#24)</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">كشوف وسجلات</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">كشوف رصد درجات الطالبات وسجل متابعة المستوى التحصيلي لتشخيص المستويات</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
     </table>
 
     <div class="report-witness-strip">
-        <div class="strip-heading">📎 تقارير معالجة الفقد التعليمي وتحليل النتائج</div>
+        <div class="strip-heading">📎 تقارير تشخيص الفاقد التعليمي وتحليل النتائج</div>
         <div class="linked-report-card">
             <div class="linked-report-head">
-                <span class="linked-report-title editable-area" contenteditable="true">تقرير #20: الخطة العلاجية للضعاف</span>
-                <span class="linked-report-badge">بند: معالجة الفقد التعليمي</span>
+                <span class="linked-report-title editable-area" contenteditable="true">تقرير #20: نتائج اختبارات تحديد المستوى وتشخيص الضعف</span>
+                <span class="linked-report-badge">بند: تشخيص مستويات المتعلمات</span>
             </div>
-            <div class="linked-report-summary editable-area" contenteditable="true">تحديد نقاط الضعف الأكاديمية بدقة عبر نتائج التقييم، وتقديم برامج علاجية موجهة بأساليب تعلم نشط لتقليص الفجوة التحصيلية وتعزيز الثقة بالنفس.</div>
+            <div class="linked-report-summary editable-area" contenteditable="true">تحليل بيانات اختبارات تحديد المستوى وتشخيص الفاقد التعليمي بدقة لتحديد المهارات غير المتقنة ورصد الاحتياجات الفردية للطالبات.</div>
         </div>
         <div class="linked-report-card">
             <div class="linked-report-head">
-                <span class="linked-report-title editable-area" contenteditable="true">تقرير #24: متابعة البرامج العلاجية</span>
+                <span class="linked-report-title editable-area" contenteditable="true">تقرير #24: تقرير تشخيص الفاقد التعليمي ومقارنة النتائج</span>
                 <span class="linked-report-badge">تحقق 99%</span>
             </div>
-            <div class="linked-report-summary editable-area" contenteditable="true">رصد أثر البرامج العلاجية من خلال اختبارات قبلية وبعدية، وتحليل نتائج الاختبارات لقياس نسبة إتقان المهارات الأساسية ومعالجة الفاقد التعليمي.</div>
+            <div class="linked-report-summary editable-area" contenteditable="true">رصد درجات الطالبات ومقارنة نتائج الاختبارات القبلية والبعدية لقياس نسبة إتقان المهارات الأساسية وتشخيص الفاقد التعليمي بدقة.</div>
         </div>
     </div>
 </div>
@@ -1987,35 +2057,35 @@
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">شاهد #22 و#23</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">نماذج من الاختبارات الورقية</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">نماذج من الاختبارات الورقية (#22 و#23)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">Wordwall / Teams</div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقارير رصد درجات</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">نماذج من الاختبارات الالكترونية</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير رصد درجات الاختبار الإلكتروني ونماذج من الاختبارات التشخيصية والبنائية</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">موثق بالقسم 4</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">ملفات إنجاز الطالب</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">ملفات إنجاز الطالبات الموثقة</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #21 / القسم 4</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">المهام الأدائية والمشاريع</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">المهام الأدائية والمشاريع (#21)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقارير #7، #8، #9</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">التقويم البديل والبنائي (الدقيقة الواحدة #7، بطاقة الخروج 3-2-1 #8، واستراتيجية 1-2-3 #9)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">التقويم البديل والبنائي السريع (الدقيقة الواحدة #7، بطاقة الخروج 3-2-1 #8، واستراتيجية 1-2-3 #9)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -2427,59 +2497,52 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">سجل حاضري / الدوام</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">المشاركة في المناسبات الوطنية</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">سجل الدوام الرسمي والانضباط بالحضور والانصراف</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">سجل متابعة وتقرير</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">سجل الدوام الرسمي</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">سجل متابعة إنجاز المنهج وتقرير انتظام الحصص الدراسية وفق الجدول</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #2 + صور</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">جدول المناوبة الشهري</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">المشاركة في المناسبات الوطنية والفعاليات الرسمية (تقرير اليوم الوطني 95)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">جدول رسمي</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">جدول الإشراف اليومي</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">جدول المناوبة الشهري المعتمد</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">جدول إشراف</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">خطة توزيع المنهج</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">جدول الإشراف اليومي وسجل متابعته</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #15 + سجل</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">سجل الانتظار</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">سجل الانتظار (تقرير تفعيل وتسديد ٦ حصص انتظار موثقة)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">سجل متابعة الدروس</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">المشاركة في تنفيذ فعاليات اليوم الوطني 95.</div></td>
-                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
-            </tr>
-            <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تسديد وتفعيل حصص الانتظار المسندة.</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">سجل متابعة إعداد الدروس وتصحيح الواجبات والاختبارات</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -2511,10 +2574,52 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #1 + صور</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تنفيذ برامج ومناسبات الأسبوع التمهيدي، اليوم الوطني 95، يوم المعلم، أسبوع الفضاء، برنامج التسامح، وبرنامج STEAM.</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير تنفيذ برنامج الأسبوع التمهيدي لاستقبال الطالبات المستجدات</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #3 + شكر</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير تفعيل يوم المعلم (الاحتفاء بالمعلمات وتكريمهن)</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #4</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير تنفيذ برنامج أسبوع الفضاء العالمي</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #2 + صور</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير احتفاء اليوم الوطني للمملكة العربية السعودية (95)</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير فعالية</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير وتوثيق تفعيل اليوم العالمي للغة العربية</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير فعالية</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير وتوثيق المشاركة في اليوم الخليجي للمرأة</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #10 + صور</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير تفعيل برنامج التسامح (كوكبنا يزهر بالتسامح)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -2544,52 +2649,52 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">استمارة + تقرير #19</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تبادل الزيارات</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير واستمارة تبادل الزيارات الصفية وتبادل الخبرات مع المعلمات</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">شهادات حضور</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">المشاركة في المجتمعات المهنية</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">شهادات حضور المؤتمرات والندوات التعليمية</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #27 + شهادات</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">التفاعل المهني</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">المشاركة في المجتمعات المهنية وورش العمل التدريبية (تقرير #27)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">سجل استشارات</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">إطلاق مبادرات تعليمية</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">سجل تقديم استشارات تربوية وتوجيه مهني للمعلمات الجدد</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير مبادرة</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تنفيذ وتبادل الزيارات الصفية.</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير إطلاق مبادرات تعليمية وتطوعية (مبادرة وعي رقمي)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">شهادات + تقارير</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">المشاركة في تنفيذ مبادرة الانضباط المدرسي.</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">شهادة مشاركة في لجنة الانضباط المدرسي وتقرير تفعيل دور الإرشاد الطلابي</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">شهادات معتمدة</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تقديم ورشة عمل لتطوير المهارات التدريسية وتبادل الخبرات التربوية.</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">شهادات الالتحاق ببرامج تدريبية حديثة والحصول على شهادات مهنية معتمدة</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -2617,45 +2722,45 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">محاضر اجتماعات</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">خطابات إحالة الطالب إلى وكيل المدرسة</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تنظيم اجتماعات الجمعية العمومية والاجتماعات الدورية مع أولياء الأمور</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #13 + كشوف</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تقرير اجتماع مع ولي أمر</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">إرسال تقارير منتظمة عن أداء الطالبات والخطة الأسبوعية لأولياء الأمور</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">توثيق تواصل رقمي</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">سجل زيارات أولياء الأمور</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">استخدام وسائل التواصل الحديثة والمنصات الرقمية في التفاعل مع الأسرة (وعي رقمي)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">سجل زيارات وملاحظات</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">الخطة الأسبوعية</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">سجل الاستماع لملاحظات أولياء الأمور وزياراتهم وتقارير الاجتماعات الفردية</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">خطابات إحالة</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">الجمعية العمومية واجتماع أولياء الأمور</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">خطابات إحالة الطالبة وإشعارات المتابعة الأسرية بالتنسيق مع وكيل المدرسة</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #18 (أسري)</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">إشراك الأسرة والتواصل مع أولياء الأمور ضمن مبادرة الانضباط المدرسي والفرصة التطوعية الرقمية (وعي رقمي).</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير تواصل مع أولياء الأمور بشأن انتظام الطالبات</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -2684,31 +2789,45 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقارير #5 إلى #9</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تقرير تنفيذ استراتيجية</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير تنفيذ استراتيجية تعليمية (البطاقات الملونة #5، العصف الذهني #6، الدقيقة الواحدة #7، بطاقة الخروج 3-2-1 #8، 1-2-3 #9)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">شهادة شكر</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">شهادة شكر وتقدير حول تفعيل الاستراتيجية</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">شهادة شكر وتقدير حول تفعيل الاستراتيجية</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">أوراق عمل وأنشطة</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تطبيق استراتيجيات التعلم النشط (البطاقات الملونة، العصف الذهني، الدقيقة الواحدة، بطاقة الخروج 3-2-1، 1-2-3، والتفكير العليا والربط بالوطن).</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">نماذج من أوراق العمل والأنشطة الصفية المتنوعة</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">بطاقات ومجموعات</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">توظيف منحى STEAM في ربط الهوية الوطنية والبيئة بالتعلم التطبيقي.</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تطبيق استراتيجيات التعلم النشط (التعلم التعاوني، العصف الذهني، خرائط المفاهيم، لعب الأدوار، التعلم باللعب)</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">مشاريع واستقصاء</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">استراتيجيات التفكير العليا والمشاريع (حل المشكلات، التعلم بالاستقصاء، المشاريع، الفصل المقلوب)</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">درس تطبيقي + صور</div></td>
+                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير تنفيذ درس تطبيقي يربط الهوية الوطنية بالمنهج وصور من نشاط طلابي (فنون/رسم) عن اليوم الوطني</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -2739,59 +2858,45 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">خطط علاجية</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">خطط علاجية للطلاب الضعاف</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">إعداد وتنفيذ الخطط العلاجية للطلاب الضعاف</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">خطط إثرائية</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">خطط إثرائية للطلاب المتميزين</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">إعداد وتنفيذ الخطط الإثرائية للطلاب المتميزين</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">صور تكريم</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تكريم الطلاب</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">صور تكريم الطالبات المتفوقات في الطابور الصباحي</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #22</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">اختبار قبلي واختبار بعدي</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">اختبار قبلي واختبار بعدي لقياس تحسن النواتج (تقرير #22)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #22</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">إعداد وتنفيذ الخطط العلاجية للطالبات الضعيفات ومتابعتها.</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير برنامج تحسين نتائج أداء المتعلمين (#22)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #10 + صور</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">إعداد وتنفيذ الخطط الإثرائية للطالبات المتفوقات.</div></td>
-                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
-            </tr>
-            <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تنفيذ برنامج تحسين نتائج أداء المتعلمين.</div></td>
-                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
-            </tr>
-            <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تكريم الطالبات المتميزات في اختبار الفترة.</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">برامج تعزيز القيم الداعمة للدافعية والتحصيل (تقرير التسامح #10)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -2822,24 +2927,31 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #13 (9–19)</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">خطة توزيع المنهج</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">خطة توزيع المنهج الدراسي المعتمدة (تقرير #13)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">سجل الدروس #13</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">إعداد الدروس اليومية</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">سجل إعداد الدروس اليومية والتحضير الإلكتروني عبر منصة مدرستي</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">منصة مدرستي</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">نماذج من الواجبات المنزلية والاختبارات الدورية المخططة</div></td>
+                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
+            </tr>
+            <tr>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #4</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">نماذج من الواجبات والاختبارات</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">تقرير تنفيذ برنامج أسبوع الفضاء وربط الدراسات الاجتماعية بمخرجات خطة التعلم (#4)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -2869,52 +2981,52 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقريرا #14 و#17</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">صور من التقنية في التعليم</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">صور من التقنية في التعليم (تقرير الذكاء الاصطناعي #14 + تقرير التقنية في التعليم #17)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">عروض #17 و#14</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">نماذج من عروض الدروس</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">نماذج من عروض الدروس التفاعلية (PowerPoint وCanva في #14 و#17)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">صور شواهد</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">صور من الوسائل التعليمية</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">صور من الوسائل التعليمية الرقمية واللوحات التفاعلية</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير تقني</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تقرير عن برنامج تقنين</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير عن برنامج تقنين</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">Wordwall / Teams</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">نماذج من الاختبارات الالكترونية</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">لقطات شاشة من منصة الاختبار الإلكتروني أثناء التطبيق ونماذج الاختبارات الإلكترونية (Teams وWordwall)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">منصات رقمية</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">توظيف التقنيات والمنصات الرقمية في العملية التعليمية.</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">توظيف التقنيات والمنصات الرقمية في العملية التعليمية (#17)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #14</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">استخدام أدوات الذكاء الاصطناعي في إثراء المحتوى والأنشطة التعليمية.</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">استخدام أدوات الذكاء الاصطناعي في إثراء المحتوى والأنشطة التعليمية (#14)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -2945,38 +3057,38 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #26</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تعريف الطالب حسب الأنماط التعليمية</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تصنيف الطالبات وفق أنماط التعلم لتهيئة الفصل وتوزيع المقاعد (#26)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">شاهد #16</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">توفر متطلبات الدرس</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">سجل توفير متطلبات الدرس والأدوات التعليمية (#16)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">شاهد #16 و#25</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">التفريق المادي والمعنوي</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">التعزيز المادي والمعنوي وتوزيع الحوافز للبيئة الداعمة (#16 و#25)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #1</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تنفيذ برنامج الأسبوع التمهيدي لتهيئة الطالبات المستجدات.</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تهيئة البيئة المدرسية للطالبات المستجدات (تقرير الأسبوع التمهيدي #1)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #16 + صور</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تصنيف الطالبات وفق أنماط التعلم لمراعاة الفروق الفردية.</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تهيئة البيئة الصفية وتنظيم المقاعد للتعلم التعاوني (#16)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -3007,38 +3119,31 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #12 + ميثاق</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">القوانين الصفية</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">نسخة من القوانين الصفية المعلقة واستمارة توقيع الطالبات على ميثاق القوانين الصفية (#12)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">سجل #16 و#25</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">كشف المتابعة اليومي</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">كشف المتابعة اليومي (#16 و#25)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #16 + صور</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تفعيل ميثاق القوانين الصفية والانضباط الإيجابي.</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تنفيذ برنامج إدارة الصف وتنظيم التفاعل الصفي (#16)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #25</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تنفيذ برنامج إدارة الصف والأنشطة الصفية والإثرائية.</div></td>
-                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
-            </tr>
-            <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تفعيل السلوك الإيجابي داخل الفصول الدراسية.</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تفعيل السلوك الإيجابي والانضباط المدرسي داخل الفصول الدراسية (#25)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -3069,31 +3174,24 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقريرا #22 و#24</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تحليل نتائج الاختبارات</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تحليل نتائج الاختبارات القبلية والبعدية والفترية (#22 و#24)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقريرا #20 و#24</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">معالجة الفقد التعليمي</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">نتائج اختبارات تحديد المستوى وتقرير تشخيص الفاقد التعليمي (#20 و#24)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">كشوف وسجلات</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">متابعة البرامج العلاجية ومعالجة الفاقد التعليمي.</div></td>
-                <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
-            </tr>
-            <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تشخيص وتصنيف الطالبات وفق أنماط التعلم.</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">كشوف رصد درجات الطالبات وسجل متابعة المستوى التحصيلي لتشخيص المستويات</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -3125,38 +3223,38 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">شاهد #22 و#23</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">نماذج من الاختبارات الورقية</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">نماذج من الاختبارات الورقية (#22 و#23)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقارير رصد درجات</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">نماذج من الاختبارات الالكترونية</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">تقرير رصد درجات الاختبار الإلكتروني ونماذج من الاختبارات التشخيصية والبنائية</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">موثق بالقسم 4</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">ملفات إنجاز الطالب</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">ملفات إنجاز الطالبات الموثقة</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقرير #21 / القسم 4</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">المهام الأدائية والمشاريع</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">المهام الأدائية والمشاريع (#21)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
-                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true"></div></td>
+                <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">تقارير #7، #8، #9</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
-                <td class="col-empty check-cell" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:16px;">تطبيق أدوات التقويم البديل والبنائي السريع (بطاقة الخروج 3-2-1، الدقيقة الواحدة، 1-2-3).</div></td>
+                <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">التقويم البديل والبنائي السريع (الدقيقة الواحدة #7، بطاقة الخروج 3-2-1 #8، واستراتيجية 1-2-3 #9)</div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -3180,7 +3278,7 @@
 </template>
 
 <script>
-const DEFAULT_CONTENT_VERSION = '2026-11-25-v2';
+const DEFAULT_CONTENT_VERSION = '2026-11-26-v3';
 let hasUserEdited = false;
 let pendingConfirmCb = null;
 
@@ -3370,7 +3468,7 @@ function switchPortfolioModel(targetModel, silent = false) {
             const raw = localStorage.getItem(getModelStorageKey(activePortfolioModel));
             if (raw) {
                 const parsed = JSON.parse(raw);
-                if (parsed && parsed.pagesHTML && (!parsed.version || parsed.version === DEFAULT_CONTENT_VERSION)) {
+                if (parsed && parsed.pagesHTML && parsed.version === DEFAULT_CONTENT_VERSION) {
                     nextHtml = parsed.pagesHTML;
                 }
             }
@@ -4633,7 +4731,7 @@ window.addEventListener('load', () => {
     if (raw) {
         try {
             const parsed = JSON.parse(raw);
-            if (parsed && (!parsed.version || parsed.version === DEFAULT_CONTENT_VERSION)) {
+            if (parsed && parsed.version === DEFAULT_CONTENT_VERSION) {
                 showAppConfirm('يوجد حفظ سابق', 'يوجد تعديلات محفوظة مسبقاً في المتصفح. هل تريد استرجاعها؟', () => {
                     loadData();
                 });
