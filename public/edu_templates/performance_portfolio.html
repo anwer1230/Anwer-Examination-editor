@@ -95,7 +95,15 @@
     .row-witness-attachments {
         margin-top: 5px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
     }
-    .row-witness-attachments img {
+    .row-witness-attachments.qr-grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 5px;
+        margin-top: 6px;
+        width: 100%;
+    }
+    .row-witness-attachments > img,
+    .row-witness-attachments > .editable-img-wrap > img {
         width: 58px; height: 42px; object-fit: cover; border-radius: 5px;
         border: 1px solid var(--border-color); background: #fff; cursor: pointer;
     }
@@ -104,7 +112,27 @@
         border: 1px solid var(--border-color); border-radius: 6px; padding: 3px 6px;
         font-size: 10px; font-weight: 700; color: var(--dark-teal);
     }
-    .qr-code-slot canvas, .qr-code-slot img { display: block; border-radius: 3px; }
+    .row-witness-attachments.qr-grid-3 .row-qr-pill {
+        display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+        gap: 3px; background: #ffffff; border: 1px solid var(--border-color);
+        border-radius: 7px; padding: 4px 4px 3px; text-align: center;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+    }
+    .row-qr-slot-wrap {
+        background: #ffffff; padding: 2px; border: 1px dashed #cbd5e1; border-radius: 4px;
+        display: inline-flex; align-items: center; justify-content: center;
+    }
+    .row-qr-label {
+        font-size: 9px; font-weight: 800; color: var(--dark-teal);
+        text-decoration: none; line-height: 1.25; display: block; width: 100%;
+        word-break: break-word;
+    }
+    .row-qr-label:hover { text-decoration: underline; color: var(--primary-teal); }
+    .qr-code-slot canvas, .qr-code-slot img { display: block; border-radius: 2px; }
+    .row-qr-pill .qr-code-slot img {
+        width: 42px !important; height: 42px !important;
+        object-fit: contain !important; border: none !important; border-radius: 2px !important;
+    }
     .strip-header-row {
         display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
     }
@@ -1608,7 +1636,34 @@
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">سجل متابعة الدروس</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">سجل متابعة إعداد الدروس وتصحيح الواجبات والاختبارات</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">سجل متابعة إعداد الدروس وتصحيح الواجبات والاختبارات
+                    <div class="row-witness-attachments qr-grid-3" contenteditable="false">
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1urZ5OA8cZr9CQcKG9Y1l-N0jIbkqMeVW/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="سجل متابعة الدروس والواجبات (1)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1urZ5OA8cZr9CQcKG9Y1l-N0jIbkqMeVW/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1urZ5OA8cZr9CQcKG9Y1l-N0jIbkqMeVW/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">سجل متابعة الدروس والواجبات (1)</a>
+                        </div>
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1YG0Nl8hhYIpEgrSyTZtDUR7_aU2uJbWc/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="سجل متابعة الدروس والواجبات (2)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1YG0Nl8hhYIpEgrSyTZtDUR7_aU2uJbWc/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1YG0Nl8hhYIpEgrSyTZtDUR7_aU2uJbWc/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">سجل متابعة الدروس والواجبات (2)</a>
+                        </div>
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1MoWvI2PdqnNCuckDuhd2mayFEg91huJ3/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="سجل متابعة الدروس والواجبات (3)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1MoWvI2PdqnNCuckDuhd2mayFEg91huJ3/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1MoWvI2PdqnNCuckDuhd2mayFEg91huJ3/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">سجل متابعة الدروس والواجبات (3)</a>
+                        </div>
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1lpdljaVELsj-Bv_pYfhQmHbNxP0HL7jb/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="سجل متابعة الدروس والواجبات (4)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1lpdljaVELsj-Bv_pYfhQmHbNxP0HL7jb/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1lpdljaVELsj-Bv_pYfhQmHbNxP0HL7jb/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">سجل متابعة الدروس والواجبات (4)</a>
+                        </div>
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1wh2topSLeiW8tR3CJwhk-kxznMw8zNjy/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="سجل متابعة الدروس والواجبات (5)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1wh2topSLeiW8tR3CJwhk-kxznMw8zNjy/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1wh2topSLeiW8tR3CJwhk-kxznMw8zNjy/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">سجل متابعة الدروس والواجبات (5)</a>
+                        </div>
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1h64P41jtkobKZuW35_QayEL2cOuDMVOE/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="سجل متابعة الدروس والواجبات (6)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1h64P41jtkobKZuW35_QayEL2cOuDMVOE/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1h64P41jtkobKZuW35_QayEL2cOuDMVOE/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">سجل متابعة الدروس والواجبات (6)</a>
+                        </div>
+                    </div>
+                </div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
         </tbody>
@@ -2162,7 +2217,34 @@
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">سجل الدروس #13</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">سجل إعداد الدروس اليومية والتحضير الإلكتروني عبر منصة مدرستي</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15.5px;">سجل إعداد الدروس اليومية والتحضير الإلكتروني عبر منصة مدرستي
+                    <div class="row-witness-attachments qr-grid-3" contenteditable="false">
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1J6RL6EC7cL3nd6XkrhZcmE_-5r0mvWck/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="تحضير درس إلكتروني - مدرستي (1)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1J6RL6EC7cL3nd6XkrhZcmE_-5r0mvWck/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1J6RL6EC7cL3nd6XkrhZcmE_-5r0mvWck/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">تحضير درس إلكتروني - مدرستي (1)</a>
+                        </div>
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1IHOfEw-GmV5fszZ4C9UdcyGMaiOhwxPG/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="تحضير درس إلكتروني - مدرستي (2)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1IHOfEw-GmV5fszZ4C9UdcyGMaiOhwxPG/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1IHOfEw-GmV5fszZ4C9UdcyGMaiOhwxPG/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">تحضير درس إلكتروني - مدرستي (2)</a>
+                        </div>
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1aZFYA91iR0NtLagjrH6Bbvh-A8SW1qRT/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="تحضير درس إلكتروني - مدرستي (3)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1aZFYA91iR0NtLagjrH6Bbvh-A8SW1qRT/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1aZFYA91iR0NtLagjrH6Bbvh-A8SW1qRT/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">تحضير درس إلكتروني - مدرستي (3)</a>
+                        </div>
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1wXcEF1c-yc7R0mqLQsrZ2hSkvSjhwpBe/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="تحضير درس إلكتروني - مدرستي (4)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1wXcEF1c-yc7R0mqLQsrZ2hSkvSjhwpBe/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1wXcEF1c-yc7R0mqLQsrZ2hSkvSjhwpBe/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">تحضير درس إلكتروني - مدرستي (4)</a>
+                        </div>
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1B3qsK4laaEgFJgLzRtNnJBpMBLbEF9En/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="تحضير درس إلكتروني - مدرستي (5)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1B3qsK4laaEgFJgLzRtNnJBpMBLbEF9En/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1B3qsK4laaEgFJgLzRtNnJBpMBLbEF9En/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">تحضير درس إلكتروني - مدرستي (5)</a>
+                        </div>
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1l6FNnO0XLG1gSBtiu4BFAjI1nidsZv2m/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="تحضير درس إلكتروني - مدرستي (6)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1l6FNnO0XLG1gSBtiu4BFAjI1nidsZv2m/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1l6FNnO0XLG1gSBtiu4BFAjI1nidsZv2m/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">تحضير درس إلكتروني - مدرستي (6)</a>
+                        </div>
+                    </div>
+                </div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
@@ -2234,7 +2316,34 @@
                 <td class="col-type check-cell" onclick="toggleRowCell(this)"><div class="cell-content" contenteditable="true">عروض #17 و#14</div></td>
                 <td class="col-empty check-cell" onclick="toggleCheck(this)"></td>
                 <td class="col-empty check-cell checked" onclick="toggleCheck(this)">✔</td>
-                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">نماذج من عروض الدروس التفاعلية (PowerPoint وCanva في #14 و#17)</div></td>
+                <td class="col-item"><div class="cell-content" contenteditable="true" style="text-align:right;font-weight:900;font-size:15px;">نماذج من عروض الدروس التفاعلية (PowerPoint وCanva في #14 و#17)
+                    <div class="row-witness-attachments qr-grid-3" contenteditable="false">
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1VSU1NNNZhi-RZ3wC5pEBfSABHFFPKQ6l/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="عرض درس تفاعلي (1)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1VSU1NNNZhi-RZ3wC5pEBfSABHFFPKQ6l/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1VSU1NNNZhi-RZ3wC5pEBfSABHFFPKQ6l/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">عرض درس تفاعلي (1)</a>
+                        </div>
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1Q9-AoCIragV-UwhVR1Yw-kMohA767d2e/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="عرض درس تفاعلي (2)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1Q9-AoCIragV-UwhVR1Yw-kMohA767d2e/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1Q9-AoCIragV-UwhVR1Yw-kMohA767d2e/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">عرض درس تفاعلي (2)</a>
+                        </div>
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1nt09_P4Ny9VP0yC2dsPeQrCo40Y7MAGw/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="عرض درس تفاعلي (3)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1nt09_P4Ny9VP0yC2dsPeQrCo40Y7MAGw/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1nt09_P4Ny9VP0yC2dsPeQrCo40Y7MAGw/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">عرض درس تفاعلي (3)</a>
+                        </div>
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1AuSZvLgK6rzmyIiz1MhRakSTJLUsyrKg/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="عرض درس تفاعلي (4)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1AuSZvLgK6rzmyIiz1MhRakSTJLUsyrKg/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1AuSZvLgK6rzmyIiz1MhRakSTJLUsyrKg/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">عرض درس تفاعلي (4)</a>
+                        </div>
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1fUnpuCSbtwSnmDZKncSFssmhCh0AHxqx/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="عرض درس تفاعلي (5)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1fUnpuCSbtwSnmDZKncSFssmhCh0AHxqx/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1fUnpuCSbtwSnmDZKncSFssmhCh0AHxqx/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">عرض درس تفاعلي (5)</a>
+                        </div>
+                        <div class="row-qr-pill" data-url="https://docs.google.com/presentation/d/1cljTfRLDamYr8ZD-XLMaiyNli0Y3ev6e/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-title="عرض درس تفاعلي (6)">
+                            <span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="https://docs.google.com/presentation/d/1cljTfRLDamYr8ZD-XLMaiyNli0Y3ev6e/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" data-qr-size="42"></span></span>
+                            <a class="row-qr-label" href="https://docs.google.com/presentation/d/1cljTfRLDamYr8ZD-XLMaiyNli0Y3ev6e/edit?usp=drivesdk&amp;ouid=115534488526326308724&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener noreferrer">عرض درس تفاعلي (6)</a>
+                        </div>
+                    </div>
+                </div></td>
                 <td class="action-cell edit-only"><button class="row-del-btn" onclick="delRow(this)">✕</button></td>
             </tr>
             <tr>
@@ -2606,8 +2715,8 @@
 </div>
 
 <script>
-const DEFAULT_CONTENT_VERSION = '2026-11-27-v4';
-const ACCEPTED_CONTENT_VERSIONS = new Set(['2026-11-26-v3', '2026-11-27-v4']);
+const DEFAULT_CONTENT_VERSION = '2026-11-27-v5';
+const ACCEPTED_CONTENT_VERSIONS = new Set(['2026-11-27-v5']);
 const PRIMARY_STORAGE_KEY = 'perf_form_data_v4';
 let hasUserEdited = false;
 let pendingConfirmCb = null;
@@ -4757,7 +4866,8 @@ function saveWitnessEditor() {
             itemEl.appendChild(titleNode);
             if (witnessEditorState.images.length || witnessEditorState.links.length) {
                 const attDiv = document.createElement('div');
-                attDiv.className = 'row-witness-attachments';
+                attDiv.className = 'row-witness-attachments' + (!witnessEditorState.images.length && witnessEditorState.links.length >= 3 ? ' qr-grid-3' : '');
+                attDiv.setAttribute('contenteditable', 'false');
                 witnessEditorState.images.forEach((src) => {
                     const img = document.createElement('img');
                     img.src = src;
@@ -4769,7 +4879,7 @@ function saveWitnessEditor() {
                     pill.className = 'row-qr-pill';
                     pill.setAttribute('data-url', lk.url);
                     pill.setAttribute('data-title', lk.title);
-                    pill.innerHTML = `<span class="qr-code-slot" data-url="${escAttr(lk.url)}" data-qr-size="38"></span><span>${escAttr(lk.title)}</span>`;
+                    pill.innerHTML = `<span class="row-qr-slot-wrap"><span class="qr-code-slot" data-url="${escAttr(lk.url)}" data-qr-size="42"></span></span><a class="row-qr-label" href="${escAttr(lk.url)}" target="_blank" rel="noopener noreferrer">${escAttr(lk.title)}</a>`;
                     attDiv.appendChild(pill);
                 });
                 itemEl.appendChild(attDiv);
