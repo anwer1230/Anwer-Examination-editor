@@ -24,6 +24,7 @@ import {
   Save,
   Sparkles,
   Trash2,
+  Upload,
   X,
 } from 'lucide-react';
 
@@ -381,7 +382,7 @@ export default function App() {
     | 'printDocument'
     | 'printActivities'
     | 'resetAll'
-    | 'switchPortfolioModel'
+    | 'openModelUploadModal'
     | 'switchReportsModel'
     | 'switchActivitiesModel';
 
@@ -407,9 +408,7 @@ export default function App() {
   const switchToolModel = (nextModel: 'primary' | 'secondary') => {
     setToolModel(nextModel);
     if (!activeTool) return;
-    if (activeTool.id === 'performance_portfolio') {
-      callFrameAction('switchPortfolioModel', nextModel);
-    } else if (activeTool.id === 'school_reports') {
+    if (activeTool.id === 'school_reports') {
       callFrameAction('switchReportsModel', nextModel);
     } else if (activeTool.id === 'activities_portfolio') {
       callFrameAction('switchActivitiesModel', nextModel);
@@ -965,8 +964,7 @@ export default function App() {
                     </div>
                   )}
 
-                  {(activeTool.id === 'performance_portfolio' ||
-                    activeTool.id === 'school_reports' ||
+                  {(activeTool.id === 'school_reports' ||
                     activeTool.id === 'activities_portfolio') && (
                     <div className="inline-flex items-center rounded-md bg-white/12 p-0.5 gap-0.5 ml-1">
                       <button
@@ -1024,6 +1022,17 @@ export default function App() {
                         : 'صفحة جديدة'}
                     </span>
                   </button>
+
+                  {activeTool.id === 'performance_portfolio' && (
+                    <button
+                      type="button"
+                      onClick={() => callFrameAction('openModelUploadModal')}
+                      className="px-2.5 py-1.5 rounded-md bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
+                    >
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>إضافة شاهد / رفع نموذج</span>
+                    </button>
+                  )}
 
                   {activeTool.id === 'school_reports' && (
                     <button
