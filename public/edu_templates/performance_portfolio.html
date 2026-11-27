@@ -348,10 +348,10 @@
         .text-page-box, .table-page { overflow: visible !important; }
         @page { size: A4; margin: 0; }
         .edit-only { display: none !important; }
-        .editable-area { background: transparent !important; outline: none !important; box-shadow: none !important; }
+        .editable-area, [contenteditable] { outline: none !important; box-shadow: none !important; }
         .table-controls { display: none !important; }
         .row-del-btn { display: none !important; }
-        td.action-cell { display: none !important; }
+        th.edit-only, td.action-cell { display: none !important; }
         .add-page-bar { display: none !important; }
         .fmt-bar { display: none !important; }
     }
@@ -381,12 +381,13 @@
     body.print-preview-mode .edit-only,
     body.print-preview-mode .table-controls,
     body.print-preview-mode .row-del-btn,
+    body.print-preview-mode th.edit-only,
     body.print-preview-mode td.action-cell,
     body.print-preview-mode .add-page-bar,
     body.print-preview-mode .fmt-bar { display: none !important; }
     body.print-preview-mode .editable-area,
-    body.print-preview-mode .cell-content {
-        background: transparent !important;
+    body.print-preview-mode .cell-content,
+    body.print-preview-mode [contenteditable] {
         box-shadow: none !important;
         outline: none !important;
         pointer-events: none;
@@ -429,6 +430,7 @@
     body.pdf-exporting .edit-only,
     body.pdf-exporting .table-controls,
     body.pdf-exporting .row-del-btn,
+    body.pdf-exporting th.edit-only,
     body.pdf-exporting td.action-cell,
     body.pdf-exporting .add-page-bar,
     body.pdf-exporting .fmt-bar,
@@ -436,7 +438,8 @@
     body.pdf-exporting .canva-hub-modal { display: none !important; }
     body.pdf-exporting * { animation: none !important; transition: none !important; backdrop-filter: none !important; }
     body.pdf-exporting .editable-area,
-    body.pdf-exporting .cell-content { background: transparent !important; box-shadow: none !important; outline: none !important; }
+    body.pdf-exporting .cell-content,
+    body.pdf-exporting [contenteditable] { box-shadow: none !important; outline: none !important; }
 
     .pdf-overlay {
         display: none; position: fixed; inset: 0; z-index: 20000;
@@ -476,10 +479,22 @@
     /* ===== العناصر القابلة للتعديل ===== */
     .editable-area {
         outline: none; border-radius: 4px; transition: 0.2s;
+    }
+    span.editable-area:not(.linked-report-badge) {
         min-width: 20px; display: inline-block;
     }
-    .editable-area:hover { background: rgba(255,235,150,0.35); }
-    .editable-area:focus { background: rgba(255,235,150,0.6); box-shadow: 0 0 0 2px #f39c12; }
+    @media screen {
+        body:not(.print-preview-mode):not(.pdf-exporting) .editable-area:hover,
+        body:not(.print-preview-mode):not(.pdf-exporting) [contenteditable="true"]:hover {
+            outline: 1.5px dashed rgba(243, 156, 18, 0.72);
+            box-shadow: inset 0 0 0 999px rgba(255, 235, 150, 0.2);
+        }
+        body:not(.print-preview-mode):not(.pdf-exporting) .editable-area:focus,
+        body:not(.print-preview-mode):not(.pdf-exporting) [contenteditable="true"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #f39c12, inset 0 0 0 999px rgba(255, 235, 150, 0.38);
+        }
+    }
     .editable-block { display: block; width: 100%; }
 
     /* ===== شريط التنسيق العائم ===== */
@@ -497,23 +512,33 @@
     .fmt-bar input[type=color] { width: 34px; height: 30px; border: none; border-radius: 5px; cursor: pointer; background: #4a6274; padding: 2px; }
 
     /* ===== الغلاف ===== */
-    .cover-page { border: 2px solid var(--border-color); border-radius: 20px; margin: 20px; height: calc(100% - 40px); display: flex; flex-direction: column; position: relative; }
-    .cover-header { display: flex; justify-content: space-between; padding: 30px; position: relative; z-index: 10; }
-    .cover-header-text { text-align: center; font-weight: 900; line-height: 1.6; font-size: 24px; }
+    .cover-page { border: 2px solid var(--border-color); border-radius: 20px; margin: 20px; height: calc(100% - 40px); display: flex; flex-direction: column; position: relative; background: #ffffff; overflow: hidden; }
+    .cover-header { display: flex; justify-content: space-between; align-items: flex-start; padding: 30px 34px; position: relative; z-index: 10; }
+    .cover-header-text { text-align: center; font-weight: 900; line-height: 1.6; font-size: 24px; min-width: 310px; }
+    .cover-header-text h2, .cover-header-text h3 { display: block; }
     .logo-moe { text-align: center; color: #009688; }
     .logo-moe .dots { font-size: 40px; letter-spacing: 5px; font-weight: bold; line-height: 1; }
     .logo-moe h3 { color: #009688; margin: 0; font-size: 26px; font-weight: 900; }
     .logo-moe p { font-size: 12px; color: #666; letter-spacing: 1px; margin: 0; font-weight: 700; }
-    .banner { background-color: var(--primary-teal); color: black; text-align: center; padding: 40px 20px; margin-top: 80px; font-size: 54px; font-weight: 900; position: relative; z-index: 10; }
-    .papers-graphic { position: absolute; top: 120px; left: 40px; width: 180px; height: 220px; z-index: 1; }
-    .paper { position: absolute; background: white; border: 1px solid #ccc; width: 150px; height: 200px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; padding-top: 20px; }
+    .banner {
+        display: block; width: 100%;
+        background-color: #62929e;
+        background-color: var(--primary-teal);
+        background-image: linear-gradient(135deg, var(--primary-teal) 0%, var(--dark-teal) 100%);
+        color: #ffffff; text-align: center; padding: 38px 20px; margin-top: 64px;
+        font-size: 52px; font-weight: 900; position: relative; z-index: 10;
+        border-top: 4px solid var(--light-teal); border-bottom: 4px solid var(--light-teal);
+        text-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    }
+    .papers-graphic { position: absolute; top: 475px; left: 52px; width: 175px; height: 210px; z-index: 2; opacity: 0.78; pointer-events: none; }
+    .paper { position: absolute; background: white; border: 1.5px solid #cbd5e1; width: 145px; height: 195px; box-shadow: 2px 3px 8px rgba(0,0,0,0.09); display: flex; flex-direction: column; align-items: center; padding-top: 20px; border-radius: 6px; }
     .paper-1 { transform: rotate(-15deg); top: 10px; left: 10px; }
     .paper-2 { transform: rotate(5deg); top: 20px; left: 30px; }
-    .line { width: 80%; height: 3px; background: var(--primary-teal); margin-bottom: 10px; opacity: 0.5; }
-    .box { width: 20px; height: 20px; border: 2px solid var(--primary-teal); margin-bottom: 10px; margin-right: 20px; align-self: flex-end; opacity: 0.5; }
-    .cover-footer { margin-top: auto; text-align: center; padding-bottom: 50px; position: relative; z-index: 10; }
-    .cover-footer h2 { margin-bottom: 10px; font-size: 30px; font-weight: 900; }
-    .data-text { color: var(--primary-teal); font-size: 26px; font-weight: 900; margin-bottom: 20px; display: inline-block; border-bottom: 2px dashed #ccc; padding: 0 10px 5px 10px; }
+    .line { width: 80%; height: 3px; background: var(--primary-teal); margin-bottom: 10px; opacity: 0.55; }
+    .box { width: 20px; height: 20px; border: 2px solid var(--primary-teal); margin-bottom: 10px; margin-right: 20px; align-self: flex-end; opacity: 0.55; }
+    .cover-footer { margin-top: auto; text-align: center; padding-bottom: 48px; position: relative; z-index: 10; }
+    .cover-footer h2 { display: block; width: 100%; margin-bottom: 8px; font-size: 28px; font-weight: 900; color: var(--dark-teal); }
+    .data-text { color: var(--primary-teal); font-size: 26px; font-weight: 900; margin-bottom: 18px; display: inline-block; border-bottom: 2px dashed var(--light-teal); padding: 0 14px 5px 14px; }
 
     /* ===== الأدعية ===== */
     .prayer-page { background-color: white; padding: 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center; }
@@ -523,7 +548,7 @@
 
     /* ===== المحتويات ===== */
     .toc { padding: 40px 50px; height: 100%; border-left: 15px solid var(--primary-teal); border-right: 15px solid var(--primary-teal); border-radius: 30px; margin: 20px; border-top: 15px solid var(--light-teal); border-bottom: 15px solid var(--dark-teal); background: white; display: flex; flex-direction: column; justify-content: center; }
-    .toc h2 { text-align: center; color: var(--primary-teal); margin-bottom: 25px; font-size: 36px; font-family: var(--font-academic); font-weight: 700; }
+    .toc h2 { text-align: center; color: var(--primary-teal); margin-bottom: 25px; font-size: 36px; font-family: var(--font-academic); font-weight: 700; display: block; }
     .toc ul { list-style-type: none; padding-right: 20px; }
     .toc li { margin-bottom: 12px; font-size: 21px; font-weight: 700; font-family: var(--font-academic); color: #111; border-bottom: 1px dashed #ddd; padding-bottom: 4px; display: flex; align-items: center; }
     .toc li::before { content: '❖'; color: var(--primary-teal); margin-left: 15px; font-size: 18px; }
@@ -552,38 +577,73 @@
     .text-page-box ul { padding-right: 25px; margin-bottom: 5px; }
 
     /* ===== الجداول ===== */
-    .table-page { padding: 24px 36px; min-height: 297mm; display: flex; flex-direction: column; overflow-y: auto; }
-    .table-title { font-size: 24px; font-weight: 700; margin-bottom: 10px; color: var(--primary-teal); text-align: right; border-bottom: 2px solid #eee; padding-bottom: 8px; font-family: var(--font-academic); }
-    table { width: 100%; border-collapse: collapse; margin-top: 6px; }
-    th, td { border: 1px solid var(--border-color); padding: 6px 8px; text-align: center; font-size: 15px; font-weight: 700; }
-    th { background-color: #f0f4f5; font-weight: 700; color: var(--dark-teal); font-family: var(--font-academic); font-size: 16px; }
-    td.col-empty { width: 12%; }
-    td.col-type { width: 18%; }
-    td.col-item { width: 58%; text-align: right; font-weight: 900; }
-    .check-mark { color: var(--check-color); font-size: 24px; font-weight: 900; }
+    .table-page { padding: 18px 28px; min-height: 297mm; display: flex; flex-direction: column; overflow-y: auto; }
+    .table-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: var(--primary-teal); text-align: right; border-bottom: 2px solid var(--border-color); padding-bottom: 6px; font-family: var(--font-academic); display: block; }
+    .table-page table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 4px; direction: rtl; background: #ffffff; }
+    .table-page thead { display: table-header-group; }
+    .table-page th, .table-page td {
+        border: 1.5px solid var(--border-color); padding: 4.5px 7px;
+        text-align: center; vertical-align: middle; font-size: 14px; font-weight: 700;
+        word-wrap: break-word; overflow-wrap: break-word;
+    }
+    .table-page th {
+        display: table-cell;
+        background-color: #62929e;
+        background-color: var(--primary-teal);
+        background-image: linear-gradient(135deg, var(--primary-teal) 0%, var(--dark-teal) 100%);
+        color: #ffffff; font-weight: 800; font-family: var(--font-academic);
+        font-size: 15px; padding: 7px 6px; line-height: 1.3;
+    }
+    .table-page tbody tr:nth-child(even) { background-color: #f6fafb; }
+    .table-page th:nth-child(1), td.col-type { width: 17%; }
+    .table-page th:nth-child(2), .table-page th:nth-child(3), td.col-empty { width: 9%; }
+    .table-page th:nth-child(4), td.col-item { width: 53%; text-align: right; font-weight: 900; }
+    .table-page th.edit-only, td.action-cell { width: 12%; }
+    @media print {
+        .table-page th:nth-child(1), td.col-type { width: 19% !important; }
+        .table-page th:nth-child(2), .table-page th:nth-child(3), td.col-empty { width: 10% !important; }
+        .table-page th:nth-child(4), td.col-item { width: 61% !important; }
+        .table-page th.edit-only, td.action-cell { display: none !important; }
+    }
+    body.print-preview-mode .table-page th:nth-child(1),
+    body.print-preview-mode td.col-type,
+    body.pdf-exporting .table-page th:nth-child(1),
+    body.pdf-exporting td.col-type { width: 19% !important; }
+    body.print-preview-mode .table-page th:nth-child(2),
+    body.print-preview-mode .table-page th:nth-child(3),
+    body.print-preview-mode td.col-empty,
+    body.pdf-exporting .table-page th:nth-child(2),
+    body.pdf-exporting .table-page th:nth-child(3),
+    body.pdf-exporting td.col-empty { width: 10% !important; }
+    body.print-preview-mode .table-page th:nth-child(4),
+    body.print-preview-mode td.col-item,
+    body.pdf-exporting .table-page th:nth-child(4),
+    body.pdf-exporting td.col-item { width: 61% !important; }
+    .check-mark { color: var(--check-color); font-size: 20px; font-weight: 900; line-height: 1; }
     .check-cell { cursor: pointer; user-select: none; transition: 0.15s; }
     .check-cell:hover { background: #fff3cd; }
-    .check-cell.checked { color: var(--check-color); font-size: 24px; font-weight: 900; }
-    .cell-content { outline: none; min-height: 18px; font-size: 14px; color: #333; }
+    .check-cell.checked { color: var(--check-color); font-size: 20px; font-weight: 900; line-height: 1; }
+    .cell-content { outline: none; min-height: 16px; font-size: 13.5px; line-height: 1.38; color: #1e293b; }
+    td.col-item .cell-content { text-align: right !important; font-weight: 800; color: #0f172a; }
 
     /* ===== أزرار التحكم في الجداول ===== */
-    .table-controls { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+    .table-controls { display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
     .table-controls button { background: var(--primary-teal); color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-family: inherit; font-size: 11px; font-weight: 700; }
     .table-controls button:hover { background: var(--dark-teal); }
     .table-controls button.del { background: #c0392b; }
     .table-controls button.del:hover { background: #e74c3c; }
     .row-del-btn { background: #c0392b; color: white; border: none; border-radius: 3px; width: 22px; height: 22px; cursor: pointer; font-size: 13px; font-weight: 900; line-height: 1; }
     .row-del-btn:hover { background: #e74c3c; }
-    td.action-cell { width: 35px; padding: 2px; }
+    td.action-cell { padding: 2px; }
 
     /* ===== البيانات العامة ===== */
     .data-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-top: 30px; }
-    .data-cell { border: 2px solid var(--border-color); padding: 15px; display: flex; align-items: center; font-weight: 900; font-size: 20px; }
-    .data-cell.label { background-color: #f0f4f5; justify-content: flex-start; }
+    .data-cell { border: 2px solid var(--border-color); padding: 14px 16px; display: flex; align-items: center; font-weight: 900; font-size: 19px; background: #ffffff; }
+    .data-cell.label { background-color: #edf4f6; color: var(--dark-teal); justify-content: flex-start; }
 
     /* ===== الرؤية والرسالة ===== */
-    .vision-box { background-color: #8bb5be; padding: 25px; margin-bottom: 30px; position: relative; border-radius: 5px; font-weight: 900; line-height: 1.8; color: #000; font-size: 22px; }
-    .vision-title { border: 2px solid var(--border-color); border-radius: 20px; padding: 5px 30px; display: inline-block; margin-bottom: -10px; position: relative; z-index: 2; background: white; font-weight: 900; font-size: 24px; }
+    .vision-box { background-color: #cce1e6; border: 2px solid var(--light-teal); padding: 24px; margin-bottom: 28px; position: relative; border-radius: 8px; font-weight: 900; line-height: 1.8; color: #0f172a; font-size: 21px; }
+    .vision-title { border: 2px solid var(--border-color); border-radius: 20px; padding: 5px 30px; display: inline-block; margin-bottom: -10px; position: relative; z-index: 2; background: #ffffff; color: var(--dark-teal); font-weight: 900; font-size: 24px; }
     .tape { position: absolute; width: 80px; height: 25px; background-color: rgba(100, 150, 160, 0.5); }
     .tape-top-left { top: -10px; left: -20px; transform: rotate(-45deg); }
     .tape-bottom-right { bottom: -10px; right: -20px; transform: rotate(-45deg); }
@@ -680,29 +740,31 @@
 
     /* ===== بطاقات التقارير والشواهد المرفقة من ملف التقارير ===== */
     .report-witness-strip {
-        margin-top: 10px;
+        margin-top: 8px;
         display: flex;
         flex-direction: column;
-        gap: 7px;
+        gap: 6px;
     }
     .strip-heading {
         font-family: var(--font-academic);
-        font-size: 16.5px;
+        font-size: 15.5px;
         font-weight: 700;
         color: var(--dark-teal);
         border-right: 4px solid var(--primary-teal);
-        padding: 2px 10px;
-        background: #f0f7f8;
+        padding: 3px 10px;
+        background: #eaf4f6;
         border-radius: 4px;
+        display: block;
+        flex: 1;
     }
     .linked-report-card {
         border: 1.5px solid var(--border-color);
         border-radius: 9px;
-        padding: 8px 11px;
-        background: linear-gradient(135deg, #ffffff 0%, #f4f9fa 100%);
+        padding: 7px 10px;
+        background: linear-gradient(135deg, #ffffff 0%, #f1f8fa 100%);
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 3px;
     }
     .linked-report-head {
         display: flex;
@@ -2916,13 +2978,17 @@ async function exportHTML() {
             extraCss: `
                 body { padding: 18px 0 32px 0 !important; }
                 .pages-wrap { margin-top: 0 !important; }
+                .table-page th:nth-child(1), td.col-type { width: 19% !important; }
+                .table-page th:nth-child(2), .table-page th:nth-child(3), td.col-empty { width: 10% !important; }
+                .table-page th:nth-child(4), td.col-item { width: 61% !important; }
+                .table-page th.edit-only, td.action-cell { display: none !important; }
                 @media print {
                     body { padding: 0 !important; background: #ffffff !important; }
                     .pages-wrap { margin-top: 0 !important; }
                 }
             `,
             onAfterClone: (clone) => {
-                clone.querySelectorAll('.edit-only, .page-tools-bar, .img-edit-actions, .logo-replace-btn, .strip-actions, .witness-card-tools').forEach(n => n.remove());
+                clone.querySelectorAll('.edit-only, .page-tools-bar, .img-edit-actions, .logo-replace-btn, .strip-actions, .witness-card-tools, th.edit-only, td.action-cell').forEach(n => n.remove());
                 clone.querySelectorAll('.page').forEach(p => {
                     p.style.transform = '';
                     p.style.marginBottom = '';
@@ -3113,13 +3179,23 @@ async function exportPDF() {
     document.body.classList.add('pdf-exporting');
 
     const prunePortfolioClone = (clonedDoc) => {
+        try {
+            if (document.documentElement.style.cssText) {
+                clonedDoc.documentElement.style.cssText = document.documentElement.style.cssText;
+            }
+            const srcTheme = document.getElementById('canvaDynamicThemeCss');
+            const dstTheme = clonedDoc.getElementById('canvaDynamicThemeCss');
+            if (srcTheme && dstTheme && srcTheme.textContent) {
+                dstTheme.textContent = srcTheme.textContent;
+            }
+        } catch (e) {}
         const target = clonedDoc.querySelector('[data-h2c-target="1"]');
         if (target) {
             clonedDoc.querySelectorAll('#pagesWrap > *').forEach(node => {
                 if (node !== target && !node.contains(target) && !target.contains(node)) node.remove();
             });
         }
-        clonedDoc.querySelectorAll('.toolbar, .preview-bar, .fmt-bar, .canva-hub-modal, .edu-modal-overlay, .img-lightbox-overlay, .pdf-overlay, .pdf-ready-banner, .preview-page-badge, .edit-only, .page-tools-bar, .img-edit-actions, .logo-replace-btn, .strip-actions, .witness-card-tools').forEach(n => n.remove());
+        clonedDoc.querySelectorAll('.toolbar, .preview-bar, .fmt-bar, .canva-hub-modal, .edu-modal-overlay, .img-lightbox-overlay, .pdf-overlay, .pdf-ready-banner, .preview-page-badge, .edit-only, th.edit-only, td.action-cell, .page-tools-bar, .img-edit-actions, .logo-replace-btn, .strip-actions, .witness-card-tools').forEach(n => n.remove());
     };
 
     try {
@@ -3782,7 +3858,8 @@ function applyCanvaTemplateToContent(tpl, openPreview = true) {
             .logo-moe, .logo-moe h3 { color: ${p} !important; }
             .logo-moe p { color: ${s} !important; }
             .banner {
-                background: linear-gradient(135deg, ${p} 0%, ${s} 100%) !important;
+                background-color: ${p} !important;
+                background-image: linear-gradient(135deg, ${p} 0%, ${s} 100%) !important;
                 color: #ffffff !important;
                 border-top: 4px solid ${a} !important;
                 border-bottom: 4px solid ${a} !important;
@@ -3836,8 +3913,12 @@ function applyCanvaTemplateToContent(tpl, openPreview = true) {
             }
             .table-page th, .table-page td { border-color: ${p}99 !important; }
             .table-page th {
-                background: linear-gradient(135deg, ${p} 0%, ${s} 100%) !important;
+                background-color: ${p} !important;
+                background-image: linear-gradient(135deg, ${p} 0%, ${s} 100%) !important;
                 color: #ffffff !important;
+            }
+            .table-page tbody tr:nth-child(even) {
+                background-color: ${softTint} !important;
             }
             .check-mark, .check-cell.checked { color: ${a} !important; }
             .table-controls button { background: ${p} !important; color: #ffffff !important; }
@@ -4163,7 +4244,7 @@ function enhanceLogoBoxes(rootEl = document) {
     rootEl.querySelectorAll('#pagesWrap .logo-moe').forEach((logoBox) => {
         logoBox.querySelectorAll(':scope > h3, :scope > p').forEach((el) => {
             el.setAttribute('contenteditable', 'true');
-            el.classList.add('editable-area');
+            el.classList.remove('editable-area');
         });
         if (!logoBox.querySelector(':scope > .logo-replace-btn')) {
             const btn = document.createElement('button');
@@ -4183,8 +4264,8 @@ function enhancePortfolioEditability() {
     const pagesWrap = document.getElementById('pagesWrap');
     if (!pagesWrap) return;
 
-    // 1. جعل النصوص والعناوين الثابتة قابلة للتعديل المباشر
-    const editableSelectors = [
+    // 1. جعل النصوص والعناوين الثابتة قابلة للتعديل المباشر دون إضافة .editable-area لعناصر الهيكل والجداول
+    const structuralEditableSelectors = [
         '.cover-header-text h2',
         '.cover-header-text h3',
         '.cover-footer h2',
@@ -4194,7 +4275,9 @@ function enhancePortfolioEditability() {
         '.section-title',
         '.text-page-header h2',
         '.vision-title',
+        '.data-cell',
         '.data-cell.label',
+        '.table-title',
         '.table-page thead th:not(.edit-only)',
         '.strip-heading',
         '.linked-report-badge',
@@ -4203,10 +4286,11 @@ function enhancePortfolioEditability() {
         '.uploaded-model-badge',
         '.uploaded-model-caption'
     ];
-    pagesWrap.querySelectorAll(editableSelectors.join(', ')).forEach((el) => {
+    pagesWrap.querySelectorAll(structuralEditableSelectors.join(', ')).forEach((el) => {
         if (!el.classList.contains('edit-only')) {
             el.setAttribute('contenteditable', 'true');
-            el.classList.add('editable-area');
+            // إزالة editable-area لتفادي تشويه تخطيط block/flex/table-cell أو إزالة الخلفيات
+            el.classList.remove('editable-area');
         }
     });
 
@@ -4267,9 +4351,13 @@ function enhancePortfolioEditability() {
 
 function enhanceWitnessCard(card) {
     if (!card) return;
-    card.querySelectorAll('.linked-report-title, .linked-report-badge, .linked-report-meta, .linked-report-summary').forEach((el) => {
+    card.querySelectorAll('.linked-report-title, .linked-report-meta, .linked-report-summary').forEach((el) => {
         el.setAttribute('contenteditable', 'true');
         el.classList.add('editable-area');
+    });
+    card.querySelectorAll('.linked-report-badge').forEach((el) => {
+        el.setAttribute('contenteditable', 'true');
+        el.classList.remove('editable-area');
     });
     if (!card.querySelector(':scope > .witness-card-tools')) {
         const tools = document.createElement('div');
@@ -4384,8 +4472,8 @@ function restoreDefaultMoeLogo(btn) {
     if (!logoBox) return;
     logoBox.innerHTML = `
         <div class="dots">••• •••<br>••• •••</div>
-        <h3 class="editable-area" contenteditable="true">وزارة التعليم</h3>
-        <p class="editable-area" contenteditable="true">Ministry of Education</p>
+        <h3 contenteditable="true">وزارة التعليم</h3>
+        <p contenteditable="true">Ministry of Education</p>
         <button type="button" class="logo-replace-btn edit-only" onclick="event.stopPropagation(); replaceLogoGraphic(this)">🖼️ تغيير الشعار</button>
     `;
     markUserEdited();
