@@ -25,6 +25,7 @@ import {
   getGeminiClient,
   getVideoJob,
   parseHtmlDocument,
+  parseHtmlToSlides,
   pptxChatReply,
   saveUploadedStudioAudio,
   startHtmlToVideoRender,
@@ -1057,10 +1058,19 @@ async function startServer() {
       void warmCanvaImageCache();
     }
 
+    const includeStudio = body.include_studio === true || body.include_studio === 'true' || body.include_studio === '1';
     const combinedMap = new Map<string, CanvaTemplate & { thumb_url?: string }>();
+    const studioAsCanva: CanvaTemplate[] = includeStudio
+      ? PRESENTATION_CANVA_TEMPLATES.map((t) => ({
+          ...t,
+          font_family: t.font_family || t.font_name || 'Cairo',
+          heading_font: t.heading_font || 'Cairo',
+          badge_text: t.badge_text || `Canva ${t.category || 'عرض'}`,
+        }))
+      : [];
     const sourceList = importedTemplate
-      ? [importedTemplate, ...fetched, ...PREPARED_EDU_CANVA_TEMPLATES]
-      : [...fetched, ...PREPARED_EDU_CANVA_TEMPLATES];
+      ? [importedTemplate, ...fetched, ...PREPARED_EDU_CANVA_TEMPLATES, ...studioAsCanva]
+      : [...fetched, ...PREPARED_EDU_CANVA_TEMPLATES, ...studioAsCanva];
     for (const item of sourceList) {
       if (!combinedMap.has(item.id)) {
         const fb = item.fallback_preview_data_url || buildCanvaSvgDataUrl(item);
@@ -1363,6 +1373,40 @@ async function startServer() {
   });
 
   // ================= API: Presentation & Document Studio (منشئ العروض والمستندات الاحترافي) =================
+  const getAllStudioCanvaTemplates = (extra?: unknown): StudioCanvaTemplate[] => {
+    const out: StudioCanvaTemplate[] = [];
+    if (extra && typeof extra === 'object') {
+      const e = extra as Partial<StudioCanvaTemplate>;
+      if (e.id && e.colors) {
+        out.push({
+          id: String(e.id),
+          name: String(e.name || e.id),
+          category: String(e.category || 'Canva'),
+          source: String(e.source || 'Canva Studio'),
+          layout: String(e.layout || 'modern_card'),
+          font_name: String(e.font_name || e.font_family || 'Cairo'),
+          font_family: String(e.font_family || e.font_name || 'Cairo'),
+          description: String(e.description || ''),
+          colors: e.colors,
+          preview_image: e.preview_image,
+          canva_url: e.canva_url,
+          badge_text: e.badge_text,
+        });
+      }
+    }
+    for (const t of loadStudioCustomCanva()) out.push(t);
+    for (const t of loadFetchedCanva()) {
+      out.push({ ...t, font_name: t.font_family || 'Cairo' });
+    }
+    for (const t of PREPARED_EDU_CANVA_TEMPLATES) {
+      out.push({ ...t, font_name: t.font_family || 'Cairo' });
+    }
+    for (const t of PRESENTATION_CANVA_TEMPLATES) {
+      out.push(t);
+    }
+    return out;
+  };
+
   app.get('/api/pptx/ai_status', (_req, res) => {
     const ai = getGeminiClient();
     res.json({
@@ -1485,7 +1529,7 @@ async function startServer() {
         ...templateImages,
       ];
 
-      const customTemplates = loadStudioCustomCanva();
+      const customTemplates = getAllStudioCanvaTemplates(body.canva_template_data);
       const built = await buildPptxFile({
         outputDir: STUDIO_OUTPUTS_DIR,
         slides,
@@ -1537,32 +1581,13 @@ async function startServer() {
     }
     const t0 = Date.now();
     try {
-      const parsed = parseHtmlDocument(html);
+      const parsed = parseHtmlToSlides(html, body.title ? String(body.title) : undefined);
       const title = String(body.title || parsed.title || 'عرض_من_HTML').trim();
-      const slides: SlideItem[] = [
-        {
-          title,
-          bullets: parsed.sections[0]?.paragraphs.slice(0, 3) || ['عرض تقديمي مستخرج من HTML'],
-          slide_type: 'title',
-        },
-      ];
-      for (const sec of parsed.sections) {
-        const bullets = [...sec.bullets, ...sec.paragraphs].slice(0, 6);
-        if (bullets.length > 0) {
-          slides.push({ title: sec.heading || title, bullets, slide_type: 'content' });
-        }
-        if (sec.table && sec.table.length > 0) {
-          slides.push({
-            title: sec.heading || 'جدول البيانات',
-            bullets: [],
-            slide_type: 'table',
-            table_data: sec.table,
-          });
-        }
-      }
+      const slides: SlideItem[] = parsed.slides;
 
       const themeColor = String(body.canva_template_id || body.theme_color || 'blue');
-      const customTemplates = loadStudioCustomCanva();
+      const customTemplates = getAllStudioCanvaTemplates(body.canva_template_data);
+      const matchedTpl = customTemplates.find((t) => t.id === themeColor);
       const rawCover = body.cover_data && typeof body.cover_data === 'object' ? body.cover_data : null;
       const allImgs = [
         ...(rawCover?.logo_image ? [String(rawCover.logo_image)] : []),
@@ -1573,25 +1598,34 @@ async function startServer() {
         slides,
         themeColor,
         customTemplates,
-        coverData: rawCover,
+        coverData: rawCover
+          ? {
+              org: String(rawCover.organization || rawCover.org || ''),
+              presenter: String(rawCover.presenter || ''),
+              subtitle: String(rawCover.subtitle || ''),
+              date: String(rawCover.date || ''),
+              logo: String(rawCover.logo || ''),
+            }
+          : null,
         templateImages: allImgs,
         fontName: String(body.font_name || ''),
         bodyFontSize: Number(body.body_font_size || 22) || 22,
         filenamePrefix: title,
+        layoutOverride: matchedTpl?.layout,
       });
 
-      const elapsed = Math.max(30, Date.now() - t0);
+      const elapsed = Math.max(20, Date.now() - t0);
       const metrics = buildPipelineMetrics({
         operation: `تحويل HTML إلى PowerPoint (${slides.length} شريحة)`,
         stages: [
-          { key: 'extract', stage: '1. تحليل بنية HTML', shortName: 'HTML', duration_ms: 15 },
-          { key: 'ai', stage: '2. تحويل الأقسام لشرائح', shortName: 'التحويل', duration_ms: 18 },
-          { key: 'charts', stage: '3. بناء الجداول والتنسيق', shortName: 'التنسيق', duration_ms: 16 },
-          { key: 'render', stage: '4. تصدير ملف PPTX', shortName: 'التصدير', duration_ms: elapsed },
+          { key: 'extract', stage: '1. تحليل بنية HTML', shortName: 'HTML', duration_ms: Math.max(5, Math.round(elapsed * 0.2)) },
+          { key: 'ai', stage: '2. تحويل الأقسام لشرائح', shortName: 'التحويل', duration_ms: Math.max(5, Math.round(elapsed * 0.25)) },
+          { key: 'charts', stage: '3. تطبيق قالب كانفا', shortName: 'القالب', duration_ms: Math.max(5, Math.round(elapsed * 0.25)) },
+          { key: 'render', stage: '4. تصدير ملف PPTX', shortName: 'التصدير', duration_ms: Math.max(8, Math.round(elapsed * 0.3)) },
         ],
-        wordCount: cheerio.load(html)('body').text().trim().split(/\s+/).length,
+        wordCount: parsed.wordCount || 1,
         itemsCount: slides.length,
-        provider: 'محرك HTML إلى PPTX',
+        provider: `محرك HTML إلى PPTX السريع (${built.themeName})`,
       });
 
       res.json({
@@ -1601,6 +1635,7 @@ async function startServer() {
         slides,
         num_slides: slides.length,
         theme_applied: built.themeName,
+        applied_design: matchedTpl || { id: themeColor, name: built.themeName, layout: built.layout },
         pipeline_metrics: metrics,
       });
     } catch (err) {
@@ -1629,15 +1664,22 @@ async function startServer() {
 
   // Presentation Studio Canva Templates & Google Accounts
   app.get('/api/pptx/canva/templates', (_req, res) => {
-    const custom = loadStudioCustomCanva();
-    const templates = [...custom, ...PRESENTATION_CANVA_TEMPLATES].map((t) => {
-      const svgUrl = buildCanvaSvgDataUrl(t);
-      return {
-        ...t,
-        safe_preview_data_url: t.safe_preview_data_url || svgUrl,
-        fallback_preview_data_url: t.fallback_preview_data_url || svgUrl,
-      };
-    });
+    const mergedMap = new Map<string, StudioCanvaTemplate & { thumb_url?: string }>();
+    for (const t of getAllStudioCanvaTemplates()) {
+      if (!mergedMap.has(t.id)) {
+        const svgUrl = buildCanvaSvgDataUrl(t);
+        const thumbUrl = t.preview_image
+          ? `/api/edu/canva/proxy_img?tid=${encodeURIComponent(t.id)}&url=${encodeURIComponent(t.preview_image)}`
+          : '';
+        mergedMap.set(t.id, {
+          ...t,
+          thumb_url: thumbUrl,
+          safe_preview_data_url: t.safe_preview_data_url || svgUrl,
+          fallback_preview_data_url: t.fallback_preview_data_url || svgUrl,
+        });
+      }
+    }
+    const templates = Array.from(mergedMap.values());
     res.json({
       success: true,
       templates,
@@ -1797,15 +1839,21 @@ async function startServer() {
   app.post('/api/pptx/canva/apply_template', async (req, res) => {
     const body = req.body || {};
     const templateId = String(body.template_id || 'canva_exec_navy').trim();
-    const customTemplates = loadStudioCustomCanva();
-    const tpl = [...customTemplates, ...PRESENTATION_CANVA_TEMPLATES].find((t) => t.id === templateId);
-    const title = String(body.title || tpl?.name || 'عرض احترافي').trim();
+    const customTemplates = getAllStudioCanvaTemplates(body.canva_template_data);
+    const tpl = customTemplates.find((t) => t.id === templateId);
+    const htmlCode = String(body.html || '').trim();
+    let title = String(body.title || tpl?.name || 'عرض احترافي').trim();
     const text = String(body.text || '').trim();
     let slides: SlideItem[] = Array.isArray(body.slides) ? body.slides : [];
     const t0 = Date.now();
     let provider = 'Canva Design Engine';
 
-    if (!slides.length) {
+    if (htmlCode) {
+      const parsedHtml = parseHtmlToSlides(htmlCode, body.title ? String(body.title) : undefined);
+      slides = parsedHtml.slides;
+      if (!body.title && parsedHtml.title) title = parsedHtml.title;
+      provider = 'محرك HTML + Canva السريع';
+    } else if (!slides.length) {
       if (text) {
         const resGen = await generateSlidesStructure({
           text,
@@ -1865,6 +1913,7 @@ async function startServer() {
       fontName: String(body.font_name || ''),
       bodyFontSize: Number(body.body_font_size || 22) || 22,
       filenamePrefix: title,
+      layoutOverride: tpl?.layout,
     });
 
     const elapsed = Math.max(30, Date.now() - t0);
@@ -1962,7 +2011,7 @@ async function startServer() {
 
     const t0 = Date.now();
     try {
-      const customTemplates = loadStudioCustomCanva();
+      const customTemplates = getAllStudioCanvaTemplates(body.canva_template_data);
       const built = await buildPptxFile({
         outputDir: STUDIO_OUTPUTS_DIR,
         slides: rebuiltSlides,

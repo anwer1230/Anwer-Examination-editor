@@ -28,6 +28,8 @@ export interface SlideItem {
   title: string;
   bullets: string[];
   slide_type?: string;
+  subtitle?: string;
+  image_data?: string;
   table_data?: string[][];
   chart_type?: string;
   chart_labels?: string[];
@@ -456,13 +458,21 @@ const CLASSIC_THEMES: Record<string, ThemeColors & { name: string; font_name: st
   },
 };
 
-export function resolveColors(themeId: string, customTemplates: StudioCanvaTemplate[] = []): { name: string; colors: ThemeColors; fontName: string } {
+export function resolveColors(
+  themeId: string,
+  customTemplates: StudioCanvaTemplate[] = []
+): { name: string; colors: ThemeColors; fontName: string; layout: string } {
   const canva = [...customTemplates, ...PRESENTATION_CANVA_TEMPLATES].find((t) => t.id === themeId);
   if (canva) {
-    return { name: canva.name, colors: canva.colors, fontName: canva.font_name || canva.font_family || 'Dubai' };
+    return {
+      name: canva.name,
+      colors: canva.colors,
+      fontName: canva.font_name || canva.font_family || 'Dubai',
+      layout: canva.layout || 'modern_card',
+    };
   }
   const classic = CLASSIC_THEMES[themeId] || CLASSIC_THEMES.blue;
-  return { name: classic.name, colors: classic, fontName: classic.font_name };
+  return { name: classic.name, colors: classic, fontName: classic.font_name, layout: 'modern_card' };
 }
 
 function stripHash(hex: string): string {
@@ -594,7 +604,8 @@ export async function buildPptxFile(params: {
   fontName?: string;
   bodyFontSize?: number;
   filenamePrefix?: string;
-}): Promise<{ filename: string; filePath: string; themeName: string }> {
+  layoutOverride?: string;
+}): Promise<{ filename: string; filePath: string; themeName: string; layout: string }> {
   fs.mkdirSync(params.outputDir, { recursive: true });
   const PptxCtor = (PptxGenJS as unknown as { default?: typeof PptxGenJS }).default || PptxGenJS;
   const pptx = new PptxCtor();
@@ -603,28 +614,86 @@ export async function buildPptxFile(params: {
 
   const resolved = resolveColors(params.themeColor, params.customTemplates || []);
   const c = resolved.colors;
+  const layout = params.layoutOverride || resolved.layout || 'modern_card';
   const fontFace = params.fontName && params.fontName !== 'auto' ? params.fontName : resolved.fontName;
   const bodySize = Math.max(12, Math.min(34, params.bodyFontSize || 20));
-  const images = (params.templateImages || []).filter((img) => img.startsWith('data:image/'));
+  const images = (params.templateImages || []).filter((img) => /^data:image\/(png|jpeg|jpg|webp|gif)/i.test(img));
 
   const cover = params.coverData || {};
   const hasCustomCover = Boolean(cover.org || cover.presenter || cover.subtitle || cover.date || cover.logo);
 
-  // Slide 1: Cover or Title
+  const isLuxuryFrame = layout === 'royal_double' || layout === 'botanical_frame';
+  const isRibbon = layout === 'modern_ribbon' || layout === 'gradient_arch';
+  const isStripe = layout === 'clean_stripe' || layout === 'split_accent';
+  const isGeometric = layout === 'geometric_split';
+  const isPastelOrCard = layout === 'modern_card' || layout === 'dark_pitch' || layout === 'pastel_card';
+
+  // Slide 1: Cover or Title (styled to match Canva template layout)
   const firstSlide = params.slides[0] || { title: params.filenamePrefix || 'عرض تقديمي', bullets: [] };
   const coverSlide = pptx.addSlide();
   coverSlide.background = { color: stripHash(c.primary) };
-  coverSlide.addShape(pptx.ShapeType.rect, {
-    x: 0,
-    y: 5.15,
-    w: 10,
-    h: 0.47,
-    fill: { color: stripHash(c.accent) },
-  });
 
-  if (images[0]) {
+  if (isLuxuryFrame) {
+    coverSlide.addShape(pptx.ShapeType.rect, {
+      x: 0.25,
+      y: 0.22,
+      w: 9.5,
+      h: 5.18,
+      fill: { color: stripHash(c.secondary) },
+      line: { color: stripHash(c.accent), width: 2.5 },
+    });
+    coverSlide.addShape(pptx.ShapeType.rect, {
+      x: 0.37,
+      y: 0.34,
+      w: 9.26,
+      h: 4.94,
+      fill: { type: 'none' },
+      line: { color: stripHash(c.accent), width: 0.75 },
+    });
+  } else if (isStripe || isGeometric) {
+    coverSlide.addShape(pptx.ShapeType.rect, {
+      x: 9.45,
+      y: 0,
+      w: 0.55,
+      h: 5.625,
+      fill: { color: stripHash(c.accent) },
+    });
+    coverSlide.addShape(pptx.ShapeType.rect, {
+      x: 0,
+      y: 0,
+      w: 9.45,
+      h: 0.9,
+      fill: { color: stripHash(c.secondary) },
+    });
+  } else if (isRibbon) {
+    coverSlide.addShape(pptx.ShapeType.rect, {
+      x: 0,
+      y: 0,
+      w: 10,
+      h: 0.22,
+      fill: { color: stripHash(c.accent) },
+    });
+    coverSlide.addShape(pptx.ShapeType.rect, {
+      x: 0,
+      y: 5.15,
+      w: 10,
+      h: 0.475,
+      fill: { color: stripHash(c.secondary) },
+    });
+  } else {
+    coverSlide.addShape(pptx.ShapeType.rect, {
+      x: 0,
+      y: 5.15,
+      w: 10,
+      h: 0.475,
+      fill: { color: stripHash(c.accent) },
+    });
+  }
+
+  const coverImgSrc = images[0] || firstSlide.image_data;
+  if (coverImgSrc) {
     try {
-      coverSlide.addImage({ data: images[0], x: 0.45, y: 0.45, w: 1.5, h: 1.5 });
+      coverSlide.addImage({ data: coverImgSrc, x: 0.48, y: 0.48, w: 1.45, h: 1.45 });
     } catch {
       // ignore invalid image data
     }
@@ -633,8 +702,8 @@ export async function buildPptxFile(params: {
   if (cover.org || cover.logo) {
     coverSlide.addText(`${cover.logo ? cover.logo + ' ' : ''}${cover.org || ''}`.trim(), {
       x: 0.6,
-      y: 0.45,
-      w: 8.8,
+      y: 0.38,
+      w: 8.65,
       h: 0.55,
       fontSize: 16,
       bold: true,
@@ -646,11 +715,11 @@ export async function buildPptxFile(params: {
   }
 
   coverSlide.addText(firstSlide.title || params.filenamePrefix || 'عرض تقديمي احترافي', {
-    x: 0.7,
-    y: 1.55,
-    w: 8.6,
-    h: 1.5,
-    fontSize: 34,
+    x: 0.75,
+    y: 1.5,
+    w: 8.5,
+    h: 1.45,
+    fontSize: 32,
     bold: true,
     color: stripHash(c.text_light),
     align: 'center',
@@ -658,17 +727,27 @@ export async function buildPptxFile(params: {
     rtlMode: true,
   });
 
+  // Accent divider bar
+  coverSlide.addShape(pptx.ShapeType.rect, {
+    x: 3.1,
+    y: 3.02,
+    w: 3.8,
+    h: 0.06,
+    fill: { color: stripHash(c.accent) },
+  });
+
   const subText =
     cover.subtitle ||
-    (hasCustomCover ? '' : firstSlide.bullets.slice(0, 2).join(' • ')) ||
-    'عرض تقديمي منسّق بالذكاء الاصطناعي';
+    firstSlide.subtitle ||
+    (hasCustomCover ? '' : (firstSlide.bullets || []).slice(0, 2).join(' • ')) ||
+    'عرض تقديمي منسّق بقالب كانفا';
   if (subText) {
     coverSlide.addText(subText, {
-      x: 1.0,
-      y: 3.2,
-      w: 8.0,
-      h: 0.9,
-      fontSize: 18,
+      x: 0.9,
+      y: 3.22,
+      w: 8.2,
+      h: 0.95,
+      fontSize: 17,
       color: stripHash(c.text_light),
       align: 'center',
       fontFace,
@@ -679,10 +758,10 @@ export async function buildPptxFile(params: {
   if (cover.presenter || cover.date) {
     coverSlide.addText([cover.presenter, cover.date].filter(Boolean).join('  |  '), {
       x: 0.8,
-      y: 4.35,
+      y: 4.38,
       w: 8.4,
-      h: 0.5,
-      fontSize: 14,
+      h: 0.48,
+      fontSize: 13.5,
       color: stripHash(c.accent),
       align: 'center',
       fontFace,
@@ -696,28 +775,48 @@ export async function buildPptxFile(params: {
     const slide = pptx.addSlide();
     slide.background = { color: stripHash(c.bg) };
 
+    if (isLuxuryFrame) {
+      slide.addShape(pptx.ShapeType.rect, {
+        x: 0.16,
+        y: 0.14,
+        w: 9.68,
+        h: 5.34,
+        fill: { type: 'none' },
+        line: { color: stripHash(c.primary), width: 1.5 },
+      });
+    } else if (isStripe || isGeometric) {
+      slide.addShape(pptx.ShapeType.rect, {
+        x: 9.82,
+        y: 0.95,
+        w: 0.18,
+        h: 4.675,
+        fill: { color: stripHash(c.accent) },
+      });
+    }
+
     // Top header bar
+    const headerBg = isPastelOrCard ? c.secondary : c.primary;
     slide.addShape(pptx.ShapeType.rect, {
       x: 0,
       y: 0,
       w: 10,
-      h: 0.95,
-      fill: { color: stripHash(c.primary) },
+      h: 0.92,
+      fill: { color: stripHash(headerBg) },
     });
     slide.addShape(pptx.ShapeType.rect, {
       x: 0,
-      y: 0.95,
+      y: 0.92,
       w: 10,
       h: 0.06,
       fill: { color: stripHash(c.accent) },
     });
 
     slide.addText(s.title || `شريحة ${idx + 2}`, {
-      x: 0.5,
-      y: 0.14,
-      w: 9.0,
+      x: 0.45,
+      y: 0.12,
+      w: 8.85,
       h: 0.68,
-      fontSize: 24,
+      fontSize: 22,
       bold: true,
       color: stripHash(c.text_light),
       align: 'right',
@@ -726,24 +825,27 @@ export async function buildPptxFile(params: {
     });
 
     if (s.slide_type === 'table' && Array.isArray(s.table_data) && s.table_data.length > 0) {
-      const rows = s.table_data.slice(0, 12).map((row, rIdx) =>
-        row.slice(0, 6).map((cell) => ({
+      const tableRowsData = s.table_data.slice(0, 12);
+      const tblFontSize = tableRowsData.length > 8 ? Math.max(10, bodySize - 9) : Math.max(11, bodySize - 7);
+      const rows = tableRowsData.map((row, rIdx) =>
+        row.slice(0, 7).map((cell) => ({
           text: String(cell || ''),
           options: {
-            fill: { color: rIdx === 0 ? stripHash(c.secondary) : rIdx % 2 === 0 ? 'F8FAFC' : 'FFFFFF' },
+            fill: { color: rIdx === 0 ? stripHash(c.primary) : rIdx % 2 === 0 ? stripHash(c.bg) : stripHash(c.card_bg) },
             color: rIdx === 0 ? stripHash(c.text_light) : stripHash(c.text_dark),
             bold: rIdx === 0,
-            fontSize: Math.max(11, bodySize - 6),
+            fontSize: tblFontSize,
             fontFace,
             align: 'right' as const,
+            valign: 'middle' as const,
           },
         }))
       );
       slide.addTable(rows, {
-        x: 0.5,
-        y: 1.25,
-        w: 9.0,
-        border: { type: 'solid', color: stripHash(c.primary), pt: 1 },
+        x: 0.45,
+        y: 1.2,
+        w: 9.1,
+        border: { type: 'solid', color: stripHash(c.accent), pt: 1 },
       });
     } else if (
       s.slide_type === 'chart' &&
@@ -762,44 +864,60 @@ export async function buildPptxFile(params: {
         ],
         {
           x: 0.7,
-          y: 1.3,
+          y: 1.25,
           w: 8.6,
-          h: 3.8,
+          h: 3.85,
           chartColors: [stripHash(c.primary), stripHash(c.accent), stripHash(c.secondary)],
           showLegend: true,
           showValue: true,
         }
       );
     } else {
-      const slideImg = images.length > 1 ? images[(idx % (images.length - 1)) + 1] : undefined;
-      const contentW = slideImg ? 5.9 : 8.8;
-      const contentX = slideImg ? 3.55 : 0.6;
+      const slideImg =
+        (s.image_data && /^data:image\/(png|jpeg|jpg|webp|gif)/i.test(s.image_data) ? s.image_data : undefined) ||
+        (images.length > 1 ? images[(idx % (images.length - 1)) + 1] : undefined);
+      const hasImg = Boolean(slideImg);
+      const contentW = hasImg ? 5.8 : (isStripe ? 8.75 : 9.0);
+      const contentX = hasImg ? 3.7 : 0.45;
 
-      slide.addShape(pptx.ShapeType.roundRect, {
-        x: contentX,
-        y: 1.28,
-        w: contentW,
-        h: 3.9,
-        fill: { color: stripHash(c.card_bg) },
-        line: { color: stripHash(c.accent), width: 1 },
-      });
+      if (isPastelOrCard || isLuxuryFrame || isRibbon) {
+        slide.addShape(pptx.ShapeType.roundRect, {
+          x: contentX,
+          y: 1.22,
+          w: contentW,
+          h: 3.92,
+          fill: { color: stripHash(c.card_bg) },
+          line: { color: stripHash(c.accent), width: 1.2 },
+        });
+      } else {
+        slide.addShape(pptx.ShapeType.rect, {
+          x: contentX,
+          y: 1.22,
+          w: contentW,
+          h: 3.92,
+          fill: { color: stripHash(c.card_bg) },
+          line: { color: stripHash(c.primary), width: 0.75 },
+        });
+      }
 
-      const bulletsText = (s.bullets && s.bullets.length ? s.bullets : ['محتوى الشريحة']).map((b) => ({
-        text: `• ${b}`,
+      const rawBullets = s.bullets && s.bullets.length ? s.bullets : ['محتوى الشريحة'];
+      const effectiveSize = rawBullets.length >= 6 ? Math.max(13, bodySize - 4) : bodySize;
+      const bulletsText = rawBullets.map((b) => ({
+        text: `◆ ${b}`,
         options: {
-          fontSize: bodySize,
+          fontSize: effectiveSize,
           color: stripHash(c.text_dark),
           fontFace,
           breakLine: true,
-          paraSpaceAfter: 10,
+          paraSpaceAfter: rawBullets.length >= 6 ? 6 : 10,
         },
       }));
 
       slide.addText(bulletsText, {
         x: contentX + 0.25,
-        y: 1.48,
+        y: 1.4,
         w: contentW - 0.5,
-        h: 3.5,
+        h: 3.56,
         align: 'right',
         valign: 'top',
         rtlMode: true,
@@ -807,7 +925,15 @@ export async function buildPptxFile(params: {
 
       if (slideImg) {
         try {
-          slide.addImage({ data: slideImg, x: 0.45, y: 1.35, w: 2.85, h: 3.6 });
+          slide.addShape(pptx.ShapeType.roundRect, {
+            x: 0.4,
+            y: 1.25,
+            w: 3.05,
+            h: 3.8,
+            fill: { color: stripHash(c.card_bg) },
+            line: { color: stripHash(c.accent), width: 1.5 },
+          });
+          slide.addImage({ data: slideImg, x: 0.5, y: 1.35, w: 2.85, h: 3.6 });
         } catch {
           // ignore
         }
@@ -815,12 +941,24 @@ export async function buildPptxFile(params: {
     }
 
     // Slide footer
+    slide.addText(`${resolved.name}`, {
+      x: 4.5,
+      y: 5.25,
+      w: 5.0,
+      h: 0.28,
+      fontSize: 9.5,
+      color: stripHash(c.primary),
+      align: 'right',
+      fontFace,
+      rtlMode: true,
+    });
     slide.addText(`${idx + 2}`, {
-      x: 0.4,
+      x: 0.35,
       y: 5.25,
       w: 0.8,
-      h: 0.3,
+      h: 0.28,
       fontSize: 10,
+      bold: true,
       color: stripHash(c.primary),
       align: 'left',
     });
@@ -831,9 +969,9 @@ export async function buildPptxFile(params: {
     .slice(0, 48);
   const filename = `${safePrefix || 'presentation'}_${Date.now()}.pptx`;
   const filePath = path.join(params.outputDir, filename);
-  await pptx.writeFile({ fileName: filePath });
+  await pptx.writeFile({ fileName: filePath, compression: false });
 
-  return { filename, filePath, themeName: resolved.name };
+  return { filename, filePath, themeName: resolved.name, layout };
 }
 
 export async function extractFileContent(fileBuffer: Buffer, originalName: string): Promise<{
@@ -917,15 +1055,19 @@ export function parseHtmlDocument(html: string): {
   tables: string[][][];
 } {
   const $ = cheerio.load(html || '');
+  $('script, style, noscript, template').remove();
   const title = $('title').text().trim() || $('h1').first().text().trim() || 'مستند احترافي';
   const tables: string[][][] = [];
   const sections: Array<{ heading: string; paragraphs: string[]; bullets: string[]; table?: string[][] }> = [];
 
   let current = { heading: title, paragraphs: [] as string[], bullets: [] as string[], table: undefined as string[][] | undefined };
 
-  $('h1, h2, h3, p, ul, ol, table').each((_i, el) => {
+  $('h1, h2, h3, h4, p, ul, ol, table').each((_i, el) => {
     const tag = (el.tagName || '').toLowerCase();
-    if (tag === 'h1' || tag === 'h2' || tag === 'h3') {
+    if (tag !== 'table' && $(el).closest('table').length > 0) return;
+    if (tag === 'p' && $(el).closest('li').length > 0) return;
+
+    if (tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'h4') {
       if (current.paragraphs.length || current.bullets.length || current.table) {
         sections.push(current);
       }
@@ -972,6 +1114,256 @@ export function parseHtmlDocument(html: string): {
   }
 
   return { title, sections, tables };
+}
+
+export function parseHtmlToSlides(html: string, titleOverride?: string): {
+  title: string;
+  slides: SlideItem[];
+  wordCount: number;
+} {
+  const $ = cheerio.load(html || '');
+  $('script, style, noscript, template, iframe').remove();
+
+  const cleanTxt = (s: string) => s.replace(/\s+/g, ' ').trim();
+  const docTitle =
+    cleanTxt(String(titleOverride || '')) ||
+    cleanTxt($('h1').first().text()) ||
+    cleanTxt($('title').text()) ||
+    'عرض تقديمي احترافي';
+
+  const bodyText = cleanTxt($('body').text() || $.root().text());
+  const wordCount = bodyText ? bodyText.split(/\s+/).filter(Boolean).length : 0;
+
+  const isRasterDataUrl = (src?: string) =>
+    Boolean(src && /^data:image\/(png|jpeg|jpg|webp|gif)/i.test(src) && src.length > 140);
+
+  const extractTableRows = (tblEl: cheerio.Cheerio<any>): string[][] => {
+    const rows: string[][] = [];
+    tblEl.find('tr').each((_ri, trEl) => {
+      const row: string[] = [];
+      $(trEl)
+        .find('th, td')
+        .each((_ci, cellEl) => {
+          row.push(cleanTxt($(cellEl).text()));
+        });
+      if (row.length && row.some(Boolean)) rows.push(row);
+    });
+    return rows;
+  };
+
+  const pushTableSlides = (outSlides: SlideItem[], heading: string, rows: string[][]) => {
+    if (!rows.length) return;
+    const header = rows[0];
+    const body = rows.slice(1);
+    const maxBodyPerSlide = 9;
+    if (body.length <= maxBodyPerSlide) {
+      outSlides.push({ title: heading, bullets: [], slide_type: 'table', table_data: rows });
+      return;
+    }
+    for (let i = 0; i < body.length; i += maxBodyPerSlide) {
+      const partIdx = Math.floor(i / maxBodyPerSlide) + 1;
+      outSlides.push({
+        title: partIdx === 1 ? heading : `${heading} (تابع ${partIdx})`,
+        bullets: [],
+        slide_type: 'table',
+        table_data: [header, ...body.slice(i, i + maxBodyPerSlide)],
+      });
+    }
+  };
+
+  const pushBulletSlides = (
+    outSlides: SlideItem[],
+    heading: string,
+    bullets: string[],
+    imageData?: string,
+    slideType = 'content'
+  ) => {
+    const cleanBullets = bullets.map(cleanTxt).filter(Boolean);
+    if (!cleanBullets.length && !imageData) return;
+    const chunkSize = 6;
+    if (cleanBullets.length <= chunkSize) {
+      outSlides.push({
+        title: heading,
+        bullets: cleanBullets.length ? cleanBullets : [heading],
+        slide_type: slideType,
+        image_data: imageData,
+      });
+      return;
+    }
+    for (let i = 0; i < cleanBullets.length; i += chunkSize) {
+      const part = Math.floor(i / chunkSize) + 1;
+      outSlides.push({
+        title: part === 1 ? heading : `${heading} (${part})`,
+        bullets: cleanBullets.slice(i, i + chunkSize),
+        slide_type: slideType,
+        image_data: part === 1 ? imageData : undefined,
+      });
+    }
+  };
+
+  const slides: SlideItem[] = [];
+
+  // 1) Fast path: explicit slide / page / section containers
+  const slideContainers = $('.slide, .ppt-slide, [data-slide], .canva-a4-sheet, main > section, body > section, article.slide')
+    .toArray()
+    .filter((el) => {
+      const $el = $(el);
+      if ($el.parents('.slide, .ppt-slide, [data-slide], .canva-a4-sheet').length > 0) return false;
+      const tLen = cleanTxt($el.text()).length;
+      return tLen > 8 || $el.find('table, img').length > 0;
+    });
+
+  if (slideContainers.length >= 2) {
+    slideContainers.forEach((el, idx) => {
+      const $el = $(el);
+      const heading =
+        cleanTxt($el.find('h1, h2, h3, h4, .slide-title, .title').first().text()) ||
+        (idx === 0 ? docTitle : `شريحة ${idx + 1}`);
+
+      let slideImg: string | undefined;
+      $el.find('img').each((_ii, imgEl) => {
+        if (!slideImg) {
+          const src = $(imgEl).attr('src');
+          if (isRasterDataUrl(src)) slideImg = src;
+        }
+      });
+
+      const items: string[] = [];
+      const seenItem = new Set<string>();
+      $el.find('li, p, .card, .kpi, blockquote').each((_bi, bEl) => {
+        const $b = $(bEl);
+        if ($b.closest('table').length > 0) return;
+        if ($b.is('p') && $b.closest('li, .card, .kpi').length > 0) return;
+        const txt = cleanTxt($b.text());
+        if (txt && txt !== heading && !seenItem.has(txt)) {
+          seenItem.add(txt);
+          items.push(txt.slice(0, 200));
+        }
+      });
+
+      const tblEls = $el.find('table').toArray();
+      if (items.length || slideImg || !tblEls.length) {
+        if (idx === 0) {
+          slides.push({
+            title: heading,
+            subtitle: items[0] || '',
+            bullets: items.slice(0, 4),
+            slide_type: 'title',
+            image_data: slideImg,
+          });
+        } else {
+          pushBulletSlides(slides, heading, items, slideImg, 'content');
+        }
+      }
+      tblEls.forEach((tEl, ti) => {
+        const rows = extractTableRows($(tEl));
+        pushTableSlides(slides, tblEls.length > 1 ? `${heading} — جدول ${ti + 1}` : heading, rows);
+      });
+    });
+
+    if (slides.length > 0) {
+      return { title: docTitle, slides, wordCount };
+    }
+  }
+
+  // 2) General HTML document fast single-pass extraction
+  const firstBannerP = cleanTxt($('.header-banner p, header p').first().text()) || '';
+  const coverSub =
+    firstBannerP && firstBannerP !== docTitle
+      ? firstBannerP
+      : cleanTxt($('p').first().text()) || 'عرض تقديمي مستخرج من كود HTML';
+
+  const firstRasterImg = $('img')
+    .toArray()
+    .map((el) => $(el).attr('src'))
+    .find((s) => isRasterDataUrl(s));
+
+  slides.push({
+    title: docTitle,
+    subtitle: coverSub.slice(0, 180),
+    bullets: coverSub ? [coverSub.slice(0, 160)] : [],
+    slide_type: 'title',
+    image_data: firstRasterImg,
+  });
+
+  let currentHeading = docTitle;
+  let currentBullets: string[] = [];
+  let currentImg: string | undefined;
+  const seenBlocks = new Set<string>();
+  const skipInHeaderBanner = new Set<any>();
+  $('.header-banner, header').find('h1, h2, h3, p').each((_i, el) => {
+    skipInHeaderBanner.add(el);
+  });
+
+  const flushCurrent = () => {
+    if (currentBullets.length || currentImg) {
+      pushBulletSlides(slides, currentHeading, currentBullets, currentImg, 'content');
+      currentBullets = [];
+      currentImg = undefined;
+    }
+  };
+
+  $('h1, h2, h3, h4, p, ul, ol, table, .card, .highlight-box, .kpi, .stat-card, blockquote, img').each((_i, el) => {
+    const $el = $(el);
+    if (skipInHeaderBanner.has(el)) return;
+    if ($el.closest('table').length > 0 && !$el.is('table')) return;
+    if (($el.is('p') || $el.is('h4')) && $el.closest('li, .card, .highlight-box, .kpi, .stat-card').length > 0) return;
+
+    const tag = (el.tagName || '').toLowerCase();
+    if (tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'h4') {
+      const hTxt = cleanTxt($el.text());
+      if (!hTxt) return;
+      flushCurrent();
+      currentHeading = hTxt.slice(0, 110);
+    } else if (tag === 'img') {
+      const src = $el.attr('src');
+      if (isRasterDataUrl(src) && src !== firstRasterImg && !currentImg) {
+        currentImg = src;
+      }
+    } else if (tag === 'table') {
+      flushCurrent();
+      const tblHeading = cleanTxt($el.prev('h2, h3, h4, .table-title, caption').text()) ||
+        cleanTxt($el.find('caption').text()) ||
+        (currentHeading !== docTitle ? currentHeading : 'جدول البيانات');
+      const rows = extractTableRows($el);
+      pushTableSlides(slides, tblHeading, rows);
+    } else if (tag === 'ul' || tag === 'ol') {
+      $el.find('li').each((_li, liEl) => {
+        const txt = cleanTxt($(liEl).text());
+        if (txt && !seenBlocks.has(txt)) {
+          seenBlocks.add(txt);
+          currentBullets.push(txt.slice(0, 200));
+        }
+      });
+    } else {
+      // p, .card, .highlight-box, .kpi, .stat-card, blockquote
+      const cardTitle = cleanTxt($el.find('h2, h3, h4, strong').first().text());
+      const fullTxt = cleanTxt($el.text());
+      if (!fullTxt || fullTxt === docTitle || fullTxt === coverSub) return;
+      const line =
+        cardTitle && fullTxt.startsWith(cardTitle) && fullTxt.length > cardTitle.length + 2
+          ? `${cardTitle}: ${fullTxt.slice(cardTitle.length).replace(/^[:\s-]+/, '')}`
+          : fullTxt;
+      if (line && !seenBlocks.has(line)) {
+        seenBlocks.add(line);
+        currentBullets.push(line.slice(0, 220));
+      }
+    }
+  });
+
+  flushCurrent();
+
+  if (slides.length === 1 && bodyText) {
+    const chunks = bodyText
+      .split(/[.!؟\n]+/)
+      .map(cleanTxt)
+      .filter((x) => x.length > 4 && x !== docTitle);
+    if (chunks.length) {
+      pushBulletSlides(slides, 'محتوى العرض التقديمي', chunks.slice(0, 12));
+    }
+  }
+
+  return { title: docTitle, slides, wordCount };
 }
 
 export async function buildDocxFile(params: {
